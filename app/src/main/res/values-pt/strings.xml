@@ -1,0 +1,123 @@
+<resources>
+    <!-- App Name -->
+    <string name="app_name">Gestão de Tarefas &amp; Estudos</string>
+
+    <!-- General -->
+    <string name="add">Adicionar</string>
+    <string name="edit">Editar</string>
+    <string name="delete">Eliminar</string>
+    <string name="save">Guardar</string>
+    <string name="cancel">Cancelar</string>
+    <string name="yes">Sim</string>
+    <string name="no">Não</string>
+    <string name="confirm">Confirmar</string>
+    <string name="search">Pesquisar</string>
+
+    <!-- Navigation -->
+    <string name="nav_home">Início</string>
+    <string name="nav_subjects">Disciplinas</string>
+    <string name="nav_tasks">Tarefas</string>
+    <string name="nav_timer">Cronómetro</string>
+
+    <!-- Home Screen -->
+    <string name="home_title">Painel Principal</string>
+    <string name="home_welcome">Bem-vindo ao Gestor de Tarefas!</string>
+    <string name="home_total_subjects">Total de Disciplinas</string>
+    <string name="home_pending_tasks">Tarefas Pendentes</string>
+    <string name="home_study_time_today">Tempo de Estudo Hoje</string>
+
+    <!-- Subjects -->
+    <string name="subjects_title">Minhas Disciplinas</string>
+    <string name="subjects_empty">Ainda não tem disciplinas. Adicione a sua primeira!</string>
+    <string name="subject_name">Nome da Disciplina</string>
+    <string name="subject_code">Código da Disciplina</string>
+    <string name="subject_color">Cor</string>
+    <string name="subject_add">Adicionar Disciplina</string>
+    <string name="subject_edit">Editar Disciplina</string>
+    <string name="subject_delete_confirm">Tem a certeza que deseja eliminar esta disciplina?</string>
+    <string name="subject_name_required">O nome da disciplina é obrigatório</string>
+
+    <!-- Tasks -->
+    <string name="tasks_title">Minhas Tarefas</string>
+    <string name="tasks_empty">Ainda não tem tarefas. Adicione a sua primeira!</string>
+    <string name="task_title">Título da Tarefa</string>
+    <string name="task_description">Descrição</string>
+    <string name="task_subject">Disciplina</string>
+    <string name="task_due_date">Data de Entrega</string>
+    <string name="task_priority">Prioridade</string>
+    <string name="task_status">Estado</string>
+    <string name="task_add">Adicionar Tarefa</string>
+    <string name="task_edit">Editar Tarefa</string>
+    <string name="task_delete_confirm">Tem a certeza que deseja eliminar esta tarefa?</string>
+    <string name="task_title_required">O título da tarefa é obrigatório</string>
+    <string name="task_mark_complete">Marcar como Concluída</string>
+    <string name="task_mark_incomplete">Marcar como Não Concluída</string>
+
+    <!-- Task Priority -->
+    <string name="priority_low">Baixa</string>
+    <string name="priority_medium">Média</string>
+    <string name="priority_high">Alta</string>
+
+    <!-- Task Status -->
+    <string name="status_pending">Pendente</string>
+    <string name="status_in_progress">Em Progresso</string>
+    <string name="status_completed">Concluída</string>
+
+    <!-- Timer -->
+    <string name="timer_title">Cronómetro de Estudo</string>
+    <string name="timer_pomodoro">Pomodoro</string>
+    <string name="timer_start">Iniciar</string>
+    <string name="timer_pause">Pausar</string>
+    <string name="timer_resume">Retomar</string>
+    <string name="timer_stop">Parar</string>
+    <string name="timer_work_session">Sessão de Trabalho</string>
+    <string name="timer_break_session">Intervalo</string>
+    <string name="timer_break">Intervalo</string>
+    <string name="timer_work_duration">Duração do Trabalho (minutos)</string>
+    <string name="timer_break_duration">Duração do Intervalo (minutos)</string>
+    <string name="timer_work_complete">Sessão de trabalho concluída! Hora de fazer uma pausa.</string>
+    <string name="timer_break_complete">Intervalo terminado! Pronto para outra sessão?</string>
+    <string name="timer_session_saved">Sessão de estudo guardada</string>
+
+    <!-- Validation Messages -->
+    <string name="validation_field_required">Este campo é obrigatório</string>
+    <string name="validation_invalid_email">Endereço de email inválido</string>
+    <string name="validation_invalid_date">Data inválida</string>
+
+    <!-- Messages -->
+    <string name="msg_saved_successfully">Guardado com sucesso!</string>
+    <string name="msg_deleted_successfully">Eliminado com sucesso!</string>
+    <string name="msg_error_occurred">Ocorreu um erro. Por favor, tente novamente.</string>
+
+    <!-- Additional UI Elements -->
+    <string name="options">Opções</string>
+    <string name="subject">Disciplina</string>
+    <string name="add_subject">Adicionar Disciplina</string>
+    <string name="edit_subject">Editar Disciplina</string>
+    <string name="add_task">Adicionar Tarefa</string>
+    <string name="edit_task">Editar Tarefa</string>
+    <string name="due_date">Data de Entrega</string>
+    <string name="priority">Prioridade</string>
+
+    <!-- Confirmations -->
+    <string name="confirm_delete">Confirmar Eliminação</string>
+    <string name="confirm_delete_subject_message">Tem certeza que deseja eliminar esta disciplina? Todas as tarefas relacionadas também serão eliminadas.</string>
+    <string name="confirm_delete_task_message">Tem certeza que deseja eliminar esta tarefa?</string>
+
+    <!-- Error Messages -->
+    <string name="error_required_field">Este campo é obrigatório</string>
+    <string name="error_code_too_short">O código deve ter pelo menos 2 caracteres</string>
+    <string name="error_code_exists">Este código já existe</string>
+    <string name="error_no_subjects">Nenhuma disciplina encontrada. Por favor, adicione uma disciplina primeiro.</string>
+    <string name="error_select_subject">Por favor, selecione uma disciplina</string>
+    <string name="error_saving">Erro ao guardar dados</string>
+    <string name="error_deleting">Erro ao eliminar dados</string>
+
+    <!-- Success Messages -->
+    <string name="success_subject_added">Disciplina adicionada com sucesso!</string>
+    <string name="success_subject_updated">Disciplina atualizada com sucesso!</string>
+    <string name="success_subject_deleted">Disciplina eliminada com sucesso!</string>
+    <string name="success_task_added">Tarefa adicionada com sucesso!</string>
+    <string name="success_task_updated">Tarefa atualizada com sucesso!</string>
+    <string name="success_task_deleted">Tarefa eliminada com sucesso!</string>
+</resources>

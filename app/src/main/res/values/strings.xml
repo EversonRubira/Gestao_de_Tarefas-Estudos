@@ -1,0 +1,123 @@
+<resources>
+    <!-- App Name -->
+    <string name="app_name">Study Task Manager</string>
+
+    <!-- General -->
+    <string name="add">Add</string>
+    <string name="edit">Edit</string>
+    <string name="delete">Delete</string>
+    <string name="save">Save</string>
+    <string name="cancel">Cancel</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="confirm">Confirm</string>
+    <string name="search">Search</string>
+
+    <!-- Navigation -->
+    <string name="nav_home">Home</string>
+    <string name="nav_subjects">Subjects</string>
+    <string name="nav_tasks">Tasks</string>
+    <string name="nav_timer">Study Timer</string>
+
+    <!-- Home Screen -->
+    <string name="home_title">Dashboard</string>
+    <string name="home_welcome">Welcome to Study Task Manager!</string>
+    <string name="home_total_subjects">Total Subjects</string>
+    <string name="home_pending_tasks">Pending Tasks</string>
+    <string name="home_study_time_today">Study Time Today</string>
+
+    <!-- Subjects -->
+    <string name="subjects_title">My Subjects</string>
+    <string name="subjects_empty">No subjects yet. Add your first subject!</string>
+    <string name="subject_name">Subject Name</string>
+    <string name="subject_code">Subject Code</string>
+    <string name="subject_color">Color</string>
+    <string name="subject_add">Add Subject</string>
+    <string name="subject_edit">Edit Subject</string>
+    <string name="subject_delete_confirm">Are you sure you want to delete this subject?</string>
+    <string name="subject_name_required">Subject name is required</string>
+
+    <!-- Tasks -->
+    <string name="tasks_title">My Tasks</string>
+    <string name="tasks_empty">No tasks yet. Add your first task!</string>
+    <string name="task_title">Task Title</string>
+    <string name="task_description">Description</string>
+    <string name="task_subject">Subject</string>
+    <string name="task_due_date">Due Date</string>
+    <string name="task_priority">Priority</string>
+    <string name="task_status">Status</string>
+    <string name="task_add">Add Task</string>
+    <string name="task_edit">Edit Task</string>
+    <string name="task_delete_confirm">Are you sure you want to delete this task?</string>
+    <string name="task_title_required">Task title is required</string>
+    <string name="task_mark_complete">Mark as Complete</string>
+    <string name="task_mark_incomplete">Mark as Incomplete</string>
+
+    <!-- Task Priority -->
+    <string name="priority_low">Low</string>
+    <string name="priority_medium">Medium</string>
+    <string name="priority_high">High</string>
+
+    <!-- Task Status -->
+    <string name="status_pending">Pending</string>
+    <string name="status_in_progress">In Progress</string>
+    <string name="status_completed">Completed</string>
+
+    <!-- Timer -->
+    <string name="timer_title">Study Timer</string>
+    <string name="timer_pomodoro">Pomodoro</string>
+    <string name="timer_start">Start</string>
+    <string name="timer_pause">Pause</string>
+    <string name="timer_resume">Resume</string>
+    <string name="timer_stop">Stop</string>
+    <string name="timer_work_session">Work Session</string>
+    <string name="timer_break_session">Break</string>
+    <string name="timer_break">Break</string>
+    <string name="timer_work_duration">Work Duration (minutes)</string>
+    <string name="timer_break_duration">Break Duration (minutes)</string>
+    <string name="timer_work_complete">Work session completed! Time for a break.</string>
+    <string name="timer_break_complete">Break over! Ready for another session?</string>
+    <string name="timer_session_saved">Study session saved</string>
+
+    <!-- Validation Messages -->
+    <string name="validation_field_required">This field is required</string>
+    <string name="validation_invalid_email">Invalid email address</string>
+    <string name="validation_invalid_date">Invalid date</string>
+
+    <!-- Messages -->
+    <string name="msg_saved_successfully">Saved successfully!</string>
+    <string name="msg_deleted_successfully">Deleted successfully!</string>
+    <string name="msg_error_occurred">An error occurred. Please try again.</string>
+
+    <!-- Additional UI Elements -->
+    <string name="options">Options</string>
+    <string name="subject">Subject</string>
+    <string name="add_subject">Add Subject</string>
+    <string name="edit_subject">Edit Subject</string>
+    <string name="add_task">Add Task</string>
+    <string name="edit_task">Edit Task</string>
+    <string name="due_date">Due Date</string>
+    <string name="priority">Priority</string>
+
+    <!-- Confirmations -->
+    <string name="confirm_delete">Confirm Delete</string>
+    <string name="confirm_delete_subject_message">Are you sure you want to delete this subject? All related tasks will also be deleted.</string>
+    <string name="confirm_delete_task_message">Are you sure you want to delete this task?</string>
+
+    <!-- Error Messages -->
+    <string name="error_required_field">This field is required</string>
+    <string name="error_code_too_short">Code must be at least 2 characters</string>
+    <string name="error_code_exists">This code already exists</string>
+    <string name="error_no_subjects">No subjects found. Please add a subject first.</string>
+    <string name="error_select_subject">Please select a subject</string>
+    <string name="error_saving">Error saving data</string>
+    <string name="error_deleting">Error deleting data</string>
+
+    <!-- Success Messages -->
+    <string name="success_subject_added">Subject added successfully!</string>
+    <string name="success_subject_updated">Subject updated successfully!</string>
+    <string name="success_subject_deleted">Subject deleted successfully!</string>
+    <string name="success_task_added">Task added successfully!</string>
+    <string name="success_task_updated">Task updated successfully!</string>
+    <string name="success_task_deleted">Task deleted successfully!</string>
+</resources>

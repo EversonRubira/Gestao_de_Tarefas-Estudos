@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="2dp"
+    app:strokeWidth="0dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="16dp"
+        android:gravity="center_vertical">
+
+        <!-- Indicador de cor da disciplina -->
+        <View
+            android:id="@+id/viewCorDisciplina"
+            android:layout_width="6dp"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="16dp"
+            android:background="@color/primary" />
+
+        <!-- Informações da disciplina -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/txtNomeDisciplina"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Programação de Aplicações Móveis"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@color/text_primary" />
+
+            <TextView
+                android:id="@+id/txtCodigoDisciplina"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="PAM"
+                android:textSize="14sp"
+                android:textColor="@color/text_secondary"
+                android:layout_marginTop="4dp" />
+
+        </LinearLayout>
+
+        <!-- Ícone de opções -->
+        <ImageView
+            android:id="@+id/imgOpcoesDisciplina"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@android:drawable/ic_menu_more"
+            android:contentDescription="@string/options"
+            android:layout_marginStart="8dp" />
+
+    </LinearLayout>
+
+</com.google.android.material.card.MaterialCardView>
