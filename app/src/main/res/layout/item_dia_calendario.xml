@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="36dp"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:padding="1dp"
+    android:id="@+id/layout_dia_container">
+
+    <!-- Número do dia -->
+    <TextView
+        android:id="@+id/tv_numero_dia"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="15"
+        android:textSize="11sp"
+        android:textColor="@color/text_primary"
+        android:textStyle="bold"
+        android:layout_marginBottom="1dp" />
+
+    <!-- Container para os dots coloridos -->
+    <LinearLayout
+        android:id="@+id/layout_dots"
+        android:layout_width="wrap_content"
+        android:layout_height="8dp"
+        android:orientation="horizontal"
+        android:gravity="center">
+
+        <!-- Dots serão adicionados dinamicamente aqui -->
+
+    </LinearLayout>
+
+</LinearLayout>
