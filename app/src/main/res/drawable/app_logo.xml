@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Logo principal do app: Livro com checkmark - representa estudos e tarefas -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="120dp"
+    android:height="120dp"
+    android:viewportWidth="120"
+    android:viewportHeight="120">
+
+    <!-- Círculo de fundo branco com sombra -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M60,10 A50,50 0 1,1 60,110 A50,50 0 1,1 60,10 Z"/>
+
+    <!-- Livro aberto -->
+    <path
+        android:fillColor="#2196F3"
+        android:pathData="M35,40 L35,80 Q35,85 40,85 L58,85 L58,40 Q58,35 53,35 L40,35 Q35,35 35,40 Z"/>
+
+    <path
+        android:fillColor="#1976D2"
+        android:pathData="M62,40 L62,80 Q62,85 67,85 L80,85 Q85,85 85,80 L85,40 Q85,35 80,35 L67,35 Q62,35 62,40 Z"/>
+
+    <!-- Linhas do livro (páginas) -->
+    <path
+        android:strokeColor="#BBDEFB"
+        android:strokeWidth="1.5"
+        android:pathData="M40,45 L53,45 M40,50 L53,50 M40,55 L53,55 M40,60 L53,60"/>
+
+    <path
+        android:strokeColor="#90CAF9"
+        android:strokeWidth="1.5"
+        android:pathData="M67,45 L80,45 M67,50 L80,50 M67,55 L80,55 M67,60 L80,60"/>
+
+    <!-- Checkmark (✓) sobrepondo o livro -->
+    <path
+        android:fillColor="#4CAF50"
+        android:pathData="M70,62 L75,67 L85,50 L88,52 L75,72 L67,64 Z"/>
+
+    <!-- Sombra do checkmark -->
+    <path
+        android:fillColor="#2E7D32"
+        android:fillAlpha="0.3"
+        android:pathData="M71,64 L76,69 L86,52 L88,54 L76,73 L69,66 Z"/>
+</vector>
