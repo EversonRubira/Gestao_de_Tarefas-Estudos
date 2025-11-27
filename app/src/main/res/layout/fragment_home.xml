@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background">
+    android:background="@drawable/background_full"
+    android:fillViewport="true">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -11,25 +12,28 @@
         android:orientation="vertical"
         android:padding="16dp">
 
-        <!-- Welcome Card -->
+        <!-- Welcome Card - Glassmorphism -->
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="12dp"
-            app:cardCornerRadius="8dp"
-            app:cardElevation="4dp">
+            app:cardBackgroundColor="@color/surface_glass"
+            app:cardCornerRadius="18dp"
+            app:cardElevation="6dp"
+            app:strokeColor="@color/white_20"
+            app:strokeWidth="1dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="10dp">
+                android:padding="14dp">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/home_welcome"
-                    android:textColor="@color/text_primary"
+                    android:textColor="@color/text_on_glass"
                     android:textSize="16sp"
                     android:textStyle="bold" />
 
@@ -38,8 +42,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
                     android:text="Track your studies and manage your tasks efficiently"
-                    android:textColor="@color/text_secondary"
-                    android:textSize="11sp" />
+                    android:textColor="@color/text_secondary_glass"
+                    android:textSize="12sp" />
 
             </LinearLayout>
 
@@ -52,81 +56,102 @@
             android:orientation="horizontal"
             android:weightSum="2">
 
-            <!-- Total Subjects Card -->
+            <!-- Total Subjects Card - Glassmorphism -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="0dp"
-                android:layout_height="80dp"
+                android:layout_height="90dp"
                 android:layout_weight="1"
-                android:layout_marginEnd="8dp"
+                android:layout_marginEnd="6dp"
                 android:layout_marginBottom="12dp"
-                app:cardBackgroundColor="@color/primary_light"
-                app:cardCornerRadius="8dp"
-                app:cardElevation="4dp">
+                app:cardBackgroundColor="@color/surface_glass"
+                app:cardCornerRadius="18dp"
+                app:cardElevation="6dp"
+                app:strokeColor="@color/white_20"
+                app:strokeWidth="1dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center"
                     android:orientation="vertical"
-                    android:padding="8dp">
+                    android:padding="12dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="📊"
+                        android:textSize="24sp" />
 
                     <TextView
                         android:id="@+id/tv_total_subjects"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
                         android:text="0"
-                        android:textColor="@color/primary_dark"
+                        android:textColor="@color/primary"
                         android:textSize="24sp"
                         android:textStyle="bold" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
+                        android:layout_marginTop="2dp"
                         android:text="@string/home_total_subjects"
                         android:textAlignment="center"
-                        android:textColor="@color/text_primary"
-                        android:textSize="10sp" />
+                        android:textColor="@color/text_on_glass"
+                        android:textSize="11sp" />
 
                 </LinearLayout>
 
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- Pending Tasks Card -->
+            <!-- Pending Tasks Card - Gradiente Laranja -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="0dp"
-                android:layout_height="80dp"
+                android:layout_height="90dp"
                 android:layout_weight="1"
-                android:layout_marginStart="8dp"
+                android:layout_marginStart="6dp"
                 android:layout_marginBottom="12dp"
-                app:cardBackgroundColor="@color/warning"
-                app:cardCornerRadius="8dp"
-                app:cardElevation="4dp">
+                app:cardCornerRadius="18dp"
+                app:cardElevation="8dp"
+                app:strokeWidth="0dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:background="@drawable/gradient_orange_accent"
                     android:gravity="center"
                     android:orientation="vertical"
-                    android:padding="8dp">
+                    android:padding="12dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="📝"
+                        android:textSize="24sp" />
 
                     <TextView
                         android:id="@+id/tv_pending_tasks"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
                         android:text="0"
-                        android:textColor="@android:color/white"
+                        android:textColor="@color/text_on_accent"
                         android:textSize="24sp"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        android:shadowColor="#40000000"
+                        android:shadowDx="0"
+                        android:shadowDy="1"
+                        android:shadowRadius="2" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
+                        android:layout_marginTop="2dp"
                         android:text="@string/home_pending_tasks"
                         android:textAlignment="center"
-                        android:textColor="@android:color/white"
-                        android:textSize="10sp" />
+                        android:textColor="@color/text_on_accent"
+                        android:textSize="11sp" />
 
                 </LinearLayout>
 
@@ -134,28 +159,46 @@
 
         </LinearLayout>
 
-        <!-- Study Time Card -->
+        <!-- Study Time Card - Glassmorphism -->
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="12dp"
-            app:cardCornerRadius="8dp"
-            app:cardElevation="4dp">
+            app:cardBackgroundColor="@color/surface_glass"
+            app:cardCornerRadius="18dp"
+            app:cardElevation="6dp"
+            app:strokeColor="@color/white_20"
+            app:strokeWidth="1dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="10dp">
+                android:padding="14dp">
 
-                <TextView
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/home_study_time_today"
-                    android:textColor="@color/text_primary"
-                    android:textSize="13sp"
-                    android:textStyle="bold"
-                    android:layout_marginBottom="6dp" />
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginBottom="6dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="⏱️"
+                        android:textSize="20sp"
+                        android:layout_marginEnd="8dp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/home_study_time_today"
+                        android:textColor="@color/text_on_glass"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
 
                 <!-- Lista de tempo por disciplina -->
                 <LinearLayout
@@ -186,7 +229,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="Total"
-                        android:textColor="@color/text_primary"
+                        android:textColor="@color/text_on_glass"
                         android:textSize="13sp"
                         android:textStyle="bold" />
 
@@ -196,7 +239,7 @@
                         android:layout_height="wrap_content"
                         android:text="0h 00m"
                         android:textColor="@color/primary"
-                        android:textSize="14sp"
+                        android:textSize="15sp"
                         android:textStyle="bold" />
 
                 </LinearLayout>
@@ -205,28 +248,46 @@
 
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- Calendar Card -->
+        <!-- Calendar Card - Glassmorphism -->
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            app:cardCornerRadius="8dp"
-            app:cardElevation="4dp">
+            android:layout_marginTop="8dp"
+            app:cardBackgroundColor="@color/surface_glass"
+            app:cardCornerRadius="18dp"
+            app:cardElevation="6dp"
+            app:strokeColor="@color/white_20"
+            app:strokeWidth="1dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="8dp">
+                android:padding="14dp">
 
-                <TextView
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Calendário de Entregas"
-                    android:textColor="@color/text_primary"
-                    android:textSize="14sp"
-                    android:textStyle="bold"
-                    android:layout_marginBottom="4dp" />
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginBottom="8dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="📅"
+                        android:textSize="20sp"
+                        android:layout_marginEnd="8dp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Calendário de Entregas"
+                        android:textColor="@color/text_on_glass"
+                        android:textSize="15sp"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
 
                 <!-- Cabeçalho do mês -->
                 <LinearLayout
@@ -242,7 +303,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="Janeiro 2025"
-                        android:textColor="@color/text_primary"
+                        android:textColor="@color/text_on_glass"
                         android:textSize="13sp"
                         android:textStyle="bold" />
 

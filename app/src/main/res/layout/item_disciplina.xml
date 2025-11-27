@@ -4,10 +4,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="8dp"
-    app:cardCornerRadius="12dp"
-    app:cardElevation="2dp"
-    app:strokeWidth="0dp">
+    android:layout_margin="6dp"
+    app:cardBackgroundColor="@color/surface_glass"
+    app:cardCornerRadius="16dp"
+    app:cardElevation="4dp"
+    app:strokeColor="@color/white_20"
+    app:strokeWidth="1dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -16,12 +18,12 @@
         android:padding="16dp"
         android:gravity="center_vertical">
 
-        <!-- Indicador de cor da disciplina -->
+        <!-- Indicador de cor da disciplina - mais sutil -->
         <View
             android:id="@+id/viewCorDisciplina"
-            android:layout_width="6dp"
+            android:layout_width="4dp"
             android:layout_height="match_parent"
-            android:layout_marginEnd="16dp"
+            android:layout_marginEnd="14dp"
             android:background="@color/primary" />
 
         <!-- Informações da disciplina -->
@@ -36,17 +38,17 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Programação de Aplicações Móveis"
-                android:textSize="16sp"
+                android:textSize="15sp"
                 android:textStyle="bold"
-                android:textColor="@color/text_primary" />
+                android:textColor="@color/text_on_glass" />
 
             <TextView
                 android:id="@+id/txtCodigoDisciplina"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="PAM"
-                android:textSize="14sp"
-                android:textColor="@color/text_secondary"
+                android:text="📚 PAM"
+                android:textSize="12sp"
+                android:textColor="@color/text_secondary_glass"
                 android:layout_marginTop="4dp" />
 
         </LinearLayout>

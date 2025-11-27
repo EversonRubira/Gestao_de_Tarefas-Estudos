@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Background de estudo - Gradiente azul suave (placeholder até adicionar foto real) -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <gradient
+        android:angle="135"
+        android:startColor="#4A6FA5"
+        android:centerColor="#5B7C99"
+        android:endColor="#3D5A75"
+        android:type="linear"/>
+</shape>

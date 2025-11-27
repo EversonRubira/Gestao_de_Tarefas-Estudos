@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background">
+    android:background="@drawable/background_full"
+    android:fillViewport="true">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -17,10 +18,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/timer_pomodoro"
-            android:textColor="@color/text_primary"
-            android:textSize="24sp"
+            android:textColor="@android:color/white"
+            android:textSize="26sp"
             android:textStyle="bold"
-            android:layout_marginTop="32dp" />
+            android:layout_marginTop="24dp"
+            android:shadowColor="#80000000"
+            android:shadowDx="0"
+            android:shadowDy="2"
+            android:shadowRadius="4" />
 
         <!-- Subject Selection -->
         <com.google.android.material.textfield.TextInputLayout
@@ -43,16 +48,18 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- Selected Subject Indicator -->
+        <!-- Selected Subject Indicator - Glassmorphism -->
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/card_selected_subject"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:visibility="gone"
-            app:cardCornerRadius="8dp"
-            app:cardElevation="2dp"
-            app:cardBackgroundColor="@color/primary_light">
+            app:cardBackgroundColor="@color/surface_glass"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="6dp"
+            app:strokeColor="@color/white_20"
+            app:strokeWidth="1dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -65,7 +72,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Estudando:"
-                    android:textColor="@color/text_secondary"
+                    android:textColor="@color/text_secondary_glass"
                     android:textSize="14sp"
                     android:layout_marginEnd="8dp" />
 
@@ -75,7 +82,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="Programação Móvel"
-                    android:textColor="@color/primary_dark"
+                    android:textColor="@color/primary"
                     android:textSize="16sp"
                     android:textStyle="bold" />
 
@@ -83,19 +90,20 @@
 
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- Timer Display -->
+        <!-- Timer Display - Gradiente Laranja Circular -->
         <com.google.android.material.card.MaterialCardView
             android:layout_width="280dp"
             android:layout_height="280dp"
             android:layout_marginTop="32dp"
             android:layout_marginBottom="32dp"
             app:cardCornerRadius="140dp"
-            app:cardElevation="8dp"
-            app:cardBackgroundColor="@color/primary">
+            app:cardElevation="12dp"
+            app:strokeWidth="0dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:background="@drawable/gradient_orange_accent"
                 android:gravity="center"
                 android:orientation="vertical">
 
@@ -104,9 +112,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="25:00"
-                    android:textColor="@android:color/white"
-                    android:textSize="48sp"
-                    android:textStyle="bold" />
+                    android:textColor="@color/text_on_accent"
+                    android:textSize="56sp"
+                    android:textStyle="bold"
+                    android:shadowColor="#40000000"
+                    android:shadowDx="0"
+                    android:shadowDy="2"
+                    android:shadowRadius="4" />
 
                 <TextView
                     android:id="@+id/tv_timer_status"
@@ -114,8 +126,9 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:text="@string/timer_work_session"
-                    android:textColor="@android:color/white"
-                    android:textSize="16sp" />
+                    android:textColor="@color/text_on_accent"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
 
             </LinearLayout>
 
@@ -148,12 +161,15 @@
 
         </LinearLayout>
 
-        <!-- Settings Card -->
+        <!-- Settings Card - Glassmorphism -->
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:cardCornerRadius="8dp"
-            app:cardElevation="4dp">
+            app:cardBackgroundColor="@color/surface_glass"
+            app:cardCornerRadius="18dp"
+            app:cardElevation="6dp"
+            app:strokeColor="@color/white_20"
+            app:strokeWidth="1dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -164,8 +180,8 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Settings"
-                    android:textColor="@color/text_primary"
+                    android:text="⚙️ Settings"
+                    android:textColor="@color/text_on_glass"
                     android:textSize="18sp"
                     android:textStyle="bold"
                     android:layout_marginBottom="16dp" />
@@ -175,7 +191,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/timer_work_duration"
-                    android:textColor="@color/text_secondary"
+                    android:textColor="@color/text_secondary_glass"
                     android:textSize="14sp" />
 
                 <EditText
@@ -191,7 +207,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/timer_break_duration"
-                    android:textColor="@color/text_secondary"
+                    android:textColor="@color/text_secondary_glass"
                     android:textSize="14sp" />
 
                 <EditText

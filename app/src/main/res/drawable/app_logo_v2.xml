@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Logo moderno v2.0 - Livro + Cronômetro integrado -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="120dp"
+    android:height="120dp"
+    android:viewportWidth="120"
+    android:viewportHeight="120">
+
+    <!-- Fundo circular com gradiente (simulado com camadas) -->
+    <path
+        android:fillColor="#5B7C99"
+        android:pathData="M60,10 A50,50 0,1,1 60,110 A50,50 0,1,1 60,10 Z"/>
+
+    <!-- Livro aberto (base) -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M30,40 L55,40 L55,75 L32,72 Z"/>
+    <path
+        android:fillColor="#E8E8E8"
+        android:pathData="M65,40 L90,40 L88,72 L65,75 Z"/>
+
+    <!-- Linha central do livro -->
+    <path
+        android:fillColor="#5B7C99"
+        android:strokeWidth="2"
+        android:strokeColor="#5B7C99"
+        android:pathData="M60,40 L60,75"/>
+
+    <!-- Páginas do livro -->
+    <path
+        android:strokeColor="#BDBDBD"
+        android:strokeWidth="1"
+        android:pathData="M35,45 L50,45 M35,50 L50,50 M35,55 L50,55 M35,60 L48,60"/>
+    <path
+        android:strokeColor="#BDBDBD"
+        android:strokeWidth="1"
+        android:pathData="M70,45 L85,45 M70,50 L85,50 M70,55 L85,55 M70,60 L82,60"/>
+
+    <!-- Cronômetro integrado (círculo sobreposto) -->
+    <path
+        android:fillColor="#FF9800"
+        android:pathData="M60,50 m-15,0 a15,15 0,1,1 30,0 a15,15 0,1,1 -30,0"/>
+
+    <!-- Face do cronômetro -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M60,50 m-12,0 a12,12 0,1,1 24,0 a12,12 0,1,1 -24,0"/>
+
+    <!-- Ponteiros do cronômetro -->
+    <path
+        android:strokeColor="#FF9800"
+        android:strokeWidth="2"
+        android:pathData="M60,50 L60,42"/>
+    <path
+        android:strokeColor="#FF9800"
+        android:strokeWidth="2"
+        android:pathData="M60,50 L66,54"/>
+
+    <!-- Centro do cronômetro -->
+    <path
+        android:fillColor="#FF9800"
+        android:pathData="M60,50 m-2,0 a2,2 0,1,1 4,0 a2,2 0,1,1 -4,0"/>
+
+    <!-- Botão do cronômetro -->
+    <path
+        android:fillColor="#FFB74D"
+        android:pathData="M58,35 L62,35 L62,38 L58,38 Z"/>
+
+    <!-- Sombra sutil -->
+    <path
+        android:fillColor="#1A000000"
+        android:pathData="M60,105 m-35,0 a35,5 0,1,1 70,0 a35,5 0,1,1 -70,0"/>
+</vector>

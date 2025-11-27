@@ -3,35 +3,47 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
-    <!-- Primary Colors -->
-    <color name="primary">#2196F3</color>
-    <color name="primary_dark">#1976D2</color>
-    <color name="primary_light">#BBDEFB</color>
+    <!-- Primary Colors - Tons Neutros e Naturais (base para glassmorphism) -->
+    <color name="primary">#5B7C99</color>           <!-- Azul-acinzentado suave -->
+    <color name="primary_dark">#3D5A75</color>       <!-- Azul escuro elegante -->
+    <color name="primary_light">#8FA3B8</color>      <!-- Azul claro suave -->
 
-    <!-- Accent Colors -->
-    <color name="accent">#FF9800</color>
-    <color name="accent_dark">#F57C00</color>
+    <!-- Accent Colors - Laranja com gradiente -->
+    <color name="accent_start">#FFB74D</color>       <!-- Amarelo-laranja -->
+    <color name="accent">#FF9800</color>             <!-- Laranja médio -->
+    <color name="accent_end">#F57C00</color>         <!-- Laranja escuro -->
+    <color name="accent_dark">#F57C00</color>        <!-- Mantido para compatibilidade -->
 
-    <!-- Background Colors -->
+    <!-- Background & Surface - Glassmorphism -->
     <color name="background">#F5F5F5</color>
+    <color name="background_overlay">#CC000000</color> <!-- 80% preto para overlay -->
     <color name="surface">#FFFFFF</color>
+    <color name="surface_glass">#B3FFFFFF</color>      <!-- Branco 70% (glassmorphism) -->
+    <color name="surface_glass_dark">#99FFFFFF</color> <!-- Branco 60% -->
 
-    <!-- Text Colors -->
-    <color name="text_primary">#212121</color>
-    <color name="text_secondary">#757575</color>
-    <color name="text_hint">#9E9E9E</color>
+    <!-- Text Colors - Para glassmorphism -->
+    <color name="text_primary">#1A1A1A</color>         <!-- Quase preto -->
+    <color name="text_secondary">#424242</color>
+    <color name="text_hint">#757575</color>
+    <color name="text_on_glass">#1A1A1A</color>        <!-- Quase preto -->
+    <color name="text_secondary_glass">#424242</color>
+    <color name="text_on_accent">#FFFFFF</color>       <!-- Branco puro -->
 
-    <!-- Status Colors -->
-    <color name="success">#4CAF50</color>
-    <color name="error">#F44336</color>
-    <color name="warning">#FFC107</color>
-    <color name="info">#2196F3</color>
+    <!-- Status Colors - Tons suaves -->
+    <color name="success">#66BB6A</color>              <!-- Verde suave -->
+    <color name="error">#EF5350</color>                <!-- Vermelho suave -->
+    <color name="warning">#FFA726</color>              <!-- Laranja aviso -->
+    <color name="info">#42A5F5</color>                 <!-- Azul info -->
 
     <!-- Priority Colors -->
-    <color name="priority_low">#4CAF50</color>
-    <color name="priority_medium">#FFC107</color>
-    <color name="priority_high">#F44336</color>
+    <color name="priority_low">#66BB6A</color>
+    <color name="priority_medium">#FFA726</color>
+    <color name="priority_high">#EF5350</color>
 
     <!-- Divider -->
-    <color name="divider">#BDBDBD</color>
+    <color name="divider">#E0E0E0</color>
+
+    <!-- Transparentes para bordas -->
+    <color name="white_20">#33FFFFFF</color>
+    <color name="white_40">#66FFFFFF</color>
 </resources>
