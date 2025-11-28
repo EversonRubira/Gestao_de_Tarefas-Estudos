@@ -46,4 +46,7 @@
     <!-- Transparentes para bordas -->
     <color name="white_20">#33FFFFFF</color>
     <color name="white_40">#66FFFFFF</color>
+
+    <!-- Bottom Navigation - Tom Bege/Creme -->
+    <color name="bottom_nav_background">#F5EDE4</color>  <!-- Bege/creme suave -->
 </resources>

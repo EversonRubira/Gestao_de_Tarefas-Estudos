@@ -16,6 +16,7 @@ import com.example.gestaodetarefasestudos.fragments.HomeFragment;
 import com.example.gestaodetarefasestudos.fragments.SubjectsFragment;
 import com.example.gestaodetarefasestudos.fragments.TasksFragment;
 import com.example.gestaodetarefasestudos.fragments.TimerFragment;
+import com.example.gestaodetarefasestudos.fragments.CalendarFragment;
 import com.example.gestaodetarefasestudos.models.Disciplina;
 import com.example.gestaodetarefasestudos.models.Tarefa;
 import com.example.gestaodetarefasestudos.models.SessaoEstudo;
@@ -87,6 +88,9 @@ public class MainActivity extends AppCompatActivity {
             } else if (idItem == R.id.navigation_timer) {
                 fragmentoSelecionado = new TimerFragment();
                 titulo = getString(R.string.timer_title);
+            } else if (idItem == R.id.navigation_calendar) {
+                fragmentoSelecionado = new CalendarFragment();
+                titulo = getString(R.string.calendar_title);
             }
 
             if (fragmentoSelecionado != null) {

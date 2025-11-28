@@ -10,111 +10,72 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="16dp">
+        android:padding="24dp">
 
-        <!-- Welcome Card - Glassmorphism -->
-        <com.google.android.material.card.MaterialCardView
-            android:layout_width="match_parent"
+        <!-- Welcome Title - Grande e em destaque -->
+        <TextView
+            android:id="@+id/tv_welcome_title"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="12dp"
-            app:cardBackgroundColor="@color/surface_glass"
-            app:cardCornerRadius="18dp"
-            app:cardElevation="6dp"
-            app:strokeColor="@color/white_20"
-            app:strokeWidth="1dp">
+            android:text="Bem-vinda,\nMaria"
+            android:textColor="@color/text_primary"
+            android:textSize="42sp"
+            android:textStyle="bold"
+            android:lineSpacingExtra="4dp"
+            android:layout_marginBottom="32dp" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="14dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/home_welcome"
-                    android:textColor="@color/text_on_glass"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:text="Track your studies and manage your tasks efficiently"
-                    android:textColor="@color/text_secondary_glass"
-                    android:textSize="12sp" />
-
-            </LinearLayout>
-
-        </com.google.android.material.card.MaterialCardView>
-
-        <!-- Statistics Grid -->
+        <!-- Grid de Cards 2x2 -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:weightSum="2">
+            android:weightSum="2"
+            android:layout_marginBottom="16dp">
 
-            <!-- Total Subjects Card - Glassmorphism -->
+            <!-- Card Disciplinas - Azul -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="0dp"
-                android:layout_height="90dp"
+                android:layout_height="160dp"
                 android:layout_weight="1"
-                android:layout_marginEnd="6dp"
-                android:layout_marginBottom="12dp"
-                app:cardBackgroundColor="@color/surface_glass"
-                app:cardCornerRadius="18dp"
-                app:cardElevation="6dp"
-                app:strokeColor="@color/white_20"
-                app:strokeWidth="1dp">
+                android:layout_marginEnd="8dp"
+                app:cardBackgroundColor="#6B9BD1"
+                app:cardCornerRadius="24dp"
+                app:cardElevation="8dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center"
                     android:orientation="vertical"
-                    android:padding="12dp">
+                    android:padding="20dp">
+
+                    <ImageView
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:src="@drawable/ic_subject"
+                        android:tint="@android:color/white"
+                        android:layout_marginBottom="12dp" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="📊"
-                        android:textSize="24sp" />
-
-                    <TextView
-                        android:id="@+id/tv_total_subjects"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        android:text="0"
-                        android:textColor="@color/primary"
-                        android:textSize="24sp"
+                        android:text="Disciplinas"
+                        android:textColor="@android:color/white"
+                        android:textSize="16sp"
                         android:textStyle="bold" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="2dp"
-                        android:text="@string/home_total_subjects"
-                        android:textAlignment="center"
-                        android:textColor="@color/text_on_glass"
-                        android:textSize="11sp" />
 
                 </LinearLayout>
 
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- Pending Tasks Card - Gradiente Laranja -->
+            <!-- Card Tarefas Pendentes - Amarelo -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="0dp"
-                android:layout_height="90dp"
+                android:layout_height="160dp"
                 android:layout_weight="1"
-                android:layout_marginStart="6dp"
-                android:layout_marginBottom="12dp"
-                app:cardCornerRadius="18dp"
-                app:cardElevation="8dp"
-                app:strokeWidth="0dp">
+                android:layout_marginStart="8dp"
+                app:cardCornerRadius="24dp"
+                app:cardElevation="8dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -122,36 +83,32 @@
                     android:background="@drawable/gradient_orange_accent"
                     android:gravity="center"
                     android:orientation="vertical"
-                    android:padding="12dp">
+                    android:padding="20dp">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="📝"
-                        android:textSize="24sp" />
+                    <ImageView
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:src="@drawable/ic_task"
+                        android:tint="@android:color/white"
+                        android:layout_marginBottom="8dp" />
 
                     <TextView
                         android:id="@+id/tv_pending_tasks"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        android:text="0"
-                        android:textColor="@color/text_on_accent"
-                        android:textSize="24sp"
-                        android:textStyle="bold"
-                        android:shadowColor="#40000000"
-                        android:shadowDx="0"
-                        android:shadowDy="1"
-                        android:shadowRadius="2" />
+                        android:text="12"
+                        android:textColor="@android:color/white"
+                        android:textSize="32sp"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="2dp"
-                        android:text="@string/home_pending_tasks"
+                        android:text="Tarefas\nPendentes"
                         android:textAlignment="center"
-                        android:textColor="@color/text_on_accent"
-                        android:textSize="11sp" />
+                        android:textColor="@android:color/white"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
 
                 </LinearLayout>
 
@@ -159,257 +116,55 @@
 
         </LinearLayout>
 
-        <!-- Study Time Card - Glassmorphism -->
+        <!-- Card Tempo de Estudo - Verde, Full Width -->
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="12dp"
-            app:cardBackgroundColor="@color/surface_glass"
-            app:cardCornerRadius="18dp"
-            app:cardElevation="6dp"
-            app:strokeColor="@color/white_20"
-            app:strokeWidth="1dp">
+            android:layout_marginBottom="16dp"
+            app:cardBackgroundColor="#7CB88F"
+            app:cardCornerRadius="24dp"
+            app:cardElevation="8dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="14dp">
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:padding="24dp">
+
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/ic_timer"
+                    android:tint="@android:color/white"
+                    android:layout_marginEnd="16dp" />
 
                 <LinearLayout
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical"
-                    android:layout_marginBottom="6dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="⏱️"
-                        android:textSize="20sp"
-                        android:layout_marginEnd="8dp" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/home_study_time_today"
-                        android:textColor="@color/text_on_glass"
-                        android:textSize="14sp"
-                        android:textStyle="bold" />
-
-                </LinearLayout>
-
-                <!-- Lista de tempo por disciplina -->
-                <LinearLayout
-                    android:id="@+id/layout_study_time_list"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:orientation="vertical">
-
-                    <!-- Itens serão adicionados dinamicamente aqui -->
-
-                </LinearLayout>
-
-                <!-- Total -->
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@color/divider"
-                    android:layout_marginTop="6dp"
-                    android:layout_marginBottom="6dp" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Total"
-                        android:textColor="@color/text_on_glass"
-                        android:textSize="13sp"
-                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/tv_study_time"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="0h 00m"
-                        android:textColor="@color/primary"
-                        android:textSize="15sp"
+                        android:text="01h 30min"
+                        android:textColor="@android:color/white"
+                        android:textSize="28sp"
                         android:textStyle="bold" />
-
-                </LinearLayout>
-
-            </LinearLayout>
-
-        </com.google.android.material.card.MaterialCardView>
-
-        <!-- Calendar Card - Glassmorphism -->
-        <com.google.android.material.card.MaterialCardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            app:cardBackgroundColor="@color/surface_glass"
-            app:cardCornerRadius="18dp"
-            app:cardElevation="6dp"
-            app:strokeColor="@color/white_20"
-            app:strokeWidth="1dp">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="14dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical"
-                    android:layout_marginBottom="8dp">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="📅"
-                        android:textSize="20sp"
-                        android:layout_marginEnd="8dp" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Calendário de Entregas"
-                        android:textColor="@color/text_on_glass"
-                        android:textSize="15sp"
-                        android:textStyle="bold" />
+                        android:text="Tempo de Estudo Hoje"
+                        android:textColor="@android:color/white"
+                        android:textSize="14sp"
+                        android:alpha="0.9" />
 
                 </LinearLayout>
 
-                <!-- Cabeçalho do mês -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical"
-                    android:layout_marginBottom="4dp">
-
-                    <TextView
-                        android:id="@+id/tv_mes_ano"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Janeiro 2025"
-                        android:textColor="@color/text_on_glass"
-                        android:textSize="13sp"
-                        android:textStyle="bold" />
-
-                    <ImageButton
-                        android:id="@+id/btn_mes_anterior"
-                        android:layout_width="32dp"
-                        android:layout_height="32dp"
-                        android:background="?attr/selectableItemBackgroundBorderless"
-                        android:src="@android:drawable/ic_media_previous"
-                        android:contentDescription="Mês anterior" />
-
-                    <ImageButton
-                        android:id="@+id/btn_proximo_mes"
-                        android:layout_width="32dp"
-                        android:layout_height="32dp"
-                        android:background="?attr/selectableItemBackgroundBorderless"
-                        android:src="@android:drawable/ic_media_next"
-                        android:contentDescription="Próximo mês" />
-
-                </LinearLayout>
-
-                <!-- Dias da semana -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginBottom="2dp">
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="D"
-                        android:textAlignment="center"
-                        android:textColor="@color/text_secondary"
-                        android:textSize="10sp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="S"
-                        android:textAlignment="center"
-                        android:textColor="@color/text_secondary"
-                        android:textSize="10sp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="T"
-                        android:textAlignment="center"
-                        android:textColor="@color/text_secondary"
-                        android:textSize="10sp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Q"
-                        android:textAlignment="center"
-                        android:textColor="@color/text_secondary"
-                        android:textSize="10sp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Q"
-                        android:textAlignment="center"
-                        android:textColor="@color/text_secondary"
-                        android:textSize="10sp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="S"
-                        android:textAlignment="center"
-                        android:textColor="@color/text_secondary"
-                        android:textSize="10sp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="S"
-                        android:textAlignment="center"
-                        android:textColor="@color/text_secondary"
-                        android:textSize="10sp"
-                        android:textStyle="bold" />
-
-                </LinearLayout>
-
-                <!-- Grid de dias (será preenchido dinamicamente) -->
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rv_calendario"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:nestedScrollingEnabled="false" />
+                <!-- Removi o layout_study_time_list para simplificar -->
 
             </LinearLayout>
 

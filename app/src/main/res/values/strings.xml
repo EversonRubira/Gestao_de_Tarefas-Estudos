@@ -18,6 +18,7 @@
     <string name="nav_subjects">Subjects</string>
     <string name="nav_tasks">Tasks</string>
     <string name="nav_timer">Study Timer</string>
+    <string name="nav_calendar">Calendar</string>
 
     <!-- Home Screen -->
     <string name="home_title">Dashboard</string>
@@ -62,6 +63,9 @@
     <string name="status_pending">Pending</string>
     <string name="status_in_progress">In Progress</string>
     <string name="status_completed">Completed</string>
+
+    <!-- Calendar -->
+    <string name="calendar_title">Calendar</string>
 
     <!-- Timer -->
     <string name="timer_title">Study Timer</string>

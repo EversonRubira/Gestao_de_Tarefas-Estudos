@@ -19,4 +19,9 @@
         android:id="@+id/navigation_timer"
         android:icon="@drawable/ic_timer"
         android:title="@string/nav_timer" />
+
+    <item
+        android:id="@+id/navigation_calendar"
+        android:icon="@drawable/ic_calendar"
+        android:title="@string/nav_calendar" />
 </menu>
