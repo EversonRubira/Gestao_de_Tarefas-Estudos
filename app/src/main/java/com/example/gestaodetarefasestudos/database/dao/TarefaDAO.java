@@ -177,6 +177,24 @@ public class TarefaDAO {
         return total;
     }
 
+    // Contar tarefas concluídas
+    public int contarConcluidas() {
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        String query = "SELECT COUNT(*) FROM " + DatabaseHelper.TABELA_TAREFAS +
+                " WHERE " + DatabaseHelper.COL_TAREFA_ESTADO + " = ?";
+
+        Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(EstadoTarefa.CONCLUIDA.getValor())});
+
+        int total = 0;
+        if (cursor.moveToFirst()) {
+            total = cursor.getInt(0);
+        }
+
+        cursor.close();
+        db.close();
+        return total;
+    }
+
     /**
      * Obtém tarefas de um período específico (mês) com informações da disciplina e cor
      * MÉTODO CRIADO PARA O CALENDÁRIO!

@@ -21,10 +21,13 @@
 
     <!-- Home Screen -->
     <string name="home_title">Dashboard</string>
-    <string name="home_welcome">Welcome to Study Task Manager!</string>
-    <string name="home_total_subjects">Total Subjects</string>
-    <string name="home_pending_tasks">Pending Tasks</string>
-    <string name="home_study_time_today">Study Time Today</string>
+    <string name="home_welcome">Bem-vinda</string>
+    <string name="home_welcome_user">Bem-vinda,\n%s</string>
+    <string name="home_total_subjects">Disciplinas</string>
+    <string name="home_pending_tasks">Tarefas\nPendentes</string>
+    <string name="home_study_time_today">Tempo de Estudo Hoje</string>
+    <string name="home_completed_tasks">Tarefas\nConcluídas</string>
+    <string name="home_study_pages">Páginas\nEstudadas</string>
 
     <!-- Subjects -->
     <string name="subjects_title">My Subjects</string>
