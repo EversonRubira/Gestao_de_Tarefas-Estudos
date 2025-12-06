@@ -47,4 +47,20 @@
     <color name="white_20">#33FFFFFF</color>
     <color name="white_40">#66FFFFFF</color>
     <color name="white_80">#CCFFFFFF</color>
+
+    <!-- Cores para Cards Principais - Gradientes -->
+    <!-- Azul para Disciplinas -->
+    <color name="blue_start">#42A5F5</color>
+    <color name="blue_center">#2196F3</color>
+    <color name="blue_end">#1976D2</color>
+
+    <!-- Verde para Tempo de Estudo -->
+    <color name="green_start">#66BB6A</color>
+    <color name="green_center">#4CAF50</color>
+    <color name="green_end">#388E3C</color>
+
+    <!-- Roxo para Progresso/Páginas -->
+    <color name="purple_start">#AB47BC</color>
+    <color name="purple_center">#9C27B0</color>
+    <color name="purple_end">#7B1FA2</color>
 </resources>
