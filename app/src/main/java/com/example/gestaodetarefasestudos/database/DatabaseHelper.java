@@ -8,15 +8,24 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     // Informações do banco de dados
     private static final String NOME_BANCO = "gestao_tarefas_estudos.db";
-    private static final int VERSAO_BANCO = 1;
+    private static final int VERSAO_BANCO = 2;
 
     // Nome das tabelas
+    public static final String TABELA_USUARIOS = "usuarios";
     public static final String TABELA_DISCIPLINAS = "disciplinas";
     public static final String TABELA_TAREFAS = "tarefas";
     public static final String TABELA_SESSOES_ESTUDO = "sessoes_estudo";
 
+    // Colunas da tabela USUARIOS
+    public static final String COL_USUARIO_ID = "id";
+    public static final String COL_USUARIO_NOME = "nome";
+    public static final String COL_USUARIO_EMAIL = "email";
+    public static final String COL_USUARIO_SENHA = "senha";
+    public static final String COL_USUARIO_DATA_CRIACAO = "data_criacao";
+
     // Colunas da tabela DISCIPLINAS
     public static final String COL_DISCIPLINA_ID = "id";
+    public static final String COL_DISCIPLINA_USUARIO_ID = "usuario_id";
     public static final String COL_DISCIPLINA_NOME = "nome";
     public static final String COL_DISCIPLINA_CODIGO = "codigo";
     public static final String COL_DISCIPLINA_COR = "cor";
@@ -24,6 +33,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     // Colunas da tabela TAREFAS
     public static final String COL_TAREFA_ID = "id";
+    public static final String COL_TAREFA_USUARIO_ID = "usuario_id";
     public static final String COL_TAREFA_TITULO = "titulo";
     public static final String COL_TAREFA_DESCRICAO = "descricao";
     public static final String COL_TAREFA_DISCIPLINA_ID = "disciplina_id";
@@ -34,24 +44,39 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     // Colunas da tabela SESSOES_ESTUDO
     public static final String COL_SESSAO_ID = "id";
+    public static final String COL_SESSAO_USUARIO_ID = "usuario_id";
     public static final String COL_SESSAO_DISCIPLINA_ID = "disciplina_id";
     public static final String COL_SESSAO_DURACAO = "duracao";
     public static final String COL_SESSAO_DATA = "data";
+
+    // SQL para criar tabela USUARIOS
+    private static final String CRIAR_TABELA_USUARIOS =
+            "CREATE TABLE " + TABELA_USUARIOS + " (" +
+            COL_USUARIO_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+            COL_USUARIO_NOME + " TEXT NOT NULL, " +
+            COL_USUARIO_EMAIL + " TEXT NOT NULL UNIQUE, " +
+            COL_USUARIO_SENHA + " TEXT NOT NULL, " +
+            COL_USUARIO_DATA_CRIACAO + " INTEGER NOT NULL" +
+            ")";
 
     // SQL para criar tabela DISCIPLINAS
     private static final String CRIAR_TABELA_DISCIPLINAS =
             "CREATE TABLE " + TABELA_DISCIPLINAS + " (" +
             COL_DISCIPLINA_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+            COL_DISCIPLINA_USUARIO_ID + " INTEGER NOT NULL, " +
             COL_DISCIPLINA_NOME + " TEXT NOT NULL, " +
-            COL_DISCIPLINA_CODIGO + " TEXT NOT NULL UNIQUE, " +
+            COL_DISCIPLINA_CODIGO + " TEXT NOT NULL, " +
             COL_DISCIPLINA_COR + " TEXT NOT NULL, " +
-            COL_DISCIPLINA_DATA_CRIACAO + " INTEGER NOT NULL" +
+            COL_DISCIPLINA_DATA_CRIACAO + " INTEGER NOT NULL, " +
+            "FOREIGN KEY(" + COL_DISCIPLINA_USUARIO_ID + ") REFERENCES " +
+            TABELA_USUARIOS + "(" + COL_USUARIO_ID + ") ON DELETE CASCADE" +
             ")";
 
     // SQL para criar tabela TAREFAS
     private static final String CRIAR_TABELA_TAREFAS =
             "CREATE TABLE " + TABELA_TAREFAS + " (" +
             COL_TAREFA_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+            COL_TAREFA_USUARIO_ID + " INTEGER NOT NULL, " +
             COL_TAREFA_TITULO + " TEXT NOT NULL, " +
             COL_TAREFA_DESCRICAO + " TEXT, " +
             COL_TAREFA_DISCIPLINA_ID + " INTEGER NOT NULL, " +
@@ -59,6 +84,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             COL_TAREFA_PRIORIDADE + " INTEGER NOT NULL, " +
             COL_TAREFA_ESTADO + " INTEGER NOT NULL, " +
             COL_TAREFA_DATA_CRIACAO + " INTEGER NOT NULL, " +
+            "FOREIGN KEY(" + COL_TAREFA_USUARIO_ID + ") REFERENCES " +
+            TABELA_USUARIOS + "(" + COL_USUARIO_ID + ") ON DELETE CASCADE, " +
             "FOREIGN KEY(" + COL_TAREFA_DISCIPLINA_ID + ") REFERENCES " +
             TABELA_DISCIPLINAS + "(" + COL_DISCIPLINA_ID + ") ON DELETE CASCADE" +
             ")";
@@ -67,9 +94,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String CRIAR_TABELA_SESSOES_ESTUDO =
             "CREATE TABLE " + TABELA_SESSOES_ESTUDO + " (" +
             COL_SESSAO_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+            COL_SESSAO_USUARIO_ID + " INTEGER NOT NULL, " +
             COL_SESSAO_DISCIPLINA_ID + " INTEGER NOT NULL, " +
             COL_SESSAO_DURACAO + " INTEGER NOT NULL, " +
             COL_SESSAO_DATA + " INTEGER NOT NULL, " +
+            "FOREIGN KEY(" + COL_SESSAO_USUARIO_ID + ") REFERENCES " +
+            TABELA_USUARIOS + "(" + COL_USUARIO_ID + ") ON DELETE CASCADE, " +
             "FOREIGN KEY(" + COL_SESSAO_DISCIPLINA_ID + ") REFERENCES " +
             TABELA_DISCIPLINAS + "(" + COL_DISCIPLINA_ID + ") ON DELETE CASCADE" +
             ")";
@@ -93,7 +123,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         // Ativar chaves estrangeiras
         db.execSQL("PRAGMA foreign_keys=ON");
 
-        // Criar tabelas
+        // Criar tabelas (ordem é importante devido às foreign keys)
+        db.execSQL(CRIAR_TABELA_USUARIOS);
         db.execSQL(CRIAR_TABELA_DISCIPLINAS);
         db.execSQL(CRIAR_TABELA_TAREFAS);
         db.execSQL(CRIAR_TABELA_SESSOES_ESTUDO);
@@ -105,6 +136,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABELA_SESSOES_ESTUDO);
         db.execSQL("DROP TABLE IF EXISTS " + TABELA_TAREFAS);
         db.execSQL("DROP TABLE IF EXISTS " + TABELA_DISCIPLINAS);
+        db.execSQL("DROP TABLE IF EXISTS " + TABELA_USUARIOS);
         onCreate(db);
     }
 

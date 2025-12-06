@@ -143,6 +143,7 @@ public class AdicionarEditarTarefaActivity extends AppCompatActivity {
      * @deprecated Este método está deprecated mas ainda funciona
      * TODO: No futuro, usar ActivityResultLauncher em vez de onActivityResult
      */
+    @Deprecated
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

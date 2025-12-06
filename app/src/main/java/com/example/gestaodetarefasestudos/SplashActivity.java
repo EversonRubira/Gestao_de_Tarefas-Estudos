@@ -1,6 +1,7 @@
 package com.example.gestaodetarefasestudos;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.animation.Animation;
@@ -37,12 +38,24 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     /**
-     * Aguarda o tempo definido e depois navega para a tela principal (MainActivity)
+     * Aguarda o tempo definido e depois navega para a tela de login ou principal
+     * Verifica se o usuário já está logado para decidir qual tela mostrar
      * Usa Handler.postDelayed para criar um atraso sem bloquear a interface
      */
     private void navegarParaTelaInicial() {
         new Handler().postDelayed(() -> {
-            Intent intencao = new Intent(SplashActivity.this, MainActivity.class);
+            SharedPreferences preferences = getSharedPreferences("GestaoTarefasPrefs", MODE_PRIVATE);
+            boolean logado = preferences.getBoolean("logado", false);
+
+            Intent intencao;
+            if (logado) {
+                // Usuário está logado - ir para MainActivity
+                intencao = new Intent(SplashActivity.this, MainActivity.class);
+            } else {
+                // Usuário não está logado - ir para LoginActivity
+                intencao = new Intent(SplashActivity.this, LoginActivity.class);
+            }
+
             startActivity(intencao);
             finish(); // Fecha a SplashActivity para que o utilizador não volte para ela ao pressionar "voltar"
         }, DURACAO_SPLASH);

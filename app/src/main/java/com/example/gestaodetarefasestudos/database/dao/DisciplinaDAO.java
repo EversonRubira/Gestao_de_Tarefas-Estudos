@@ -14,8 +14,10 @@ import java.util.List;
 public class DisciplinaDAO {
 
     private DatabaseHelper dbHelper;
+    private Context context;
 
     public DisciplinaDAO(Context context) {
+        this.context = context;
         dbHelper = DatabaseHelper.obterInstancia(context);
     }
 
@@ -24,6 +26,7 @@ public class DisciplinaDAO {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         ContentValues valores = new ContentValues();
 
+        valores.put(DatabaseHelper.COL_DISCIPLINA_USUARIO_ID, obterUsuarioLogadoId());
         valores.put(DatabaseHelper.COL_DISCIPLINA_NOME, disciplina.getNome());
         valores.put(DatabaseHelper.COL_DISCIPLINA_CODIGO, disciplina.getCodigo());
         valores.put(DatabaseHelper.COL_DISCIPLINA_COR, disciplina.getCor());
@@ -34,15 +37,16 @@ public class DisciplinaDAO {
         return id;
     }
 
-    // READ - Obter todas as disciplinas
+    // READ - Obter todas as disciplinas do usuário logado
     public List<Disciplina> obterTodas() {
         List<Disciplina> listaDisciplinas = new ArrayList<>();
         SQLiteDatabase db = dbHelper.getReadableDatabase();
 
         String query = "SELECT * FROM " + DatabaseHelper.TABELA_DISCIPLINAS +
+                " WHERE " + DatabaseHelper.COL_DISCIPLINA_USUARIO_ID + " = ?" +
                 " ORDER BY " + DatabaseHelper.COL_DISCIPLINA_NOME + " ASC";
 
-        Cursor cursor = db.rawQuery(query, null);
+        Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(obterUsuarioLogadoId())});
 
         if (cursor.moveToFirst()) {
             do {
@@ -62,15 +66,16 @@ public class DisciplinaDAO {
         return listaDisciplinas;
     }
 
-    // READ - Obter disciplina por ID
+    // READ - Obter disciplina por ID do usuário logado
     public Disciplina obterPorId(long id) {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         Disciplina disciplina = null;
 
         String query = "SELECT * FROM " + DatabaseHelper.TABELA_DISCIPLINAS +
-                " WHERE " + DatabaseHelper.COL_DISCIPLINA_ID + " = ?";
+                " WHERE " + DatabaseHelper.COL_DISCIPLINA_ID + " = ?" +
+                " AND " + DatabaseHelper.COL_DISCIPLINA_USUARIO_ID + " = ?";
 
-        Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(id)});
+        Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(id), String.valueOf(obterUsuarioLogadoId())});
 
         if (cursor.moveToFirst()) {
             disciplina = new Disciplina();
@@ -118,11 +123,12 @@ public class DisciplinaDAO {
         return linhasAfetadas;
     }
 
-    // Contar total de disciplinas
+    // Contar total de disciplinas do usuário logado
     public int contarTotal() {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
-        String query = "SELECT COUNT(*) FROM " + DatabaseHelper.TABELA_DISCIPLINAS;
-        Cursor cursor = db.rawQuery(query, null);
+        String query = "SELECT COUNT(*) FROM " + DatabaseHelper.TABELA_DISCIPLINAS +
+                " WHERE " + DatabaseHelper.COL_DISCIPLINA_USUARIO_ID + " = ?";
+        Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(obterUsuarioLogadoId())});
 
         int total = 0;
         if (cursor.moveToFirst()) {
@@ -134,14 +140,15 @@ public class DisciplinaDAO {
         return total;
     }
 
-    // Verificar se código já existe
+    // Verificar se código já existe para o usuário logado
     public boolean codigoJaExiste(String codigo, long idExcluir) {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         String query = "SELECT COUNT(*) FROM " + DatabaseHelper.TABELA_DISCIPLINAS +
-                " WHERE " + DatabaseHelper.COL_DISCIPLINA_CODIGO + " = ? AND " +
-                DatabaseHelper.COL_DISCIPLINA_ID + " != ?";
+                " WHERE " + DatabaseHelper.COL_DISCIPLINA_CODIGO + " = ?" +
+                " AND " + DatabaseHelper.COL_DISCIPLINA_ID + " != ?" +
+                " AND " + DatabaseHelper.COL_DISCIPLINA_USUARIO_ID + " = ?";
 
-        Cursor cursor = db.rawQuery(query, new String[]{codigo, String.valueOf(idExcluir)});
+        Cursor cursor = db.rawQuery(query, new String[]{codigo, String.valueOf(idExcluir), String.valueOf(obterUsuarioLogadoId())});
 
         boolean existe = false;
         if (cursor.moveToFirst()) {
@@ -151,5 +158,11 @@ public class DisciplinaDAO {
         cursor.close();
         db.close();
         return existe;
+    }
+
+    // Helper - Obter ID do usuário logado
+    private long obterUsuarioLogadoId() {
+        android.content.SharedPreferences preferences = context.getSharedPreferences("GestaoTarefasPrefs", Context.MODE_PRIVATE);
+        return preferences.getLong("usuario_id", 0);
     }
 }

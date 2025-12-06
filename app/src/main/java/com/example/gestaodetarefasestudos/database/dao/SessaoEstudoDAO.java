@@ -15,8 +15,10 @@ import java.util.List;
 public class SessaoEstudoDAO {
 
     private DatabaseHelper dbHelper;
+    private Context context;
 
     public SessaoEstudoDAO(Context context) {
+        this.context = context;
         dbHelper = DatabaseHelper.obterInstancia(context);
     }
 
@@ -25,6 +27,7 @@ public class SessaoEstudoDAO {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         ContentValues valores = new ContentValues();
 
+        valores.put(DatabaseHelper.COL_SESSAO_USUARIO_ID, obterUsuarioLogadoId());
         valores.put(DatabaseHelper.COL_SESSAO_DISCIPLINA_ID, sessao.getDisciplinaId());
         valores.put(DatabaseHelper.COL_SESSAO_DURACAO, sessao.getDuracao());
         valores.put(DatabaseHelper.COL_SESSAO_DATA, sessao.getData());
@@ -34,7 +37,7 @@ public class SessaoEstudoDAO {
         return id;
     }
 
-    // READ - Obter todas as sessões de estudo
+    // READ - Obter todas as sessões de estudo do usuário logado
     public List<SessaoEstudo> obterTodas() {
         List<SessaoEstudo> listaSessoes = new ArrayList<>();
         SQLiteDatabase db = dbHelper.getReadableDatabase();
@@ -43,9 +46,10 @@ public class SessaoEstudoDAO {
                 "FROM " + DatabaseHelper.TABELA_SESSOES_ESTUDO + " s " +
                 "LEFT JOIN " + DatabaseHelper.TABELA_DISCIPLINAS + " d " +
                 "ON s." + DatabaseHelper.COL_SESSAO_DISCIPLINA_ID + " = d." + DatabaseHelper.COL_DISCIPLINA_ID +
+                " WHERE s." + DatabaseHelper.COL_SESSAO_USUARIO_ID + " = ?" +
                 " ORDER BY s." + DatabaseHelper.COL_SESSAO_DATA + " DESC";
 
-        Cursor cursor = db.rawQuery(query, null);
+        Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(obterUsuarioLogadoId())});
 
         if (cursor.moveToFirst()) {
             do {
@@ -59,7 +63,7 @@ public class SessaoEstudoDAO {
         return listaSessoes;
     }
 
-    // READ - Obter sessão por ID
+    // READ - Obter sessão por ID do usuário logado
     public SessaoEstudo obterPorId(long id) {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         SessaoEstudo sessao = null;
@@ -68,9 +72,10 @@ public class SessaoEstudoDAO {
                 "FROM " + DatabaseHelper.TABELA_SESSOES_ESTUDO + " s " +
                 "LEFT JOIN " + DatabaseHelper.TABELA_DISCIPLINAS + " d " +
                 "ON s." + DatabaseHelper.COL_SESSAO_DISCIPLINA_ID + " = d." + DatabaseHelper.COL_DISCIPLINA_ID +
-                " WHERE s." + DatabaseHelper.COL_SESSAO_ID + " = ?";
+                " WHERE s." + DatabaseHelper.COL_SESSAO_ID + " = ?" +
+                " AND s." + DatabaseHelper.COL_SESSAO_USUARIO_ID + " = ?";
 
-        Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(id)});
+        Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(id), String.valueOf(obterUsuarioLogadoId())});
 
         if (cursor.moveToFirst()) {
             sessao = criarSessaoDoCursor(cursor);
@@ -93,7 +98,7 @@ public class SessaoEstudoDAO {
         return linhasAfetadas;
     }
 
-    // Obter tempo total de estudo de hoje (em segundos)
+    // Obter tempo total de estudo de hoje do usuário logado (em segundos)
     public long obterTempoEstudoHoje() {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
 
@@ -107,9 +112,10 @@ public class SessaoEstudoDAO {
 
         String query = "SELECT SUM(" + DatabaseHelper.COL_SESSAO_DURACAO + ") " +
                 "FROM " + DatabaseHelper.TABELA_SESSOES_ESTUDO +
-                " WHERE " + DatabaseHelper.COL_SESSAO_DATA + " >= ?";
+                " WHERE " + DatabaseHelper.COL_SESSAO_DATA + " >= ?" +
+                " AND " + DatabaseHelper.COL_SESSAO_USUARIO_ID + " = ?";
 
-        Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(inicioDia)});
+        Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(inicioDia), String.valueOf(obterUsuarioLogadoId())});
 
         long tempoTotal = 0;
         if (cursor.moveToFirst()) {
@@ -121,15 +127,16 @@ public class SessaoEstudoDAO {
         return tempoTotal;
     }
 
-    // Obter tempo total de estudo de uma disciplina
+    // Obter tempo total de estudo de uma disciplina do usuário logado
     public long obterTempoEstudoDisciplina(long disciplinaId) {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
 
         String query = "SELECT SUM(" + DatabaseHelper.COL_SESSAO_DURACAO + ") " +
                 "FROM " + DatabaseHelper.TABELA_SESSOES_ESTUDO +
-                " WHERE " + DatabaseHelper.COL_SESSAO_DISCIPLINA_ID + " = ?";
+                " WHERE " + DatabaseHelper.COL_SESSAO_DISCIPLINA_ID + " = ?" +
+                " AND " + DatabaseHelper.COL_SESSAO_USUARIO_ID + " = ?";
 
-        Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(disciplinaId)});
+        Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(disciplinaId), String.valueOf(obterUsuarioLogadoId())});
 
         long tempoTotal = 0;
         if (cursor.moveToFirst()) {
@@ -164,11 +171,35 @@ public class SessaoEstudoDAO {
                 "FROM " + DatabaseHelper.TABELA_SESSOES_ESTUDO + " s " +
                 "LEFT JOIN " + DatabaseHelper.TABELA_DISCIPLINAS + " d " +
                 "ON s." + DatabaseHelper.COL_SESSAO_DISCIPLINA_ID + " = d." + DatabaseHelper.COL_DISCIPLINA_ID + " " +
-                "WHERE s." + DatabaseHelper.COL_SESSAO_DATA + " >= ? " +
-                "GROUP BY s." + DatabaseHelper.COL_SESSAO_DISCIPLINA_ID + " " +
+                "WHERE s." + DatabaseHelper.COL_SESSAO_DATA + " >= ?" +
+                " AND s." + DatabaseHelper.COL_SESSAO_USUARIO_ID + " = ?" +
+                " GROUP BY s." + DatabaseHelper.COL_SESSAO_DISCIPLINA_ID + " " +
                 "ORDER BY total_segundos DESC";
 
-        return db.rawQuery(query, new String[]{String.valueOf(inicioDia)});
+        return db.rawQuery(query, new String[]{String.valueOf(inicioDia), String.valueOf(obterUsuarioLogadoId())});
+    }
+
+    /**
+     * Obtém as top N disciplinas por tempo total de estudo
+     * Retorna um Cursor com: disciplina_id, nome_disciplina, cor_disciplina, total_segundos
+     */
+    public Cursor obterTopDisciplinas(int limite) {
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+        String query = "SELECT " +
+                "s." + DatabaseHelper.COL_SESSAO_DISCIPLINA_ID + ", " +
+                "d." + DatabaseHelper.COL_DISCIPLINA_NOME + " as nome_disciplina, " +
+                "d." + DatabaseHelper.COL_DISCIPLINA_COR + " as cor_disciplina, " +
+                "SUM(s." + DatabaseHelper.COL_SESSAO_DURACAO + ") as total_segundos " +
+                "FROM " + DatabaseHelper.TABELA_SESSOES_ESTUDO + " s " +
+                "INNER JOIN " + DatabaseHelper.TABELA_DISCIPLINAS + " d " +
+                "ON s." + DatabaseHelper.COL_SESSAO_DISCIPLINA_ID + " = d." + DatabaseHelper.COL_DISCIPLINA_ID + " " +
+                "WHERE s." + DatabaseHelper.COL_SESSAO_USUARIO_ID + " = ? " +
+                "GROUP BY s." + DatabaseHelper.COL_SESSAO_DISCIPLINA_ID + " " +
+                "ORDER BY total_segundos DESC " +
+                "LIMIT ?";
+
+        return db.rawQuery(query, new String[]{String.valueOf(obterUsuarioLogadoId()), String.valueOf(limite)});
     }
 
     // Método auxiliar para criar objeto SessaoEstudo a partir do Cursor
@@ -186,5 +217,11 @@ public class SessaoEstudoDAO {
         }
 
         return sessao;
+    }
+
+    // Helper - Obter ID do usuário logado
+    private long obterUsuarioLogadoId() {
+        android.content.SharedPreferences preferences = context.getSharedPreferences("GestaoTarefasPrefs", Context.MODE_PRIVATE);
+        return preferences.getLong("usuario_id", 0);
     }
 }

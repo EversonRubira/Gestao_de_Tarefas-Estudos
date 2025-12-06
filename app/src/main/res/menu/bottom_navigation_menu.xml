@@ -6,6 +6,11 @@
         android:title="@string/nav_home" />
 
     <item
+        android:id="@+id/navigation_dashboard"
+        android:icon="@android:drawable/ic_menu_today"
+        android:title="Dashboard" />
+
+    <item
         android:id="@+id/navigation_subjects"
         android:icon="@drawable/ic_subject"
         android:title="@string/nav_subjects" />

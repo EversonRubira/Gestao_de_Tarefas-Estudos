@@ -5,7 +5,22 @@
       "Bash(gradlew.bat build:*)",
       "Bash(dir:*)",
       "Bash(./gradlew build:*)",
-      "Bash(./gradlew assembleDebug:*)"
+      "Bash(./gradlew assembleDebug:*)",
+      "Bash(.gradlew.bat build:*)",
+      "Bash(findstr:*)",
+      "Bash(Select-String -Pattern \"deprecated|warning\" -CaseSensitive:$false)",
+      "Bash(find:*)",
+      "Bash(.gradlew.bat assembleDebug --warning-mode all)",
+      "Bash(Select-String -Pattern \"BUILD|FAILED|ERROR|warning\" -CaseSensitive:$false)",
+      "Bash(./gradlew.bat build:*)",
+      "Bash(./gradlew.bat assembleDebug:*)",
+      "Bash(del \"C:\\Workspace\\Android_Java\\Gestao_de_Tarefas-Desenvolvimento\\app\\src\\main\\res\\menu\\menu_main.xml\")",
+      "Bash(xargs cat:*)",
+      "Bash(del \"c:\\Workspace\\Android_Java\\Gestao_de_Tarefas-Desenvolvimento\\app\\src\\main\\res\\menu\\menu_main.xml\")",
+      "Bash(gh repo view:*)",
+      "WebFetch(domain:github.com)",
+      "Bash(git pull:*)",
+      "Bash(git add:*)"
     ],
     "deny": [],
     "ask": []

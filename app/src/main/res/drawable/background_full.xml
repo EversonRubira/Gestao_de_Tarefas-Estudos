@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Background completo com overlay escuro -->
+<!-- Background com imagem bonita e overlay leve para legibilidade -->
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
-    <!-- Imagem de fundo -->
+
+    <!-- Camada 1: Imagem de fundo bonita -->
+    <item>
+        <bitmap
+            android:src="@drawable/background_image"
+            android:gravity="center"
+            android:tileMode="disabled" />
+    </item>
+
+    <!-- Camada 2: Overlay leve (25%) para garantir legibilidade do texto -->
+    <!-- Você pode ajustar a opacidade alterando o valor (#40 = 25%, #66 = 40%, #80 = 50%) -->
     <item>
         <shape>
-            <gradient
-                android:angle="135"
-                android:startColor="#4A6FA5"
-                android:centerColor="#5B7C99"
-                android:endColor="#3D5A75"
-                android:type="linear"/>
+            <solid android:color="#40000000"/>
         </shape>
     </item>
-    <!-- Overlay escuro 80% -->
-    <item>
-        <shape>
-            <solid android:color="@color/background_overlay"/>
-        </shape>
-    </item>
+
 </layer-list>

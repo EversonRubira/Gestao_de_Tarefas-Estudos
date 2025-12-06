@@ -16,8 +16,10 @@ import java.util.List;
 public class TarefaDAO {
 
     private DatabaseHelper dbHelper;
+    private Context context;
 
     public TarefaDAO(Context context) {
+        this.context = context;
         dbHelper = DatabaseHelper.obterInstancia(context);
     }
 
@@ -26,6 +28,7 @@ public class TarefaDAO {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         ContentValues valores = new ContentValues();
 
+        valores.put(DatabaseHelper.COL_TAREFA_USUARIO_ID, obterUsuarioLogadoId());
         valores.put(DatabaseHelper.COL_TAREFA_TITULO, tarefa.getTitulo());
         valores.put(DatabaseHelper.COL_TAREFA_DESCRICAO, tarefa.getDescricao());
         valores.put(DatabaseHelper.COL_TAREFA_DISCIPLINA_ID, tarefa.getDisciplinaId());
@@ -39,7 +42,7 @@ public class TarefaDAO {
         return id;
     }
 
-    // READ - Obter todas as tarefas com nome da disciplina
+    // READ - Obter todas as tarefas do usuário logado com nome da disciplina
     public List<Tarefa> obterTodas() {
         List<Tarefa> listaTarefas = new ArrayList<>();
         SQLiteDatabase db = dbHelper.getReadableDatabase();
@@ -48,9 +51,10 @@ public class TarefaDAO {
                 "FROM " + DatabaseHelper.TABELA_TAREFAS + " t " +
                 "LEFT JOIN " + DatabaseHelper.TABELA_DISCIPLINAS + " d " +
                 "ON t." + DatabaseHelper.COL_TAREFA_DISCIPLINA_ID + " = d." + DatabaseHelper.COL_DISCIPLINA_ID +
+                " WHERE t." + DatabaseHelper.COL_TAREFA_USUARIO_ID + " = ?" +
                 " ORDER BY t." + DatabaseHelper.COL_TAREFA_DATA_ENTREGA + " ASC";
 
-        Cursor cursor = db.rawQuery(query, null);
+        Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(obterUsuarioLogadoId())});
 
         if (cursor.moveToFirst()) {
             do {
@@ -64,7 +68,7 @@ public class TarefaDAO {
         return listaTarefas;
     }
 
-    // READ - Obter tarefas pendentes
+    // READ - Obter tarefas pendentes do usuário logado
     public List<Tarefa> obterPendentes() {
         List<Tarefa> listaTarefas = new ArrayList<>();
         SQLiteDatabase db = dbHelper.getReadableDatabase();
@@ -73,10 +77,11 @@ public class TarefaDAO {
                 "FROM " + DatabaseHelper.TABELA_TAREFAS + " t " +
                 "LEFT JOIN " + DatabaseHelper.TABELA_DISCIPLINAS + " d " +
                 "ON t." + DatabaseHelper.COL_TAREFA_DISCIPLINA_ID + " = d." + DatabaseHelper.COL_DISCIPLINA_ID +
-                " WHERE t." + DatabaseHelper.COL_TAREFA_ESTADO + " != ? " +
-                "ORDER BY t." + DatabaseHelper.COL_TAREFA_DATA_ENTREGA + " ASC";
+                " WHERE t." + DatabaseHelper.COL_TAREFA_ESTADO + " != ?" +
+                " AND t." + DatabaseHelper.COL_TAREFA_USUARIO_ID + " = ?" +
+                " ORDER BY t." + DatabaseHelper.COL_TAREFA_DATA_ENTREGA + " ASC";
 
-        Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(EstadoTarefa.CONCLUIDA.getValor())});
+        Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(EstadoTarefa.CONCLUIDA.getValor()), String.valueOf(obterUsuarioLogadoId())});
 
         if (cursor.moveToFirst()) {
             do {
@@ -90,7 +95,7 @@ public class TarefaDAO {
         return listaTarefas;
     }
 
-    // READ - Obter tarefa por ID
+    // READ - Obter tarefa por ID do usuário logado
     public Tarefa obterPorId(long id) {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         Tarefa tarefa = null;
@@ -99,9 +104,10 @@ public class TarefaDAO {
                 "FROM " + DatabaseHelper.TABELA_TAREFAS + " t " +
                 "LEFT JOIN " + DatabaseHelper.TABELA_DISCIPLINAS + " d " +
                 "ON t." + DatabaseHelper.COL_TAREFA_DISCIPLINA_ID + " = d." + DatabaseHelper.COL_DISCIPLINA_ID +
-                " WHERE t." + DatabaseHelper.COL_TAREFA_ID + " = ?";
+                " WHERE t." + DatabaseHelper.COL_TAREFA_ID + " = ?" +
+                " AND t." + DatabaseHelper.COL_TAREFA_USUARIO_ID + " = ?";
 
-        Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(id)});
+        Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(id), String.valueOf(obterUsuarioLogadoId())});
 
         if (cursor.moveToFirst()) {
             tarefa = criarTarefaDoCursor(cursor);
@@ -159,13 +165,51 @@ public class TarefaDAO {
         return linhasAfetadas;
     }
 
-    // Contar tarefas pendentes
+    // Contar tarefas pendentes do usuário logado
     public int contarPendentes() {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         String query = "SELECT COUNT(*) FROM " + DatabaseHelper.TABELA_TAREFAS +
-                " WHERE " + DatabaseHelper.COL_TAREFA_ESTADO + " != ?";
+                " WHERE " + DatabaseHelper.COL_TAREFA_ESTADO + " != ?" +
+                " AND " + DatabaseHelper.COL_TAREFA_USUARIO_ID + " = ?";
 
-        Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(EstadoTarefa.CONCLUIDA.getValor())});
+        Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(EstadoTarefa.CONCLUIDA.getValor()), String.valueOf(obterUsuarioLogadoId())});
+
+        int total = 0;
+        if (cursor.moveToFirst()) {
+            total = cursor.getInt(0);
+        }
+
+        cursor.close();
+        db.close();
+        return total;
+    }
+
+    // Contar total de tarefas do usuário logado
+    public int contarTotal() {
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        String query = "SELECT COUNT(*) FROM " + DatabaseHelper.TABELA_TAREFAS +
+                " WHERE " + DatabaseHelper.COL_TAREFA_USUARIO_ID + " = ?";
+
+        Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(obterUsuarioLogadoId())});
+
+        int total = 0;
+        if (cursor.moveToFirst()) {
+            total = cursor.getInt(0);
+        }
+
+        cursor.close();
+        db.close();
+        return total;
+    }
+
+    // Contar tarefas concluídas do usuário logado
+    public int contarConcluidas() {
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        String query = "SELECT COUNT(*) FROM " + DatabaseHelper.TABELA_TAREFAS +
+                " WHERE " + DatabaseHelper.COL_TAREFA_ESTADO + " = ?" +
+                " AND " + DatabaseHelper.COL_TAREFA_USUARIO_ID + " = ?";
+
+        Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(EstadoTarefa.CONCLUIDA.getValor()), String.valueOf(obterUsuarioLogadoId())});
 
         int total = 0;
         if (cursor.moveToFirst()) {
@@ -201,10 +245,11 @@ public class TarefaDAO {
                 // LEFT JOIN mantém tarefas mesmo se não tiver disciplina associada
                 "LEFT JOIN " + DatabaseHelper.TABELA_DISCIPLINAS + " d " +
                 "ON t." + DatabaseHelper.COL_TAREFA_DISCIPLINA_ID + " = d." + DatabaseHelper.COL_DISCIPLINA_ID + " " +
-                // WHERE filtra apenas tarefas dentro do período do mês
+                // WHERE filtra apenas tarefas dentro do período do mês e do usuário logado
                 "WHERE t." + DatabaseHelper.COL_TAREFA_DATA_ENTREGA + " >= ? " +
                 "AND t." + DatabaseHelper.COL_TAREFA_DATA_ENTREGA + " <= ? " +
                 "AND t." + DatabaseHelper.COL_TAREFA_ESTADO + " != ? " + // Ignorar tarefas concluídas
+                "AND t." + DatabaseHelper.COL_TAREFA_USUARIO_ID + " = ? " +
                 // GROUP BY agrupa as tarefas por dia E por disciplina
                 // date() converte timestamp (milissegundos) em data (dividindo por 1000)
                 // Resultado: cada linha representa uma disciplina em um dia específico
@@ -212,12 +257,13 @@ public class TarefaDAO {
                 "t." + DatabaseHelper.COL_TAREFA_DISCIPLINA_ID + " " +
                 "ORDER BY t." + DatabaseHelper.COL_TAREFA_DATA_ENTREGA + " ASC";
 
-        // Os '?' são substituídos pelos valores no array (inicioMes, fimMes, estado)
+        // Os '?' são substituídos pelos valores no array (inicioMes, fimMes, estado, usuario_id)
         // Isso previne SQL Injection
         return db.rawQuery(query, new String[]{
                 String.valueOf(inicioMes),
                 String.valueOf(fimMes),
-                String.valueOf(EstadoTarefa.CONCLUIDA.getValor())
+                String.valueOf(EstadoTarefa.CONCLUIDA.getValor()),
+                String.valueOf(obterUsuarioLogadoId())
         });
     }
 
@@ -239,11 +285,13 @@ public class TarefaDAO {
                 "ON t." + DatabaseHelper.COL_TAREFA_DISCIPLINA_ID + " = d." + DatabaseHelper.COL_DISCIPLINA_ID + " " +
                 "WHERE t." + DatabaseHelper.COL_TAREFA_DATA_ENTREGA + " >= ? " +
                 "AND t." + DatabaseHelper.COL_TAREFA_DATA_ENTREGA + " <= ? " +
+                "AND t." + DatabaseHelper.COL_TAREFA_USUARIO_ID + " = ? " +
                 "ORDER BY t." + DatabaseHelper.COL_TAREFA_DATA_ENTREGA + " ASC";
 
         Cursor cursor = db.rawQuery(query, new String[]{
                 String.valueOf(inicioDia),
-                String.valueOf(fimDia)
+                String.valueOf(fimDia),
+                String.valueOf(obterUsuarioLogadoId())
         });
 
         if (cursor.moveToFirst()) {
@@ -285,5 +333,11 @@ public class TarefaDAO {
         }
 
         return tarefa;
+    }
+
+    // Helper - Obter ID do usuário logado
+    private long obterUsuarioLogadoId() {
+        android.content.SharedPreferences preferences = context.getSharedPreferences("GestaoTarefasPrefs", Context.MODE_PRIVATE);
+        return preferences.getLong("usuario_id", 0);
     }
 }

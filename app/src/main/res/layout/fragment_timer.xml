@@ -1,31 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background_full"
-    android:fillViewport="true">
+    android:background="@drawable/background_full">
+
+    <!-- Gradiente no bottom para transição suave -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="280dp"
+        android:layout_gravity="bottom"
+        android:background="@drawable/gradient_bottom_fade" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:padding="16dp"
+        android:paddingBottom="16dp"
         android:gravity="center">
 
         <!-- Timer Title -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/timer_pomodoro"
-            android:textColor="@android:color/white"
-            android:textSize="26sp"
-            android:textStyle="bold"
             android:layout_marginTop="24dp"
             android:shadowColor="#80000000"
             android:shadowDx="0"
             android:shadowDy="2"
-            android:shadowRadius="4" />
+            android:shadowRadius="4"
+            android:text="@string/timer_pomodoro"
+            android:textColor="@android:color/white"
+            android:textSize="26sp"
+            android:textStyle="bold" />
 
         <!-- Subject Selection -->
         <com.google.android.material.textfield.TextInputLayout
@@ -90,13 +102,13 @@
 
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- Timer Display - Gradiente Laranja Circular -->
+        <!-- Timer Display - Gradiente Laranja Circular (Reduzido) -->
         <com.google.android.material.card.MaterialCardView
-            android:layout_width="280dp"
-            android:layout_height="280dp"
-            android:layout_marginTop="32dp"
-            android:layout_marginBottom="32dp"
-            app:cardCornerRadius="140dp"
+            android:layout_width="180dp"
+            android:layout_height="180dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            app:cardCornerRadius="90dp"
             app:cardElevation="12dp"
             app:strokeWidth="0dp">
 
@@ -111,23 +123,23 @@
                     android:id="@+id/tv_timer"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="25:00"
-                    android:textColor="@color/text_on_accent"
-                    android:textSize="56sp"
-                    android:textStyle="bold"
                     android:shadowColor="#40000000"
                     android:shadowDx="0"
                     android:shadowDy="2"
-                    android:shadowRadius="4" />
+                    android:shadowRadius="4"
+                    android:text="25:00"
+                    android:textColor="@color/text_on_accent"
+                    android:textSize="40sp"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/tv_timer_status"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginTop="4dp"
                     android:text="@string/timer_work_session"
                     android:textColor="@color/text_on_accent"
-                    android:textSize="16sp"
+                    android:textSize="12sp"
                     android:textStyle="bold" />
 
             </LinearLayout>
@@ -138,26 +150,34 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
+            android:layout_marginBottom="20dp"
             android:gravity="center"
-            android:layout_marginBottom="32dp">
+            android:orientation="horizontal">
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_start"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/timer_start"
+                android:layout_width="0dp"
+                android:layout_height="56dp"
+                android:layout_weight="1"
                 android:layout_marginEnd="8dp"
-                app:cornerRadius="8dp" />
+                android:text="@string/timer_start"
+                android:textSize="16sp"
+                app:cornerRadius="12dp"
+                app:icon="@android:drawable/ic_media_play"
+                app:iconGravity="textStart" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_stop"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/timer_stop"
+                style="@style/Widget.Material3.Button.OutlinedButton"
+                android:layout_width="0dp"
+                android:layout_height="56dp"
+                android:layout_weight="1"
                 android:layout_marginStart="8dp"
-                app:cornerRadius="8dp"
-                style="@style/Widget.Material3.Button.OutlinedButton" />
+                android:text="@string/timer_stop"
+                android:textSize="16sp"
+                app:cornerRadius="12dp"
+                app:icon="@android:drawable/ic_media_pause"
+                app:iconGravity="textStart" />
 
         </LinearLayout>
 
@@ -187,35 +207,49 @@
                     android:layout_marginBottom="16dp" />
 
                 <!-- Work Duration -->
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/timer_work_duration"
-                    android:textColor="@color/text_secondary_glass"
-                    android:textSize="14sp" />
-
-                <EditText
-                    android:id="@+id/et_work_duration"
+                <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="number"
-                    android:text="25"
-                    android:layout_marginBottom="16dp" />
+                    android:hint="@string/timer_work_duration"
+                    app:boxBackgroundMode="outline"
+                    app:boxCornerRadiusTopStart="12dp"
+                    app:boxCornerRadiusTopEnd="12dp"
+                    app:boxCornerRadiusBottomStart="12dp"
+                    app:boxCornerRadiusBottomEnd="12dp"
+                    android:layout_marginBottom="16dp"
+                    app:suffixText=" min">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/et_work_duration"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="number"
+                        android:text="25"
+                        android:maxLines="1" />
+
+                </com.google.android.material.textfield.TextInputLayout>
 
                 <!-- Break Duration -->
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/timer_break_duration"
-                    android:textColor="@color/text_secondary_glass"
-                    android:textSize="14sp" />
-
-                <EditText
-                    android:id="@+id/et_break_duration"
+                <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="number"
-                    android:text="5" />
+                    android:hint="@string/timer_break_duration"
+                    app:boxBackgroundMode="outline"
+                    app:boxCornerRadiusTopStart="12dp"
+                    app:boxCornerRadiusTopEnd="12dp"
+                    app:boxCornerRadiusBottomStart="12dp"
+                    app:boxCornerRadiusBottomEnd="12dp"
+                    app:suffixText=" min">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/et_break_duration"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="number"
+                        android:text="5"
+                        android:maxLines="1" />
+
+                </com.google.android.material.textfield.TextInputLayout>
 
             </LinearLayout>
 
@@ -223,4 +257,6 @@
 
     </LinearLayout>
 
-</ScrollView>
+    </ScrollView>
+
+</FrameLayout>

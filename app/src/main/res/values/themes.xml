@@ -31,4 +31,5 @@
         <item name="android:statusBarColor">@color/primary</item>
         <item name="android:windowFullscreen">true</item>
     </style>
+
 </resources>

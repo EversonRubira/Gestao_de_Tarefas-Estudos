@@ -12,6 +12,7 @@ import com.example.gestaodetarefasestudos.database.dao.DisciplinaDAO;
 import com.example.gestaodetarefasestudos.database.dao.TarefaDAO;
 import com.example.gestaodetarefasestudos.database.dao.SessaoEstudoDAO;
 import com.example.gestaodetarefasestudos.enums.Prioridade;
+import com.example.gestaodetarefasestudos.fragments.DashboardFragment;
 import com.example.gestaodetarefasestudos.fragments.HomeFragment;
 import com.example.gestaodetarefasestudos.fragments.SubjectsFragment;
 import com.example.gestaodetarefasestudos.fragments.TasksFragment;
@@ -78,6 +79,9 @@ public class MainActivity extends AppCompatActivity {
             if (idItem == R.id.navigation_home) {
                 fragmentoSelecionado = new HomeFragment();
                 titulo = getString(R.string.home_title);
+            } else if (idItem == R.id.navigation_dashboard) {
+                fragmentoSelecionado = new DashboardFragment();
+                titulo = "Dashboard";
             } else if (idItem == R.id.navigation_subjects) {
                 fragmentoSelecionado = new SubjectsFragment();
                 titulo = getString(R.string.subjects_title);
@@ -203,4 +207,5 @@ public class MainActivity extends AppCompatActivity {
         SessaoEstudo sessao2 = new SessaoEstudo(idBd, 900);
         sessaoDAO.adicionar(sessao2);
     }
+
 }
