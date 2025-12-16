@@ -1,17 +1,47 @@
 package com.example.gestaodetarefasestudos.models;
 
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.ForeignKey;
+import androidx.room.Ignore;
+import androidx.room.PrimaryKey;
+
 import com.example.gestaodetarefasestudos.enums.EstadoTarefa;
 import com.example.gestaodetarefasestudos.enums.Prioridade;
 
+@Entity(tableName = "tarefas",
+        foreignKeys = @ForeignKey(
+                entity = Disciplina.class,
+                parentColumns = "id",
+                childColumns = "disciplina_id",
+                onDelete = ForeignKey.CASCADE
+        ))
 public class Tarefa {
+    @PrimaryKey(autoGenerate = true)
     private long id;
+
+    @ColumnInfo(name = "titulo")
     private String titulo;
+
+    @ColumnInfo(name = "descricao")
     private String descricao;
+
+    @ColumnInfo(name = "disciplina_id")
     private long disciplinaId;
-    private String nomeDisciplina; // para exibição
+
+    @Ignore
+    private String nomeDisciplina; // para exibição - não persiste no banco
+
+    @ColumnInfo(name = "data_entrega")
     private long dataEntrega; // timestamp em milissegundos
+
+    @ColumnInfo(name = "prioridade")
     private Prioridade prioridade;
+
+    @ColumnInfo(name = "estado")
     private EstadoTarefa estado;
+
+    @ColumnInfo(name = "data_criacao")
     private long dataCriacao; // timestamp em milissegundos
 
     // Construtores

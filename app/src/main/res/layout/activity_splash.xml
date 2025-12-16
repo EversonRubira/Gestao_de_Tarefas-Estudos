@@ -2,54 +2,54 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/primary"
-    android:padding="24dp">
+    android:background="@drawable/bg_splash_gradient">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:gravity="center"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="40dp">
 
         <ImageView
             android:id="@+id/splash_logo"
-            android:layout_width="120dp"
-            android:layout_height="120dp"
-            android:src="@drawable/ic_app_logo"
-            android:contentDescription="@string/app_name" />
+            android:layout_width="140dp"
+            android:layout_height="140dp"
+            android:src="@drawable/logo_studyflow"
+            android:contentDescription="@string/app_name"
+            android:scaleType="fitCenter" />
 
         <TextView
             android:id="@+id/splash_app_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
-            android:text="@string/app_name"
+            android:text="StudyFlow"
             android:textColor="@android:color/white"
-            android:textSize="28sp"
-            android:textStyle="bold" />
+            android:textSize="42sp"
+            android:textStyle="bold"
+            android:letterSpacing="0.05"
+            android:fontFamily="sans-serif-light" />
+
+        <View
+            android:layout_width="60dp"
+            android:layout_height="4dp"
+            android:layout_marginTop="12dp"
+            android:background="@color/accent" />
 
         <TextView
             android:id="@+id/splash_subtitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="Organize your studies"
+            android:layout_marginTop="12dp"
+            android:text="Organize. Focus. Succeed."
             android:textColor="@android:color/white"
-            android:alpha="0.9"
-            android:textSize="16sp" />
+            android:alpha="0.95"
+            android:textSize="15sp"
+            android:letterSpacing="0.1"
+            android:fontFamily="sans-serif-medium" />
 
     </LinearLayout>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="32dp"
-        android:text="© 2025 IPS - Setúbal"
-        android:textColor="@android:color/white"
-        android:alpha="0.7"
-        android:textSize="12sp" />
 
 </RelativeLayout>

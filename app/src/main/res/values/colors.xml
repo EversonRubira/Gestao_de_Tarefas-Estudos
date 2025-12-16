@@ -3,35 +3,40 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
-    <!-- Primary Colors -->
-    <color name="primary">#2196F3</color>
-    <color name="primary_dark">#1976D2</color>
-    <color name="primary_light">#BBDEFB</color>
+    <!-- Primary Colors - Teal/Turquoise (Verde-Azulado) -->
+    <color name="primary">#00897B</color>
+    <color name="primary_dark">#00695C</color>
+    <color name="primary_light">#4DB6AC</color>
 
-    <!-- Accent Colors -->
-    <color name="accent">#FF9800</color>
-    <color name="accent_dark">#F57C00</color>
+    <!-- Accent Colors - Orange Energy -->
+    <color name="accent">#FF7043</color>
+    <color name="accent_dark">#F4511E</color>
+    <color name="accent_light">#FFAB91</color>
 
-    <!-- Background Colors -->
-    <color name="background">#F5F5F5</color>
-    <color name="surface">#FFFFFF</color>
+    <!-- Background Colors - Creme/Bege Suave -->
+    <color name="background">#F5F5F0</color>
+    <color name="surface">#FEFEFE</color>
 
     <!-- Text Colors -->
     <color name="text_primary">#212121</color>
-    <color name="text_secondary">#757575</color>
+    <color name="text_secondary">#616161</color>
     <color name="text_hint">#9E9E9E</color>
 
     <!-- Status Colors -->
-    <color name="success">#4CAF50</color>
-    <color name="error">#F44336</color>
-    <color name="warning">#FFC107</color>
-    <color name="info">#2196F3</color>
+    <color name="success">#66BB6A</color>
+    <color name="error">#EF5350</color>
+    <color name="warning">#FFA726</color>
+    <color name="info">#42A5F5</color>
 
     <!-- Priority Colors -->
-    <color name="priority_low">#4CAF50</color>
-    <color name="priority_medium">#FFC107</color>
-    <color name="priority_high">#F44336</color>
+    <color name="priority_low">#66BB6A</color>
+    <color name="priority_medium">#FFA726</color>
+    <color name="priority_high">#EF5350</color>
 
     <!-- Divider -->
-    <color name="divider">#BDBDBD</color>
+    <color name="divider">#E0E0E0</color>
+
+    <!-- Gradient Colors - Teal to Blue -->
+    <color name="gradient_start">#00897B</color>
+    <color name="gradient_end">#0277BD</color>
 </resources>

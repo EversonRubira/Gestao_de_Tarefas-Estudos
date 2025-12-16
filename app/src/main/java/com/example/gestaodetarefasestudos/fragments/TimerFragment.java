@@ -14,9 +14,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.example.gestaodetarefasestudos.PreferenciasApp;
 import com.example.gestaodetarefasestudos.R;
-import com.example.gestaodetarefasestudos.database.dao.DisciplinaDAO;
-import com.example.gestaodetarefasestudos.database.dao.SessaoEstudoDAO;
+import com.example.gestaodetarefasestudos.database.AppDatabase;
+import com.example.gestaodetarefasestudos.database.dao.DisciplinaRoomDAO;
+import com.example.gestaodetarefasestudos.database.dao.SessaoEstudoRoomDAO;
 import com.example.gestaodetarefasestudos.models.Disciplina;
 import com.example.gestaodetarefasestudos.models.SessaoEstudo;
 import com.google.android.material.button.MaterialButton;
@@ -25,6 +27,8 @@ import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 public class TimerFragment extends Fragment {
 
@@ -47,10 +51,11 @@ public class TimerFragment extends Fragment {
     private boolean cronometroAtivo = false;
     private long tempoInicioSessao; // para calcular tempo total da sessão
 
-    private SessaoEstudoDAO sessaoDAO;
-    private DisciplinaDAO disciplinaDAO;
+    private SessaoEstudoRoomDAO sessaoDAO;
+    private DisciplinaRoomDAO disciplinaDAO;
     private List<Disciplina> listaDisciplinas;
     private Disciplina disciplinaSelecionada;
+    private Executor executor;
 
     public TimerFragment() {
     }
@@ -64,8 +69,9 @@ public class TimerFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        sessaoDAO = new SessaoEstudoDAO(requireContext());
-        disciplinaDAO = new DisciplinaDAO(requireContext());
+        sessaoDAO = AppDatabase.getInstance(requireContext()).sessaoEstudoDAO();
+        disciplinaDAO = AppDatabase.getInstance(requireContext()).disciplinaDAO();
+        executor = Executors.newSingleThreadExecutor();
         inicializarComponentes(view);
         carregarDisciplinas();
         configurarDuracoes();
@@ -90,46 +96,53 @@ public class TimerFragment extends Fragment {
      * O utilizador precisa selecionar para qual disciplina está a estudar
      */
     private void carregarDisciplinas() {
-        // Buscar todas as disciplinas do banco
-        listaDisciplinas = disciplinaDAO.obterTodas();
+        // Obter o ID do usuário logado
+        long usuarioId = new PreferenciasApp(requireContext()).getUsuarioId();
 
-        // Verificar se existem disciplinas cadastradas
-        if (listaDisciplinas.isEmpty()) {
-            // Desabilitar o timer se não houver disciplinas
-            botaoIniciar.setEnabled(false);
-            spinnerDisciplinaTimer.setEnabled(false);
-            Toast.makeText(requireContext(),
-                    "Crie pelo menos uma disciplina para usar o timer",
-                    Toast.LENGTH_LONG).show();
-            return;
-        }
+        executor.execute(() -> {
+            // Buscar todas as disciplinas do usuário
+            listaDisciplinas = disciplinaDAO.obterTodas(usuarioId);
 
-        // Criar array com os nomes das disciplinas
-        String[] nomesDisciplinas = new String[listaDisciplinas.size()];
-        for (int i = 0; i < listaDisciplinas.size(); i++) {
-            nomesDisciplinas[i] = listaDisciplinas.get(i).toString();
-        }
+            requireActivity().runOnUiThread(() -> {
+                // Verificar se existem disciplinas cadastradas
+                if (listaDisciplinas.isEmpty()) {
+                    // Desabilitar o timer se não houver disciplinas
+                    botaoIniciar.setEnabled(false);
+                    spinnerDisciplinaTimer.setEnabled(false);
+                    Toast.makeText(requireContext(),
+                            "Crie pelo menos uma disciplina para usar o timer",
+                            Toast.LENGTH_LONG).show();
+                    return;
+                }
 
-        // Configurar o adapter
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(requireContext(),
-                android.R.layout.simple_dropdown_item_1line, nomesDisciplinas);
-        spinnerDisciplinaTimer.setAdapter(adapter);
+                // Criar array com os nomes das disciplinas
+                String[] nomesDisciplinas = new String[listaDisciplinas.size()];
+                for (int i = 0; i < listaDisciplinas.size(); i++) {
+                    nomesDisciplinas[i] = listaDisciplinas.get(i).toString();
+                }
 
-        // Mostrar dropdown ao clicar
-        spinnerDisciplinaTimer.setOnClickListener(v -> {
-            spinnerDisciplinaTimer.showDropDown();
-        });
+                // Configurar o adapter
+                ArrayAdapter<String> adapter = new ArrayAdapter<>(requireContext(),
+                        android.R.layout.simple_dropdown_item_1line, nomesDisciplinas);
+                spinnerDisciplinaTimer.setAdapter(adapter);
 
-        // Capturar seleção
-        spinnerDisciplinaTimer.setOnItemClickListener((parent, view, position, id) -> {
-            disciplinaSelecionada = listaDisciplinas.get(position);
-            inputLayoutDisciplinaTimer.setError(null); // Limpar erro
+                // Mostrar dropdown ao clicar
+                spinnerDisciplinaTimer.setOnClickListener(v -> {
+                    spinnerDisciplinaTimer.showDropDown();
+                });
 
-            // Mostrar indicador de disciplina selecionada
-            if (disciplinaSelecionada != null) {
-                textoDisciplinaSelecionada.setText(disciplinaSelecionada.getNome());
-                cardDisciplinaSelecionada.setVisibility(View.VISIBLE);
-            }
+                // Capturar seleção
+                spinnerDisciplinaTimer.setOnItemClickListener((parent, view, position, id) -> {
+                    disciplinaSelecionada = listaDisciplinas.get(position);
+                    inputLayoutDisciplinaTimer.setError(null); // Limpar erro
+
+                    // Mostrar indicador de disciplina selecionada
+                    if (disciplinaSelecionada != null) {
+                        textoDisciplinaSelecionada.setText(disciplinaSelecionada.getNome());
+                        cardDisciplinaSelecionada.setVisibility(View.VISIBLE);
+                    }
+                });
+            });
         });
     }
 
@@ -273,14 +286,19 @@ public class TimerFragment extends Fragment {
             // Salvar se estudou pelo menos 10 segundos (evitar salvamentos acidentais)
             if (duracaoEstudada >= 10) {
                 SessaoEstudo sessao = new SessaoEstudo(disciplinaSelecionada.getId(), duracaoEstudada);
-                long id = sessaoDAO.adicionar(sessao);
 
-                if (id > 0) {
-                    String duracao = formatarDuracao(duracaoEstudada);
-                    Toast.makeText(requireContext(),
-                        "Sessão parcial salva: " + duracao,
-                        Toast.LENGTH_SHORT).show();
-                }
+                executor.execute(() -> {
+                    long id = sessaoDAO.inserir(sessao);
+
+                    requireActivity().runOnUiThread(() -> {
+                        if (id > 0) {
+                            String duracao = formatarDuracao(duracaoEstudada);
+                            Toast.makeText(requireContext(),
+                                "Sessão parcial salva: " + duracao,
+                                Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                });
             }
         }
 
@@ -317,18 +335,23 @@ public class TimerFragment extends Fragment {
 
         // Criar e salvar sessão COM A DISCIPLINA SELECIONADA
         SessaoEstudo sessao = new SessaoEstudo(disciplinaId, duracaoReal);
-        long id = sessaoDAO.adicionar(sessao);
 
-        // Verificar se foi salvo com sucesso
-        if (id > 0) {
-            String duracao = formatarDuracao(duracaoReal);
-            String nomeDisciplina = (disciplinaSelecionada != null) ?
-                disciplinaSelecionada.getNome() : "Geral";
+        executor.execute(() -> {
+            long id = sessaoDAO.inserir(sessao);
 
-            Toast.makeText(requireContext(),
-                nomeDisciplina + " - " + getString(R.string.timer_session_saved) + ": " + duracao,
-                Toast.LENGTH_SHORT).show();
-        }
+            requireActivity().runOnUiThread(() -> {
+                // Verificar se foi salvo com sucesso
+                if (id > 0) {
+                    String duracao = formatarDuracao(duracaoReal);
+                    String nomeDisciplina = (disciplinaSelecionada != null) ?
+                        disciplinaSelecionada.getNome() : "Geral";
+
+                    Toast.makeText(requireContext(),
+                        nomeDisciplina + " - " + getString(R.string.timer_session_saved) + ": " + duracao,
+                        Toast.LENGTH_SHORT).show();
+                }
+            });
+        });
     }
 
     private String formatarDuracao(long segundos) {

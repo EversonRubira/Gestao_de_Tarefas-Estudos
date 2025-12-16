@@ -1,6 +1,6 @@
 <resources>
     <!-- App Name -->
-    <string name="app_name">Study Task Manager</string>
+    <string name="app_name">StudyFlow</string>
 
     <!-- General -->
     <string name="add">Add</string>
@@ -17,11 +17,12 @@
     <string name="nav_home">Home</string>
     <string name="nav_subjects">Subjects</string>
     <string name="nav_tasks">Tasks</string>
+    <string name="nav_statistics">Statistics</string>
     <string name="nav_timer">Study Timer</string>
 
     <!-- Home Screen -->
     <string name="home_title">Dashboard</string>
-    <string name="home_welcome">Welcome to Study Task Manager!</string>
+    <string name="home_welcome">Welcome to StudyFlow!</string>
     <string name="home_total_subjects">Total Subjects</string>
     <string name="home_pending_tasks">Pending Tasks</string>
     <string name="home_study_time_today">Study Time Today</string>
@@ -120,4 +121,67 @@
     <string name="success_task_added">Task added successfully!</string>
     <string name="success_task_updated">Task updated successfully!</string>
     <string name="success_task_deleted">Task deleted successfully!</string>
+
+    <!-- Subject Details -->
+    <string name="subject_details_title">Subject Details</string>
+    <string name="subject_statistics">Statistics</string>
+    <string name="subject_tasks_list">Tasks</string>
+    <string name="subject_no_tasks">No tasks for this subject yet.</string>
+    <string name="stat_total_tasks">Total</string>
+    <string name="stat_pending">Pending</string>
+    <string name="stat_completed">Completed</string>
+    <string name="stat_study_time">Total Study Time</string>
+    <string name="error_loading_subject">Error loading subject</string>
+
+    <!-- Authentication -->
+    <string name="login">Login</string>
+    <string name="register">Register</string>
+    <string name="logout">Logout</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="name">Name</string>
+    <string name="create_account">Create Account</string>
+    <string name="already_have_account">Already have an account? Login</string>
+    <string name="or">OR</string>
+
+    <!-- Login Screen -->
+    <string name="login_subtitle">Welcome back!</string>
+    <string name="login_success">Login successful!</string>
+    <string name="login_error">Invalid email or password</string>
+
+    <!-- Register Screen -->
+    <string name="register_subtitle">Join us and start organizing your studies</string>
+    <string name="register_success">Account created successfully!</string>
+    <string name="register_error">Error creating account. Please try again.</string>
+
+    <!-- Auth Validation -->
+    <string name="error_empty_name">Name is required</string>
+    <string name="error_short_name">Name must be at least 3 characters</string>
+    <string name="error_empty_email">Email is required</string>
+    <string name="error_invalid_email">Invalid email format</string>
+    <string name="error_empty_password">Password is required</string>
+    <string name="error_short_password">Password must be at least 6 characters</string>
+    <string name="error_empty_confirm_password">Please confirm your password</string>
+    <string name="error_password_mismatch">Passwords do not match</string>
+    <string name="error_email_exists">This email is already registered</string>
+
+    <!-- Logout -->
+    <string name="logout_confirmation">Are you sure you want to logout?</string>
+
+    <!-- Database Errors -->
+    <string name="error_database">Database error. Please try again.</string>
+    <string name="error_login_failed">Login failed. Check your credentials.</string>
+    <string name="error_register_failed">Could not create account. Try again later.</string>
+    <string name="error_saving_data">Error saving to database</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Settings</string>
+    <string name="settings_language">Language</string>
+    <string name="settings_theme">Theme</string>
+    <string name="settings_saved">Settings saved successfully!</string>
+    <string name="language_portuguese">Portuguese</string>
+    <string name="language_english">English</string>
+    <string name="theme_light">Light</string>
+    <string name="theme_dark">Dark</string>
 </resources>

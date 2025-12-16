@@ -1,6 +1,6 @@
 <resources>
     <!-- App Name -->
-    <string name="app_name">Gestão de Tarefas &amp; Estudos</string>
+    <string name="app_name">StudyFlow</string>
 
     <!-- General -->
     <string name="add">Adicionar</string>
@@ -17,11 +17,12 @@
     <string name="nav_home">Início</string>
     <string name="nav_subjects">Disciplinas</string>
     <string name="nav_tasks">Tarefas</string>
+    <string name="nav_statistics">Estatísticas</string>
     <string name="nav_timer">Cronómetro</string>
 
     <!-- Home Screen -->
     <string name="home_title">Painel Principal</string>
-    <string name="home_welcome">Bem-vindo ao Gestor de Tarefas!</string>
+    <string name="home_welcome">Bem-vindo ao StudyFlow!</string>
     <string name="home_total_subjects">Total de Disciplinas</string>
     <string name="home_pending_tasks">Tarefas Pendentes</string>
     <string name="home_study_time_today">Tempo de Estudo Hoje</string>
@@ -120,4 +121,68 @@
     <string name="success_task_added">Tarefa adicionada com sucesso!</string>
     <string name="success_task_updated">Tarefa atualizada com sucesso!</string>
     <string name="success_task_deleted">Tarefa eliminada com sucesso!</string>
+
+    <!-- Subject Details -->
+    <string name="subject_details_title">Detalhes da Disciplina</string>
+    <string name="subject_statistics">Estatísticas</string>
+    <string name="subject_tasks_list">Tarefas</string>
+    <string name="subject_no_tasks">Ainda não há tarefas para esta disciplina.</string>
+    <string name="stat_total_tasks">Total</string>
+    <string name="stat_pending">Pendentes</string>
+    <string name="stat_completed">Concluídas</string>
+    <string name="stat_study_time">Tempo Total de Estudo</string>
+    <string name="error_loading_subject">Erro ao carregar disciplina</string>
+
+    <!-- Authentication -->
+    <string name="login">Entrar</string>
+    <string name="register">Registar</string>
+    <string name="logout">Sair</string>
+    <string name="email">Email</string>
+    <string name="password">Palavra-passe</string>
+    <string name="confirm_password">Confirmar Palavra-passe</string>
+    <string name="name">Nome</string>
+    <string name="create_account">Criar Conta</string>
+    <string name="already_have_account">Já tem conta? Entrar</string>
+    <string name="or">OU</string>
+
+    <!-- Login Screen -->
+    <string name="login_subtitle">Bem-vindo de volta!</string>
+    <string name="login_success">Login efetuado com sucesso!</string>
+    <string name="login_error">Email ou palavra-passe inválidos</string>
+
+    <!-- Register Screen -->
+    <string name="register_subtitle">Junte-se a nós e comece a organizar os seus estudos</string>
+    <string name="register_success">Conta criada com sucesso!</string>
+    <string name="register_error">Erro ao criar conta. Por favor, tente novamente.</string>
+
+    <!-- Auth Validation -->
+    <string name="error_empty_name">O nome é obrigatório</string>
+    <string name="error_short_name">O nome deve ter pelo menos 3 caracteres</string>
+    <string name="error_empty_email">O email é obrigatório</string>
+    <string name="error_invalid_email">Formato de email inválido</string>
+    <string name="error_empty_password">A palavra-passe é obrigatória</string>
+    <string name="error_short_password">A palavra-passe deve ter pelo menos 6 caracteres</string>
+    <string name="error_empty_confirm_password">Por favor, confirme a sua palavra-passe</string>
+    <string name="error_password_mismatch">As palavras-passe não coincidem</string>
+    <string name="error_email_exists">Este email já está registado</string>
+
+    <!-- Logout -->
+    <string name="logout_confirmation">Tem a certeza que deseja sair?</string>
+
+    <!-- Database Errors -->
+    <string name="error_database">Erro na base de dados. Por favor, tente novamente.</string>
+    <string name="error_login_failed">Falha no login. Verifique as suas credenciais.</string>
+    <string name="error_register_failed">Não foi possível criar a conta. Tente mais tarde.</string>
+    <string name="error_saving_data">Erro ao guardar na base de dados</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Configurações</string>
+    <string name="settings_language">Idioma</string>
+    <string name="settings_theme">Tema</string>
+    <string name="settings_saved">Configurações guardadas com sucesso!</string>
+    <string name="language_portuguese">Português</string>
+    <string name="language_english">Inglês</string>
+    <string name="theme_light">Claro</string>
+    <string name="theme_dark">Escuro</string>
 </resources>
+

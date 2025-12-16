@@ -18,9 +18,9 @@
             android:layout_height="wrap_content"
             android:text="@string/timer_pomodoro"
             android:textColor="@color/text_primary"
-            android:textSize="24sp"
+            android:textSize="20sp"
             android:textStyle="bold"
-            android:layout_marginTop="32dp" />
+            android:layout_marginTop="16dp" />
 
         <!-- Subject Selection -->
         <com.google.android.material.textfield.TextInputLayout
@@ -85,11 +85,11 @@
 
         <!-- Timer Display -->
         <com.google.android.material.card.MaterialCardView
-            android:layout_width="280dp"
-            android:layout_height="280dp"
-            android:layout_marginTop="32dp"
-            android:layout_marginBottom="32dp"
-            app:cardCornerRadius="140dp"
+            android:layout_width="220dp"
+            android:layout_height="220dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="24dp"
+            app:cardCornerRadius="110dp"
             app:cardElevation="8dp"
             app:cardBackgroundColor="@color/primary">
 
@@ -105,17 +105,17 @@
                     android:layout_height="wrap_content"
                     android:text="25:00"
                     android:textColor="@android:color/white"
-                    android:textSize="48sp"
+                    android:textSize="42sp"
                     android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/tv_timer_status"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginTop="4dp"
                     android:text="@string/timer_work_session"
                     android:textColor="@android:color/white"
-                    android:textSize="16sp" />
+                    android:textSize="14sp" />
 
             </LinearLayout>
 
@@ -127,7 +127,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:gravity="center"
-            android:layout_marginBottom="32dp">
+            android:layout_marginBottom="16dp">
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_start"
@@ -152,6 +152,7 @@
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
             app:cardCornerRadius="8dp"
             app:cardElevation="4dp">
 
@@ -159,16 +160,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="16dp">
+                android:padding="12dp">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Settings"
                     android:textColor="@color/text_primary"
-                    android:textSize="18sp"
+                    android:textSize="16sp"
                     android:textStyle="bold"
-                    android:layout_marginBottom="16dp" />
+                    android:layout_marginBottom="12dp" />
 
                 <!-- Work Duration -->
                 <TextView
@@ -176,15 +177,15 @@
                     android:layout_height="wrap_content"
                     android:text="@string/timer_work_duration"
                     android:textColor="@color/text_secondary"
-                    android:textSize="14sp" />
+                    android:textSize="13sp" />
 
                 <EditText
                     android:id="@+id/et_work_duration"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="48dp"
                     android:inputType="number"
                     android:text="25"
-                    android:layout_marginBottom="16dp" />
+                    android:layout_marginBottom="12dp" />
 
                 <!-- Break Duration -->
                 <TextView
@@ -192,12 +193,12 @@
                     android:layout_height="wrap_content"
                     android:text="@string/timer_break_duration"
                     android:textColor="@color/text_secondary"
-                    android:textSize="14sp" />
+                    android:textSize="13sp" />
 
                 <EditText
                     android:id="@+id/et_break_duration"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="48dp"
                     android:inputType="number"
                     android:text="5" />
 

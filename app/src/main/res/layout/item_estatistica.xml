@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="2dp"
+    app:cardBackgroundColor="@color/surface">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="16dp"
+        android:gravity="center_vertical">
+
+        <!-- Indicador de cor da disciplina -->
+        <View
+            android:id="@+id/view_cor_disciplina"
+            android:layout_width="6dp"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="16dp"
+            android:background="@color/primary" />
+
+        <!-- Informações da disciplina -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_nome_disciplina"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Programação de Aplicações Móveis"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@color/text_primary" />
+
+            <TextView
+                android:id="@+id/tv_detalhes"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Últimos 7 dias"
+                android:textSize="12sp"
+                android:textColor="@color/text_hint"
+                android:layout_marginTop="2dp" />
+
+        </LinearLayout>
+
+        <!-- Tempo de estudo -->
+        <TextView
+            android:id="@+id/tv_tempo_estudo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="120 min"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="@color/primary"
+            android:layout_marginStart="12dp" />
+
+    </LinearLayout>
+
+</com.google.android.material.card.MaterialCardView>

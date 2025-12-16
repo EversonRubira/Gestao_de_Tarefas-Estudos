@@ -10,8 +10,12 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.gestaodetarefasestudos.database.dao.DisciplinaDAO;
-import com.example.gestaodetarefasestudos.database.dao.TarefaDAO;
+import com.example.gestaodetarefasestudos.database.AppDatabase;
+import com.example.gestaodetarefasestudos.database.dao.DisciplinaRoomDAO;
+import com.example.gestaodetarefasestudos.database.dao.TarefaRoomDAO;
+
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 import com.example.gestaodetarefasestudos.enums.EstadoTarefa;
 import com.example.gestaodetarefasestudos.enums.Prioridade;
 import com.example.gestaodetarefasestudos.models.Disciplina;
@@ -34,9 +38,10 @@ public class AdicionarEditarTarefaActivity extends AppCompatActivity {
     private RadioGroup radioGroupPrioridade;
     private MaterialButton btnSalvarTarefa, btnCancelarTarefa;
 
-    private TarefaDAO tarefaDAO;
-    private DisciplinaDAO disciplinaDAO;
+    private TarefaRoomDAO tarefaDAO;
+    private DisciplinaRoomDAO disciplinaDAO;
     private Tarefa tarefaEditando;
+    private Executor executor;
 
     private List<Disciplina> listaDisciplinas;
     private Disciplina disciplinaSelecionada;
@@ -70,8 +75,9 @@ public class AdicionarEditarTarefaActivity extends AppCompatActivity {
         btnSalvarTarefa = findViewById(R.id.btnSalvarTarefa);
         btnCancelarTarefa = findViewById(R.id.btnCancelarTarefa);
 
-        tarefaDAO = new TarefaDAO(this);
-        disciplinaDAO = new DisciplinaDAO(this);
+        tarefaDAO = AppDatabase.getInstance(this).tarefaDAO();
+        disciplinaDAO = AppDatabase.getInstance(this).disciplinaDAO();
+        executor = Executors.newSingleThreadExecutor();
 
         calendarioSelecionado = Calendar.getInstance();
     }
@@ -81,36 +87,43 @@ public class AdicionarEditarTarefaActivity extends AppCompatActivity {
      * Se não houver disciplinas, mostra um diálogo perguntando se quer criar uma
      */
     private void carregarDisciplinas() {
-        // Buscar todas as disciplinas do banco de dados
-        listaDisciplinas = disciplinaDAO.obterTodas();
+        // Obter o ID do usuário logado
+        long usuarioId = new PreferenciasApp(this).getUsuarioId();
 
-        // Verificar se não existem disciplinas cadastradas
-        if (listaDisciplinas.isEmpty()) {
-            // Em vez de fechar o app, mostrar um diálogo útil
-            mostrarDialogoSemDisciplinas();
-            return;
-        }
+        // Buscar todas as disciplinas do usuário
+        executor.execute(() -> {
+            listaDisciplinas = disciplinaDAO.obterTodas(usuarioId);
 
-        // Criar array com os nomes das disciplinas para mostrar no dropdown
-        String[] nomesDisciplinas = new String[listaDisciplinas.size()];
-        for (int i = 0; i < listaDisciplinas.size(); i++) {
-            nomesDisciplinas[i] = listaDisciplinas.get(i).toString();
-        }
+            runOnUiThread(() -> {
+                // Verificar se não existem disciplinas cadastradas
+                if (listaDisciplinas.isEmpty()) {
+                    // Em vez de fechar o app, mostrar um diálogo útil
+                    mostrarDialogoSemDisciplinas();
+                    return;
+                }
 
-        // Configurar o adapter do AutoCompleteTextView
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_dropdown_item_1line, nomesDisciplinas);
-        spinnerDisciplina.setAdapter(adapter);
+                // Criar array com os nomes das disciplinas para mostrar no dropdown
+                String[] nomesDisciplinas = new String[listaDisciplinas.size()];
+                for (int i = 0; i < listaDisciplinas.size(); i++) {
+                    nomesDisciplinas[i] = listaDisciplinas.get(i).toString();
+                }
 
-        // Mostrar dropdown ao clicar no campo
-        spinnerDisciplina.setOnClickListener(v -> {
-            spinnerDisciplina.showDropDown();
-        });
+                // Configurar o adapter do AutoCompleteTextView
+                ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
+                        android.R.layout.simple_dropdown_item_1line, nomesDisciplinas);
+                spinnerDisciplina.setAdapter(adapter);
 
-        // Capturar seleção do utilizador
-        spinnerDisciplina.setOnItemClickListener((parent, view, position, id) -> {
-            disciplinaSelecionada = listaDisciplinas.get(position);
-            inputLayoutDisciplina.setError(null); // Limpar erro ao selecionar
+                // Mostrar dropdown ao clicar no campo
+                spinnerDisciplina.setOnClickListener(v -> {
+                    spinnerDisciplina.showDropDown();
+                });
+
+                // Capturar seleção do utilizador
+                spinnerDisciplina.setOnItemClickListener((parent, view, position, id) -> {
+                    disciplinaSelecionada = listaDisciplinas.get(position);
+                    inputLayoutDisciplina.setError(null); // Limpar erro ao selecionar
+                });
+            });
         });
     }
 
@@ -192,40 +205,44 @@ public class AdicionarEditarTarefaActivity extends AppCompatActivity {
         long tarefaId = getIntent().getLongExtra("tarefa_id", -1);
 
         if (tarefaId != -1) {
-            tarefaEditando = tarefaDAO.obterPorId(tarefaId);
+            executor.execute(() -> {
+                tarefaEditando = tarefaDAO.obterPorId(tarefaId);
 
-            if (tarefaEditando != null) {
-                setTitle(R.string.edit_task);
+                runOnUiThread(() -> {
+                    if (tarefaEditando != null) {
+                        setTitle(R.string.edit_task);
 
-                editTituloTarefa.setText(tarefaEditando.getTitulo());
-                editDescricaoTarefa.setText(tarefaEditando.getDescricao());
+                        editTituloTarefa.setText(tarefaEditando.getTitulo());
+                        editDescricaoTarefa.setText(tarefaEditando.getDescricao());
 
-                // Selecionar disciplina
-                for (int i = 0; i < listaDisciplinas.size(); i++) {
-                    if (listaDisciplinas.get(i).getId() == tarefaEditando.getDisciplinaId()) {
-                        spinnerDisciplina.setText(listaDisciplinas.get(i).toString(), false);
-                        disciplinaSelecionada = listaDisciplinas.get(i);
-                        break;
+                        // Selecionar disciplina
+                        for (int i = 0; i < listaDisciplinas.size(); i++) {
+                            if (listaDisciplinas.get(i).getId() == tarefaEditando.getDisciplinaId()) {
+                                spinnerDisciplina.setText(listaDisciplinas.get(i).toString(), false);
+                                disciplinaSelecionada = listaDisciplinas.get(i);
+                                break;
+                            }
+                        }
+
+                        // Configurar data
+                        calendarioSelecionado.setTimeInMillis(tarefaEditando.getDataEntrega());
+                        editDataEntrega.setText(formatoData.format(calendarioSelecionado.getTime()));
+
+                        // Selecionar prioridade
+                        switch (tarefaEditando.getPrioridade()) {
+                            case BAIXA:
+                                radioGroupPrioridade.check(R.id.radioBaixa);
+                                break;
+                            case MEDIA:
+                                radioGroupPrioridade.check(R.id.radioMedia);
+                                break;
+                            case ALTA:
+                                radioGroupPrioridade.check(R.id.radioAlta);
+                                break;
+                        }
                     }
-                }
-
-                // Configurar data
-                calendarioSelecionado.setTimeInMillis(tarefaEditando.getDataEntrega());
-                editDataEntrega.setText(formatoData.format(calendarioSelecionado.getTime()));
-
-                // Selecionar prioridade
-                switch (tarefaEditando.getPrioridade()) {
-                    case BAIXA:
-                        radioGroupPrioridade.check(R.id.radioBaixa);
-                        break;
-                    case MEDIA:
-                        radioGroupPrioridade.check(R.id.radioMedia);
-                        break;
-                    case ALTA:
-                        radioGroupPrioridade.check(R.id.radioAlta);
-                        break;
-                }
-            }
+                });
+            });
         } else {
             setTitle(R.string.add_task);
         }
@@ -283,15 +300,19 @@ public class AdicionarEditarTarefaActivity extends AppCompatActivity {
                     prioridade
             );
 
-            long id = tarefaDAO.adicionar(novaTarefa);
+            executor.execute(() -> {
+                long id = tarefaDAO.inserir(novaTarefa);
 
-            if (id != -1) {
-                Toast.makeText(this, R.string.success_task_added, Toast.LENGTH_SHORT).show();
-                setResult(RESULT_OK);
-                finish();
-            } else {
-                Toast.makeText(this, R.string.error_saving, Toast.LENGTH_SHORT).show();
-            }
+                runOnUiThread(() -> {
+                    if (id != -1) {
+                        Toast.makeText(this, R.string.success_task_added, Toast.LENGTH_SHORT).show();
+                        setResult(RESULT_OK);
+                        finish();
+                    } else {
+                        Toast.makeText(this, R.string.error_saving, Toast.LENGTH_SHORT).show();
+                    }
+                });
+            });
         } else {
             // Atualizar tarefa existente
             tarefaEditando.setTitulo(titulo);
@@ -300,15 +321,19 @@ public class AdicionarEditarTarefaActivity extends AppCompatActivity {
             tarefaEditando.setDataEntrega(calendarioSelecionado.getTimeInMillis());
             tarefaEditando.setPrioridade(prioridade);
 
-            int linhas = tarefaDAO.atualizar(tarefaEditando);
+            executor.execute(() -> {
+                int linhas = tarefaDAO.atualizar(tarefaEditando);
 
-            if (linhas > 0) {
-                Toast.makeText(this, R.string.success_task_updated, Toast.LENGTH_SHORT).show();
-                setResult(RESULT_OK);
-                finish();
-            } else {
-                Toast.makeText(this, R.string.error_saving, Toast.LENGTH_SHORT).show();
-            }
+                runOnUiThread(() -> {
+                    if (linhas > 0) {
+                        Toast.makeText(this, R.string.success_task_updated, Toast.LENGTH_SHORT).show();
+                        setResult(RESULT_OK);
+                        finish();
+                    } else {
+                        Toast.makeText(this, R.string.error_saving, Toast.LENGTH_SHORT).show();
+                    }
+                });
+            });
         }
     }
 }

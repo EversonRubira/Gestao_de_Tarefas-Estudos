@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="120dp"
+    android:height="120dp"
+    android:viewportWidth="120"
+    android:viewportHeight="120">
+
+    <!-- Background Circle -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M60,60m-55,0a55,55 0,1 1,110 0a55,55 0,1 1,-110 0" />
+
+    <!-- Book Base - Left Page -->
+    <path
+        android:fillColor="#00897B"
+        android:pathData="M35,40 L35,80 L58,80 L58,40 Z" />
+
+    <!-- Book Base - Right Page -->
+    <path
+        android:fillColor="#0277BD"
+        android:pathData="M62,40 L62,80 L85,80 L85,40 Z" />
+
+    <!-- Book Spine -->
+    <path
+        android:fillColor="#00695C"
+        android:pathData="M58,40 L62,40 L62,80 L58,80 Z" />
+
+    <!-- Flow Arrow - Curved Path -->
+    <path
+        android:strokeColor="#FF7043"
+        android:strokeWidth="3"
+        android:strokeLineCap="round"
+        android:fillColor="#00000000"
+        android:pathData="M45,50 Q50,45 55,50 T65,50 Q70,50 73,53" />
+
+    <!-- Arrow Head -->
+    <path
+        android:fillColor="#FF7043"
+        android:pathData="M73,53 L68,50 L70,55 Z" />
+
+    <!-- Sparkle 1 - Top Right -->
+    <path
+        android:fillColor="#FFA726"
+        android:pathData="M78,35 L79,37 L81,38 L79,39 L78,41 L77,39 L75,38 L77,37 Z" />
+
+    <!-- Sparkle 2 - Bottom Left -->
+    <path
+        android:fillColor="#FFA726"
+        android:pathData="M40,72 L41,74 L43,75 L41,76 L40,78 L39,76 L37,75 L39,74 Z" />
+
+    <!-- Page Lines - Left Page -->
+    <path
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="1.5"
+        android:strokeLineCap="round"
+        android:pathData="M40,50 L53,50 M40,55 L53,55 M40,60 L53,60 M40,65 L50,65" />
+
+    <!-- Page Lines - Right Page -->
+    <path
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="1.5"
+        android:strokeLineCap="round"
+        android:pathData="M67,50 L80,50 M67,55 L80,55 M67,60 L80,60 M67,65 L77,65" />
+
+</vector>

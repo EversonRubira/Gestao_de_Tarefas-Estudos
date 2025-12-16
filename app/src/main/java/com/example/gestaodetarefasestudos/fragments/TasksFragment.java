@@ -15,12 +15,15 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.gestaodetarefasestudos.AdicionarEditarTarefaActivity;
 import com.example.gestaodetarefasestudos.R;
 import com.example.gestaodetarefasestudos.adapters.TarefaAdapter;
-import com.example.gestaodetarefasestudos.database.dao.TarefaDAO;
+import com.example.gestaodetarefasestudos.database.AppDatabase;
+import com.example.gestaodetarefasestudos.database.dao.TarefaRoomDAO;
 import com.example.gestaodetarefasestudos.models.Tarefa;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 public class TasksFragment extends Fragment {
 
@@ -29,8 +32,9 @@ public class TasksFragment extends Fragment {
     private FloatingActionButton botaoAdicionar;
 
     private TarefaAdapter tarefaAdapter;
-    private TarefaDAO tarefaDAO;
+    private TarefaRoomDAO tarefaDAO;
     private List<Tarefa> listaTarefas;
+    private Executor executor;
 
     public TasksFragment() {
     }
@@ -61,7 +65,8 @@ public class TasksFragment extends Fragment {
         txtEstadoVazio = view.findViewById(R.id.empty_state);
         botaoAdicionar = view.findViewById(R.id.fab_add_task);
 
-        tarefaDAO = new TarefaDAO(requireContext());
+        tarefaDAO = AppDatabase.getInstance(requireContext()).tarefaDAO();
+        executor = Executors.newSingleThreadExecutor();
         listaTarefas = new ArrayList<>();
     }
 
@@ -85,29 +90,35 @@ public class TasksFragment extends Fragment {
      * Atualiza a RecyclerView com as tarefas encontradas
      */
     private void carregarTarefas() {
-        // Buscar todas as tarefas
-        listaTarefas = tarefaDAO.obterTodas();
+        executor.execute(() -> {
+            // Buscar todas as tarefas
+            List<Tarefa> tarefas = tarefaDAO.obterTodas();
 
-        // Contar tarefas para possíveis estatísticas futuras
-        @SuppressWarnings("unused")
-        int totalTarefas = listaTarefas.size();
+            requireActivity().runOnUiThread(() -> {
+                listaTarefas = tarefas;
 
-        // Verificar se existem tarefas
-        if (listaTarefas.isEmpty()) {
-            // Nenhuma tarefa encontrada - mostrar mensagem
-            recyclerViewTarefas.setVisibility(View.GONE);
-            txtEstadoVazio.setVisibility(View.VISIBLE);
-        } else {
-            // Existem tarefas - mostrar a lista
-            recyclerViewTarefas.setVisibility(View.VISIBLE);
-            txtEstadoVazio.setVisibility(View.GONE);
-        }
+                // Contar tarefas para possíveis estatísticas futuras
+                @SuppressWarnings("unused")
+                int totalTarefas = listaTarefas.size();
 
-        // Atualizar o RecyclerView com as tarefas
-        tarefaAdapter.atualizarLista(listaTarefas);
+                // Verificar se existem tarefas
+                if (listaTarefas.isEmpty()) {
+                    // Nenhuma tarefa encontrada - mostrar mensagem
+                    recyclerViewTarefas.setVisibility(View.GONE);
+                    txtEstadoVazio.setVisibility(View.VISIBLE);
+                } else {
+                    // Existem tarefas - mostrar a lista
+                    recyclerViewTarefas.setVisibility(View.VISIBLE);
+                    txtEstadoVazio.setVisibility(View.GONE);
+                }
 
-        // TODO: Adicionar filtro por estado (pendente, em progresso, concluída)
-        // TODO: Adicionar filtro por disciplina
-        // TODO: Ordenar por data de entrega ou prioridade
+                // Atualizar o RecyclerView com as tarefas
+                tarefaAdapter.atualizarLista(listaTarefas);
+
+                // TODO: Adicionar filtro por estado (pendente, em progresso, concluída)
+                // TODO: Adicionar filtro por disciplina
+                // TODO: Ordenar por data de entrega ou prioridade
+            });
+        });
     }
 }

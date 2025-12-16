@@ -1,20 +1,31 @@
 package com.example.gestaodetarefasestudos;
 
-import android.content.SharedPreferences;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
 
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.example.gestaodetarefasestudos.database.dao.DisciplinaDAO;
-import com.example.gestaodetarefasestudos.database.dao.TarefaDAO;
-import com.example.gestaodetarefasestudos.database.dao.SessaoEstudoDAO;
+import com.example.gestaodetarefasestudos.database.AppDatabase;
+import com.example.gestaodetarefasestudos.database.dao.DisciplinaRoomDAO;
+import com.example.gestaodetarefasestudos.database.dao.TarefaRoomDAO;
+import com.example.gestaodetarefasestudos.database.dao.SessaoEstudoRoomDAO;
+
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 import com.example.gestaodetarefasestudos.enums.Prioridade;
 import com.example.gestaodetarefasestudos.fragments.HomeFragment;
 import com.example.gestaodetarefasestudos.fragments.SubjectsFragment;
 import com.example.gestaodetarefasestudos.fragments.TasksFragment;
+import com.example.gestaodetarefasestudos.fragments.StatisticsFragment;
 import com.example.gestaodetarefasestudos.fragments.TimerFragment;
 import com.example.gestaodetarefasestudos.models.Disciplina;
 import com.example.gestaodetarefasestudos.models.Tarefa;
@@ -23,184 +34,203 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.Calendar;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity {
 
-    private Toolbar barraFerramentas;
-    private BottomNavigationView navegacaoInferior;
-
-    // Nome do arquivo de preferências para guardar configurações do app
-    private static final String PREFS_NAME = "AppPreferences";
-    // Chave para verificar se é a primeira vez que o app é aberto
-    private static final String KEY_PRIMEIRA_EXECUCAO = "primeira_execucao";
+    private Toolbar toolbar;
+    private BottomNavigationView bottomNav;
+    private Executor executor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Inicializar os componentes da interface
-        inicializarComponentes();
-        configurarBarraFerramentas();
-        configurarNavegacaoInferior();
+        // inicializar componentes
+        toolbar = findViewById(R.id.toolbar);
+        bottomNav = findViewById(R.id.bottom_navigation);
+        setSupportActionBar(toolbar);
+        executor = Executors.newSingleThreadExecutor();
 
-        // Verificar se é a primeira vez que o app é aberto
-        // Se sim, criar alguns dados de exemplo para facilitar os testes
-        verificarPrimeiraExecucao();
+        setupBottomNav();
+        checkFirstRun();
 
-        // Carregar fragmento inicial apenas na primeira vez que a activity é criada
+        // carregar o fragment inicial
         if (savedInstanceState == null) {
-            carregarFragmento(new HomeFragment());
-            definirTituloBarraFerramentas(getString(R.string.home_title));
+            loadFragment(new HomeFragment());
+            setToolbarTitle(getString(R.string.home_title));
         }
     }
 
-    private void inicializarComponentes() {
-        barraFerramentas = findViewById(R.id.toolbar);
-        navegacaoInferior = findViewById(R.id.bottom_navigation);
-    }
+    // setup da navegacao inferior
+    private void setupBottomNav() {
+        bottomNav.setOnItemSelectedListener(new BottomNavigationView.OnItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                Fragment selectedFragment = null;
+                String title = "";
 
-    private void configurarBarraFerramentas() {
-        setSupportActionBar(barraFerramentas);
-    }
+                int id = item.getItemId();
 
-    /**
-     * Configura a navegação inferior (Bottom Navigation)
-     * Define qual fragmento será exibido quando o utilizador tocar num item do menu
-     */
-    private void configurarNavegacaoInferior() {
-        navegacaoInferior.setOnItemSelectedListener(item -> {
-            Fragment fragmentoSelecionado = null;
-            String titulo = "";
+                if (id == R.id.navigation_home) {
+                    selectedFragment = new HomeFragment();
+                    title = getString(R.string.home_title);
+                } else if (id == R.id.navigation_subjects) {
+                    selectedFragment = new SubjectsFragment();
+                    title = getString(R.string.subjects_title);
+                } else if (id == R.id.navigation_tasks) {
+                    selectedFragment = new TasksFragment();
+                    title = getString(R.string.tasks_title);
+                } else if (id == R.id.navigation_statistics) {
+                    selectedFragment = new StatisticsFragment();
+                    title = getString(R.string.nav_statistics);
+                } else if (id == R.id.navigation_timer) {
+                    selectedFragment = new TimerFragment();
+                    title = getString(R.string.timer_title);
+                }
 
-            int idItem = item.getItemId();
-
-            // Determina qual fragmento carregar baseado no item selecionado
-            if (idItem == R.id.navigation_home) {
-                fragmentoSelecionado = new HomeFragment();
-                titulo = getString(R.string.home_title);
-            } else if (idItem == R.id.navigation_subjects) {
-                fragmentoSelecionado = new SubjectsFragment();
-                titulo = getString(R.string.subjects_title);
-            } else if (idItem == R.id.navigation_tasks) {
-                fragmentoSelecionado = new TasksFragment();
-                titulo = getString(R.string.tasks_title);
-            } else if (idItem == R.id.navigation_timer) {
-                fragmentoSelecionado = new TimerFragment();
-                titulo = getString(R.string.timer_title);
+                if (selectedFragment != null) {
+                    loadFragment(selectedFragment);
+                    setToolbarTitle(title);
+                    return true;
+                }
+                return false;
             }
-
-            if (fragmentoSelecionado != null) {
-                carregarFragmento(fragmentoSelecionado);
-                definirTituloBarraFerramentas(titulo);
-                return true;
-            }
-
-            return false;
         });
     }
 
-    /**
-     * Carrega um fragmento no container principal
-     * @param fragmento O fragmento a ser exibido
-     */
-    private void carregarFragmento(Fragment fragmento) {
-        FragmentTransaction transacao = getSupportFragmentManager().beginTransaction();
-        transacao.replace(R.id.fragment_container, fragmento);
-        transacao.commit();
+    private void loadFragment(Fragment fragment) {
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.fragment_container, fragment);
+        transaction.commit();
     }
 
-    private void definirTituloBarraFerramentas(String titulo) {
+    private void setToolbarTitle(String title) {
         if (getSupportActionBar() != null) {
-            getSupportActionBar().setTitle(titulo);
+            getSupportActionBar().setTitle(title);
         }
     }
 
-    /**
-     * Verifica se é a primeira vez que o app é executado
-     * Se for, cria alguns dados de exemplo para o utilizador poder testar
-     */
-    private void verificarPrimeiraExecucao() {
-        // Aceder às preferências partilhadas para verificar se já foi executado antes
-        SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-        boolean primeiraVez = prefs.getBoolean(KEY_PRIMEIRA_EXECUCAO, true);
-
-        // Se for a primeira vez, criar dados de exemplo
-        if (primeiraVez) {
-            criarDadosExemplo();
-
-            // Marcar que o app já foi aberto
-            SharedPreferences.Editor editor = prefs.edit();
-            editor.putBoolean(KEY_PRIMEIRA_EXECUCAO, false);
-            editor.apply();
+    // verifica se eh a primeira vez que abre o app
+    private void checkFirstRun() {
+        if (getPrefs().isPrimeiraExecucao()) {
+            createSampleData();
+            getPrefs().setPrimeiraExecucao(false);
         }
     }
 
-    /**
-     * Cria alguns dados de exemplo no banco de dados
-     * Isto ajuda o utilizador a perceber como a aplicação funciona
-     * TODO: No futuro, poderia mostrar um tutorial em vez de criar dados automáticos
-     */
-    private void criarDadosExemplo() {
-        // Inicializar os DAOs para aceder ao banco de dados
-        DisciplinaDAO disciplinaDAO = new DisciplinaDAO(this);
-        TarefaDAO tarefaDAO = new TarefaDAO(this);
-        SessaoEstudoDAO sessaoDAO = new SessaoEstudoDAO(this);
+    // cria dados de exemplo na primeira execucao
+    private void createSampleData() {
+        long usuarioId = getUserId();
+        if (usuarioId == -1) {
+            return;
+        }
 
-        // Criar algumas disciplinas de exemplo
-        Disciplina pam = new Disciplina("Programação de Aplicações Móveis", "PAM", "#2196F3");
-        Disciplina bd = new Disciplina("Bases de Dados", "BD", "#4CAF50");
-        Disciplina web = new Disciplina("Desenvolvimento Web", "WEB", "#FF9800");
+        executor.execute(() -> {
+            DisciplinaRoomDAO disciplinaDAO = AppDatabase.getInstance(this).disciplinaDAO();
+            TarefaRoomDAO tarefaDAO = AppDatabase.getInstance(this).tarefaDAO();
+            SessaoEstudoRoomDAO sessaoDAO = AppDatabase.getInstance(this).sessaoEstudoDAO();
 
-        long idPam = disciplinaDAO.adicionar(pam);
-        long idBd = disciplinaDAO.adicionar(bd);
-        long idWeb = disciplinaDAO.adicionar(web);
+            // criar disciplinas exemplo
+            Disciplina pam = new Disciplina("Programação de Aplicações Móveis", "PAM", "#2196F3");
+            pam.setUsuarioId(usuarioId);
+            Disciplina bd = new Disciplina("Bases de Dados", "BD", "#4CAF50");
+            bd.setUsuarioId(usuarioId);
+            Disciplina web = new Disciplina("Desenvolvimento Web", "WEB", "#FF9800");
+            web.setUsuarioId(usuarioId);
+            //Disciplina mat = new Disciplina("Matemática", "MAT", "#E91E63");
 
-        // Criar algumas tarefas de exemplo
-        // Calcular datas para as tarefas
-        Calendar calendario = Calendar.getInstance();
+            long idPam = disciplinaDAO.inserir(pam);
+            long idBd = disciplinaDAO.inserir(bd);
+            long idWeb = disciplinaDAO.inserir(web);
 
-        // Tarefa 1: Projeto PAM para daqui a 7 dias
-        calendario.add(Calendar.DAY_OF_MONTH, 7);
-        Tarefa tarefa1 = new Tarefa(
-            "Concluir projeto final",
-            "Finalizar aplicação de gestão de tarefas",
-            idPam,
-            calendario.getTimeInMillis(),
-            Prioridade.ALTA
-        );
-        tarefaDAO.adicionar(tarefa1);
+            // criar tarefas exemplo
+            Calendar cal = Calendar.getInstance();
 
-        // Tarefa 2: Estudo BD para daqui a 3 dias
-        calendario = Calendar.getInstance();
-        calendario.add(Calendar.DAY_OF_MONTH, 3);
-        Tarefa tarefa2 = new Tarefa(
-            "Estudar para teste",
-            "Rever matéria de normalização",
-            idBd,
-            calendario.getTimeInMillis(),
-            Prioridade.MEDIA
-        );
-        tarefaDAO.adicionar(tarefa2);
+            cal.add(Calendar.DAY_OF_MONTH, 7);
+            Tarefa tarefa1 = new Tarefa(
+                "Concluir projeto final",
+                "Finalizar aplicação de gestão de tarefas",
+                idPam,
+                cal.getTimeInMillis(),
+                Prioridade.ALTA
+            );
+            tarefaDAO.inserir(tarefa1);
 
-        // Tarefa 3: Exercício Web para daqui a 10 dias
-        calendario = Calendar.getInstance();
-        calendario.add(Calendar.DAY_OF_MONTH, 10);
-        Tarefa tarefa3 = new Tarefa(
-            "Fazer exercícios de JavaScript",
-            "Completar exercícios do capítulo 5",
-            idWeb,
-            calendario.getTimeInMillis(),
-            Prioridade.BAIXA
-        );
-        tarefaDAO.adicionar(tarefa3);
+            cal = Calendar.getInstance();
+            cal.add(Calendar.DAY_OF_MONTH, 3);
+            Tarefa tarefa2 = new Tarefa(
+                "Estudar para teste",
+                "Rever matéria de normalização",
+                idBd,
+                cal.getTimeInMillis(),
+                Prioridade.MEDIA
+            );
+            tarefaDAO.inserir(tarefa2);
 
-        // Criar uma sessão de estudo de exemplo (25 minutos = 1500 segundos)
-        // Simular que estudou hoje
-        SessaoEstudo sessao = new SessaoEstudo(idPam, 1500);
-        sessaoDAO.adicionar(sessao);
+            cal = Calendar.getInstance();
+            cal.add(Calendar.DAY_OF_MONTH, 10);
+            Tarefa tarefa3 = new Tarefa(
+                "Fazer exercícios de JavaScript",
+                "Completar exercícios do capítulo 5",
+                idWeb,
+                cal.getTimeInMillis(),
+                Prioridade.BAIXA
+            );
+            tarefaDAO.inserir(tarefa3);
 
-        // Adicionar outra sessão de 15 minutos
-        SessaoEstudo sessao2 = new SessaoEstudo(idBd, 900);
-        sessaoDAO.adicionar(sessao2);
+            // adicionar sessoes de estudo exemplo
+            SessaoEstudo sessao = new SessaoEstudo(idPam, 1500);
+            sessaoDAO.inserir(sessao);
+            SessaoEstudo sessao2 = new SessaoEstudo(idBd, 900);
+            sessaoDAO.inserir(sessao2);
+        });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.action_settings) {
+            startActivity(new Intent(this, ConfiguracoesActivity.class));
+            return true;
+        } else if (id == R.id.action_logout) {
+            showLogoutDialog();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    // mostra dialogo pra confirmar logout
+    private void showLogoutDialog() {
+        new AlertDialog.Builder(this)
+                .setTitle(R.string.logout)
+                .setMessage(R.string.logout_confirmation)
+                .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        doLogout();
+                    }
+                })
+                .setNegativeButton(R.string.no, null)
+                .show();
+    }
+
+    // faz o logout do usuario
+    private void doLogout() {
+        getPrefs().logout();
+
+        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+        finish();
+    }
+
+    public long getUserId() {
+        return getPrefs().getUsuarioId();
     }
 }

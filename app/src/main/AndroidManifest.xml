@@ -40,6 +40,29 @@
             android:exported="false"
             android:parentActivityName=".MainActivity" />
 
+        <!-- Subject Details Activity -->
+        <activity
+            android:name=".DetalhesDisciplinaActivity"
+            android:exported="false"
+            android:parentActivityName=".MainActivity" />
+
+        <!-- Login Activity -->
+        <activity
+            android:name=".LoginActivity"
+            android:exported="false" />
+
+        <!-- Register Activity -->
+        <activity
+            android:name=".RegistroActivity"
+            android:exported="false"
+            android:parentActivityName=".LoginActivity" />
+
+        <!-- Settings Activity -->
+        <activity
+            android:name=".ConfiguracoesActivity"
+            android:exported="false"
+            android:parentActivityName=".MainActivity" />
+
     </application>
 
 </manifest>

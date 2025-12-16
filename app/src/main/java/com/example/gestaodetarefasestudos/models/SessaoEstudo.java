@@ -1,10 +1,32 @@
 package com.example.gestaodetarefasestudos.models;
 
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.ForeignKey;
+import androidx.room.Ignore;
+import androidx.room.PrimaryKey;
+
+@Entity(tableName = "sessoes_estudo",
+        foreignKeys = @ForeignKey(
+                entity = Disciplina.class,
+                parentColumns = "id",
+                childColumns = "disciplina_id",
+                onDelete = ForeignKey.CASCADE
+        ))
 public class SessaoEstudo {
+    @PrimaryKey(autoGenerate = true)
     private long id;
+
+    @ColumnInfo(name = "disciplina_id")
     private long disciplinaId;
-    private String nomeDisciplina; // para exibição
+
+    @Ignore
+    private String nomeDisciplina; // para exibição - não persiste no banco
+
+    @ColumnInfo(name = "duracao")
     private long duracao; // duração em segundos
+
+    @ColumnInfo(name = "data")
     private long data; // timestamp em milissegundos
 
     // Construtores

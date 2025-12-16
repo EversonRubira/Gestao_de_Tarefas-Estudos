@@ -2,9 +2,11 @@ package com.example.gestaodetarefasestudos.adapters;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -16,114 +18,133 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.gestaodetarefasestudos.AdicionarEditarDisciplinaActivity;
+import com.example.gestaodetarefasestudos.DetalhesDisciplinaActivity;
 import com.example.gestaodetarefasestudos.R;
-import com.example.gestaodetarefasestudos.database.dao.DisciplinaDAO;
+import com.example.gestaodetarefasestudos.database.AppDatabase;
+import com.example.gestaodetarefasestudos.database.dao.DisciplinaRoomDAO;
 import com.example.gestaodetarefasestudos.models.Disciplina;
 
 import java.util.List;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 public class DisciplinaAdapter extends RecyclerView.Adapter<DisciplinaAdapter.DisciplinaViewHolder> {
 
-    private Context contexto;
-    private List<Disciplina> listaDisciplinas;
-    private DisciplinaDAO disciplinaDAO;
+    private Context context;
+    private List<Disciplina> lista;
+    private DisciplinaRoomDAO dao;
     private OnDisciplinaChangedListener listener;
+    private Executor executor;
 
     public interface OnDisciplinaChangedListener {
         void onDisciplinaChanged();
     }
 
-    public DisciplinaAdapter(Context contexto, List<Disciplina> listaDisciplinas,
+    public DisciplinaAdapter(Context context, List<Disciplina> lista,
                              OnDisciplinaChangedListener listener) {
-        this.contexto = contexto;
-        this.listaDisciplinas = listaDisciplinas;
+        this.context = context;
+        this.lista = lista;
         this.listener = listener;
-        this.disciplinaDAO = new DisciplinaDAO(contexto);
+        this.dao = AppDatabase.getInstance(context).disciplinaDAO();
+        this.executor = Executors.newSingleThreadExecutor();
     }
 
     @NonNull
     @Override
     public DisciplinaViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(contexto).inflate(R.layout.item_disciplina, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.item_disciplina, parent, false);
         return new DisciplinaViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull DisciplinaViewHolder holder, int position) {
-        Disciplina disciplina = listaDisciplinas.get(position);
+        Disciplina disciplina = lista.get(position);
 
-        holder.txtNomeDisciplina.setText(disciplina.getNome());
-        holder.txtCodigoDisciplina.setText(disciplina.getCodigo());
+        holder.txtNome.setText(disciplina.getNome());
+        holder.txtCodigo.setText(disciplina.getCodigo());
 
-        // Aplicar cor da disciplina
+        // cor da disciplina
         try {
-            holder.viewCorDisciplina.setBackgroundColor(Color.parseColor(disciplina.getCor()));
+            holder.viewCor.setBackgroundColor(Color.parseColor(disciplina.getCor()));
         } catch (Exception e) {
-            holder.viewCorDisciplina.setBackgroundColor(Color.parseColor("#2196F3"));
+            holder.viewCor.setBackgroundColor(Color.parseColor("#2196F3"));
         }
 
-        // Configurar menu de opções
-        holder.imgOpcoesDisciplina.setOnClickListener(v -> {
-            mostrarMenuOpcoes(v, disciplina, position);
+        holder.imgOpcoes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showOptionsMenu(v, disciplina, position);
+            }
         });
 
-        // Click no item abre para edição
-        holder.itemView.setOnClickListener(v -> {
-            Intent intent = new Intent(contexto, AdicionarEditarDisciplinaActivity.class);
-            intent.putExtra("disciplina_id", disciplina.getId());
-            contexto.startActivity(intent);
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, DetalhesDisciplinaActivity.class);
+                intent.putExtra(DetalhesDisciplinaActivity.EXTRA_DISCIPLINA_ID, disciplina.getId());
+                context.startActivity(intent);
+            }
         });
     }
 
     @Override
     public int getItemCount() {
-        return listaDisciplinas.size();
+        return lista.size();
     }
 
-    private void mostrarMenuOpcoes(View view, Disciplina disciplina, int position) {
-        PopupMenu popupMenu = new PopupMenu(contexto, view);
+    private void showOptionsMenu(View view, Disciplina disciplina, int position) {
+        PopupMenu popupMenu = new PopupMenu(context, view);
         popupMenu.inflate(R.menu.menu_item_opcoes);
 
-        popupMenu.setOnMenuItemClickListener(item -> {
-            int itemId = item.getItemId();
+        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                int itemId = item.getItemId();
 
-            if (itemId == R.id.menu_editar) {
-                Intent intent = new Intent(contexto, AdicionarEditarDisciplinaActivity.class);
-                intent.putExtra("disciplina_id", disciplina.getId());
-                contexto.startActivity(intent);
-                return true;
-            } else if (itemId == R.id.menu_deletar) {
-                confirmarDelecao(disciplina, position);
-                return true;
+                if (itemId == R.id.menu_editar) {
+                    Intent intent = new Intent(context, AdicionarEditarDisciplinaActivity.class);
+                    intent.putExtra("disciplina_id", disciplina.getId());
+                    context.startActivity(intent);
+                    return true;
+                } else if (itemId == R.id.menu_deletar) {
+                    confirmDelete(disciplina, position);
+                    return true;
+                }
+                return false;
             }
-
-            return false;
         });
 
         popupMenu.show();
     }
 
-    private void confirmarDelecao(Disciplina disciplina, int position) {
-        new AlertDialog.Builder(contexto)
+    private void confirmDelete(Disciplina disciplina, int position) {
+        new AlertDialog.Builder(context)
                 .setTitle(R.string.confirm_delete)
                 .setMessage(R.string.confirm_delete_subject_message)
-                .setPositiveButton(R.string.delete, (dialog, which) -> {
-                    int linhas = disciplinaDAO.deletar(disciplina.getId());
+                .setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        executor.execute(() -> {
+                            int linhas = dao.deletar(disciplina);
 
-                    if (linhas > 0) {
-                        listaDisciplinas.remove(position);
-                        notifyItemRemoved(position);
-                        notifyItemRangeChanged(position, listaDisciplinas.size());
+                            ((android.app.Activity) context).runOnUiThread(() -> {
+                                if (linhas > 0) {
+                                    lista.remove(position);
+                                    notifyItemRemoved(position);
+                                    notifyItemRangeChanged(position, lista.size());
 
-                        Toast.makeText(contexto, R.string.success_subject_deleted,
-                                Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(context, R.string.success_subject_deleted,
+                                            Toast.LENGTH_SHORT).show();
 
-                        if (listener != null) {
-                            listener.onDisciplinaChanged();
-                        }
-                    } else {
-                        Toast.makeText(contexto, R.string.error_deleting,
-                                Toast.LENGTH_SHORT).show();
+                                    if (listener != null) {
+                                        listener.onDisciplinaChanged();
+                                    }
+                                } else {
+                                    Toast.makeText(context, R.string.error_deleting,
+                                            Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        });
                     }
                 })
                 .setNegativeButton(R.string.cancel, null)
@@ -131,22 +152,22 @@ public class DisciplinaAdapter extends RecyclerView.Adapter<DisciplinaAdapter.Di
     }
 
     public void atualizarLista(List<Disciplina> novaLista) {
-        this.listaDisciplinas = novaLista;
+        this.lista = novaLista;
         notifyDataSetChanged();
     }
 
     static class DisciplinaViewHolder extends RecyclerView.ViewHolder {
-        View viewCorDisciplina;
-        TextView txtNomeDisciplina;
-        TextView txtCodigoDisciplina;
-        ImageView imgOpcoesDisciplina;
+        View viewCor;
+        TextView txtNome;
+        TextView txtCodigo;
+        ImageView imgOpcoes;
 
         public DisciplinaViewHolder(@NonNull View itemView) {
             super(itemView);
-            viewCorDisciplina = itemView.findViewById(R.id.viewCorDisciplina);
-            txtNomeDisciplina = itemView.findViewById(R.id.txtNomeDisciplina);
-            txtCodigoDisciplina = itemView.findViewById(R.id.txtCodigoDisciplina);
-            imgOpcoesDisciplina = itemView.findViewById(R.id.imgOpcoesDisciplina);
+            viewCor = itemView.findViewById(R.id.viewCorDisciplina);
+            txtNome = itemView.findViewById(R.id.txtNomeDisciplina);
+            txtCodigo = itemView.findViewById(R.id.txtCodigoDisciplina);
+            imgOpcoes = itemView.findViewById(R.id.imgOpcoesDisciplina);
         }
     }
 }

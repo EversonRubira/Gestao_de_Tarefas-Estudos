@@ -19,7 +19,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.gestaodetarefasestudos.AdicionarEditarTarefaActivity;
 import com.example.gestaodetarefasestudos.R;
-import com.example.gestaodetarefasestudos.database.dao.TarefaDAO;
+import com.example.gestaodetarefasestudos.database.AppDatabase;
+import com.example.gestaodetarefasestudos.database.dao.TarefaRoomDAO;
 import com.example.gestaodetarefasestudos.enums.EstadoTarefa;
 import com.example.gestaodetarefasestudos.enums.Prioridade;
 import com.example.gestaodetarefasestudos.models.Tarefa;
@@ -28,14 +29,17 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 public class TarefaAdapter extends RecyclerView.Adapter<TarefaAdapter.TarefaViewHolder> {
 
     private Context contexto;
     private List<Tarefa> listaTarefas;
-    private TarefaDAO tarefaDAO;
+    private TarefaRoomDAO tarefaDAO;
     private OnTarefaChangedListener listener;
     private SimpleDateFormat formatoData = new SimpleDateFormat("dd MMM yyyy", Locale.getDefault());
+    private Executor executor;
 
     public interface OnTarefaChangedListener {
         void onTarefaChanged();
@@ -46,7 +50,8 @@ public class TarefaAdapter extends RecyclerView.Adapter<TarefaAdapter.TarefaView
         this.contexto = contexto;
         this.listaTarefas = listaTarefas;
         this.listener = listener;
-        this.tarefaDAO = new TarefaDAO(contexto);
+        this.tarefaDAO = AppDatabase.getInstance(contexto).tarefaDAO();
+        this.executor = Executors.newSingleThreadExecutor();
     }
 
     @NonNull
@@ -89,25 +94,31 @@ public class TarefaAdapter extends RecyclerView.Adapter<TarefaAdapter.TarefaView
         // Listener do checkbox
         holder.checkboxTarefa.setOnCheckedChangeListener((buttonView, isChecked) -> {
             EstadoTarefa novoEstado = isChecked ? EstadoTarefa.CONCLUIDA : EstadoTarefa.PENDENTE;
-            tarefaDAO.atualizarEstado(tarefa.getId(), novoEstado);
-            tarefa.setEstado(novoEstado);
 
-            // Atualizar visual
-            if (isChecked) {
-                holder.txtTituloTarefa.setPaintFlags(
-                        holder.txtTituloTarefa.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-                holder.txtTituloTarefa.setAlpha(0.5f);
-                holder.txtDisciplinaTarefa.setAlpha(0.5f);
-            } else {
-                holder.txtTituloTarefa.setPaintFlags(
-                        holder.txtTituloTarefa.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
-                holder.txtTituloTarefa.setAlpha(1.0f);
-                holder.txtDisciplinaTarefa.setAlpha(1.0f);
-            }
+            executor.execute(() -> {
+                tarefaDAO.atualizarEstado(tarefa.getId(), novoEstado.ordinal());
 
-            if (listener != null) {
-                listener.onTarefaChanged();
-            }
+                ((android.app.Activity) contexto).runOnUiThread(() -> {
+                    tarefa.setEstado(novoEstado);
+
+                    // Atualizar visual
+                    if (isChecked) {
+                        holder.txtTituloTarefa.setPaintFlags(
+                                holder.txtTituloTarefa.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                        holder.txtTituloTarefa.setAlpha(0.5f);
+                        holder.txtDisciplinaTarefa.setAlpha(0.5f);
+                    } else {
+                        holder.txtTituloTarefa.setPaintFlags(
+                                holder.txtTituloTarefa.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
+                        holder.txtTituloTarefa.setAlpha(1.0f);
+                        holder.txtDisciplinaTarefa.setAlpha(1.0f);
+                    }
+
+                    if (listener != null) {
+                        listener.onTarefaChanged();
+                    }
+                });
+            });
         });
 
         // Configurar menu de opções
@@ -180,23 +191,27 @@ public class TarefaAdapter extends RecyclerView.Adapter<TarefaAdapter.TarefaView
                 .setTitle(R.string.confirm_delete)
                 .setMessage(R.string.confirm_delete_task_message)
                 .setPositiveButton(R.string.delete, (dialog, which) -> {
-                    int linhas = tarefaDAO.deletar(tarefa.getId());
+                    executor.execute(() -> {
+                        int linhas = tarefaDAO.deletar(tarefa);
 
-                    if (linhas > 0) {
-                        listaTarefas.remove(position);
-                        notifyItemRemoved(position);
-                        notifyItemRangeChanged(position, listaTarefas.size());
+                        ((android.app.Activity) contexto).runOnUiThread(() -> {
+                            if (linhas > 0) {
+                                listaTarefas.remove(position);
+                                notifyItemRemoved(position);
+                                notifyItemRangeChanged(position, listaTarefas.size());
 
-                        Toast.makeText(contexto, R.string.success_task_deleted,
-                                Toast.LENGTH_SHORT).show();
+                                Toast.makeText(contexto, R.string.success_task_deleted,
+                                        Toast.LENGTH_SHORT).show();
 
-                        if (listener != null) {
-                            listener.onTarefaChanged();
-                        }
-                    } else {
-                        Toast.makeText(contexto, R.string.error_deleting,
-                                Toast.LENGTH_SHORT).show();
-                    }
+                                if (listener != null) {
+                                    listener.onTarefaChanged();
+                                }
+                            } else {
+                                Toast.makeText(contexto, R.string.error_deleting,
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    });
                 })
                 .setNegativeButton(R.string.cancel, null)
                 .show();

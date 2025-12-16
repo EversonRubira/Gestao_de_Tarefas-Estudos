@@ -2,6 +2,7 @@ package com.example.gestaodetarefasestudos.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,14 +14,18 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.gestaodetarefasestudos.AdicionarEditarDisciplinaActivity;
+import com.example.gestaodetarefasestudos.PreferenciasApp;
 import com.example.gestaodetarefasestudos.R;
 import com.example.gestaodetarefasestudos.adapters.DisciplinaAdapter;
-import com.example.gestaodetarefasestudos.database.dao.DisciplinaDAO;
+import com.example.gestaodetarefasestudos.database.AppDatabase;
+import com.example.gestaodetarefasestudos.database.dao.DisciplinaRoomDAO;
 import com.example.gestaodetarefasestudos.models.Disciplina;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 public class SubjectsFragment extends Fragment {
 
@@ -29,8 +34,9 @@ public class SubjectsFragment extends Fragment {
     private FloatingActionButton botaoAdicionar;
 
     private DisciplinaAdapter disciplinaAdapter;
-    private DisciplinaDAO disciplinaDAO;
+    private DisciplinaRoomDAO disciplinaDAO;
     private List<Disciplina> listaDisciplinas;
+    private Executor executor;
 
     public SubjectsFragment() {
     }
@@ -61,7 +67,8 @@ public class SubjectsFragment extends Fragment {
         txtEstadoVazio = view.findViewById(R.id.empty_state);
         botaoAdicionar = view.findViewById(R.id.fab_add_subject);
 
-        disciplinaDAO = new DisciplinaDAO(requireContext());
+        disciplinaDAO = AppDatabase.getInstance(requireContext()).disciplinaDAO();
+        executor = Executors.newSingleThreadExecutor();
         listaDisciplinas = new ArrayList<>();
     }
 
@@ -85,26 +92,35 @@ public class SubjectsFragment extends Fragment {
      * e atualiza a interface conforme necessário
      */
     private void carregarDisciplinas() {
-        // Buscar todas as disciplinas do banco
-        listaDisciplinas = disciplinaDAO.obterTodas();
+        // Obter o ID do usuário logado
+        long usuarioId = new PreferenciasApp(requireContext()).getUsuarioId();
 
-        // Variável para debug - pode ser útil no futuro
-        @SuppressWarnings("unused")
-        int totalDisciplinas = listaDisciplinas.size();
+        Log.d("SubjectsFragment", "Usuario ID: " + usuarioId);
 
-        // Verificar se a lista está vazia
-        if (listaDisciplinas.isEmpty()) {
-            // Mostrar mensagem de lista vazia
-            recyclerViewDisciplinas.setVisibility(View.GONE);
-            txtEstadoVazio.setVisibility(View.VISIBLE);
-        } else {
-            // Mostrar a lista de disciplinas
-            recyclerViewDisciplinas.setVisibility(View.VISIBLE);
-            txtEstadoVazio.setVisibility(View.GONE);
-        }
+        // Buscar todas as disciplinas do usuário em background thread
+        executor.execute(() -> {
+            List<Disciplina> disciplinas = disciplinaDAO.obterTodas(usuarioId);
 
-        // Atualizar o adapter com os novos dados
-        disciplinaAdapter.atualizarLista(listaDisciplinas);
+            requireActivity().runOnUiThread(() -> {
+                Log.d("SubjectsFragment", "Total de disciplinas: " + disciplinas.size());
+
+                listaDisciplinas = disciplinas;
+
+                // Verificar se a lista está vazia
+                if (listaDisciplinas.isEmpty()) {
+                    // Mostrar mensagem de lista vazia
+                    recyclerViewDisciplinas.setVisibility(View.GONE);
+                    txtEstadoVazio.setVisibility(View.VISIBLE);
+                } else {
+                    // Mostrar a lista de disciplinas
+                    recyclerViewDisciplinas.setVisibility(View.VISIBLE);
+                    txtEstadoVazio.setVisibility(View.GONE);
+                }
+
+                // Atualizar o adapter com os novos dados
+                disciplinaAdapter.atualizarLista(listaDisciplinas);
+            });
+        });
 
         // TODO: Adicionar funcionalidade de filtro/pesquisa
         // TODO: Ordenar disciplinas alfabeticamente ou por data
