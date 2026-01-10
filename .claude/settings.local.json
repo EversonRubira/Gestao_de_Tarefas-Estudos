@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(dir /s /b \"C:\\\\Workspace\\\\IPS\\\\PAM\\\\ProjetoFinal\\\\GestaoTarefasEstudos\\\\app\\\\src\\\\main\\\\java\")",
+      "Bash(findstr:*)"
+    ]
+  }
+}

@@ -184,4 +184,14 @@
     <string name="language_english">English</string>
     <string name="theme_light">Light</string>
     <string name="theme_dark">Dark</string>
+
+    <!-- Empty States -->
+    <string name="no_study_today">No study recorded today</string>
+    <string name="no_subjects_for_timer">Create at least one subject to use the timer</string>
+
+    <!-- Dialog: No Subjects -->
+    <string name="dialog_no_subjects_title">No Subjects Found</string>
+    <string name="dialog_no_subjects_message">To create a task, you must first create a subject.\n\nWould you like to create a subject now?</string>
+    <string name="dialog_create_subject">Create Subject</string>
+    <string name="dialog_go_back">Go Back</string>
 </resources>

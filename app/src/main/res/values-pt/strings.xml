@@ -184,5 +184,15 @@
     <string name="language_english">Inglês</string>
     <string name="theme_light">Claro</string>
     <string name="theme_dark">Escuro</string>
+
+    <!-- Empty States -->
+    <string name="no_study_today">Nenhum estudo registado hoje</string>
+    <string name="no_subjects_for_timer">Crie pelo menos uma disciplina para usar o timer</string>
+
+    <!-- Dialog: No Subjects -->
+    <string name="dialog_no_subjects_title">Nenhuma Disciplina Encontrada</string>
+    <string name="dialog_no_subjects_message">Para criar uma tarefa, primeiro precisa de criar uma disciplina.\n\nDeseja criar uma disciplina agora?</string>
+    <string name="dialog_create_subject">Criar Disciplina</string>
+    <string name="dialog_go_back">Voltar</string>
 </resources>
 

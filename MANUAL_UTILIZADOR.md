@@ -1,365 +1,343 @@
-# Manual de Utilizador - StudyFlow
+StudyFlow - Manual de Utilizador
 
-Guia passo a passo de como usar a aplicação.
+Programação de Aplicações Móveis 2025/26
+Instituto Politécnico de Setúbal
 
-## Índice
-1. Primeira Utilização
-2. Gerir Disciplinas
-3. Gerir Tarefas
-4. Usar o Timer de Estudo
-5. Ver Estatísticas
-6. Usar o Calendário
-7. Navegar na App
+================================================================================
 
----
+1. Introdução
 
-## 1. Primeira Utilização
+O StudyFlow é uma aplicação Android para gestão de disciplinas académicas, tarefas e controlo de tempo de estudo usando a técnica Pomodoro.
 
-### Passo 1: Abrir a App
-- Tocar no ícone do StudyFlow no telemóvel
-- Aparece uma tela inicial (Splash Screen) com animação
-- Aguardar 3 segundos
+Funcionalidades:
+  - Gestão de disciplinas com cores personalizadas
+  - Criação de tarefas com prioridades (Alta, Média, Baixa)
+  - Timer Pomodoro (25min trabalho / 5min descanso)
+  - Calendário visual com tarefas agendadas
+  - Estatísticas de tempo de estudo por disciplina
+  - Internacionalização (Português/Inglês)
+  - Tema claro e escuro
 
-![Splash Screen - mostra logo e gradiente azul/roxo]
+================================================================================
 
-### Passo 2: Tela Principal
-- Após o splash, abre automaticamente na aba "Home" (Dashboard)
-- Na primeira vez, a app cria 3 disciplinas de exemplo e algumas tarefas
-- Estes dados são só para demonstração, podem ser apagados depois
+2. Instalação e Primeiro Acesso
 
-![Dashboard inicial com dados de exemplo]
+2.1 Requisitos
 
----
+Para usar a aplicação é necessário ter um dispositivo com Android 7.0 ou superior (API 24) e pelo menos 50 MB de espaço livre.
 
-## 2. Gerir Disciplinas
+2.2 Registo de Conta
 
-### 2.1 Ver Lista de Disciplinas
+Passo 1: Abra a aplicação
 
-**Passo 1**: Tocar na aba "Subjects" (segundo ícone da navegação inferior)
+Ao abrir a app pela primeira vez verá o Splash Screen com o logo da aplicação durante 2 segundos.
 
-**Passo 2**: Aparecem todas as disciplinas em lista, cada uma mostra:
-- Nome da disciplina
-- Código da disciplina
-- Cor associada (barra colorida à esquerda)
+Passo 2: Na tela de Login, clique em "Criar Conta"
 
-![Lista de disciplinas]
+Se já tiver conta pode fazer login diretamente. Se não, precisa criar uma conta nova clicando no botão de criar conta.
 
-### 2.2 Adicionar Nova Disciplina
+Passo 3: Preencha o formulário de registo
 
-**Passo 1**: Na aba "Subjects", tocar no botão redondo azul com símbolo "+"
+Vai precisar preencher os seguintes campos:
+  - Nome (mínimo 3 caracteres)
+  - Email (formato válido)
+  - Password (mínimo 6 caracteres)
+  - Confirmar Password
 
-**Passo 2**: Preencher o formulário:
-- **Nome**: Escrever nome da disciplina (ex: "Matemática")
-- **Código**: Código único da disciplina (ex: "MAT101")
-- **Cor**: Tocar no selector de cor e escolher uma cor
+Todos os campos são obrigatórios e têm validação.
 
-**Passo 3**: Tocar em "GUARDAR"
+Passo 4: Clique em "Registar"
 
-**Nota**: Se o código já existir, aparece erro e não deixa guardar.
+Depois de preencher tudo corretamente, clique no botão Registar. A conta será criada e você será redirecionado automaticamente para o Dashboard.
 
-![Formulário de adicionar disciplina]
+Dados de Exemplo: Na primeira execução, a app cria automaticamente 3 Disciplinas (PAM, BD, WEB), 3 Tarefas de exemplo e 2 Sessões de estudo. Pode apagar estes dados e criar os seus próprios.
 
-### 2.3 Ver Detalhes de uma Disciplina
+================================================================================
 
-**Passo 1**: Na lista de disciplinas, tocar numa disciplina
+3. Funcionalidades Principais
 
-**Passo 2**: Abre tela com:
-- Nome e código no topo (com a cor)
-- Estatísticas: Total tarefas, Pendentes, Concluídas, Tempo de estudo
-- Lista de todas as tarefas dessa disciplina
+3.1 Dashboard (Home)
 
-![Detalhes da disciplina]
+O Dashboard dá uma visão geral do seu progresso académico. É composto por três partes principais:
 
-### 2.4 Editar Disciplina
+a) Resumo Estatístico (3 cards no topo)
+   Mostra o total de disciplinas cadastradas, tarefas pendentes e tempo de estudo hoje.
 
-**Passo 1**: Abrir detalhes da disciplina
+b) Calendário Visual
+   O calendário permite navegar entre meses usando as setas. Os dias com pontos coloridos têm tarefas agendadas. As cores representam disciplinas diferentes. Pode clicar num dia para ver as tarefas desse dia específico. O dia atual aparece marcado com uma borda diferente.
 
-**Passo 2**: Tocar nos 3 pontinhos no canto superior direito
+c) Tempo de Estudo Hoje
+   Lista com o tempo estudado hoje para cada disciplina. Por exemplo:
+   PAM - 1h 25m
+   BD - 0h 45m
 
-**Passo 3**: Escolher "Editar"
+================================================================================
 
-**Passo 4**: Alterar os dados necessários
+3.2 Disciplinas
 
-**Passo 5**: Guardar
+Adicionar Disciplina
 
-### 2.5 Apagar Disciplina
+Para adicionar uma nova disciplina siga estes passos:
 
-**Passo 1**: Abrir detalhes da disciplina
+Passo 1: Clique no botão flutuante "+" (canto inferior direito)
 
-**Passo 2**: Tocar nos 3 pontinhos no canto superior direito
+Passo 2: Preencha os campos do formulário
+  - Nome: Por exemplo "Matemática Aplicada"
+  - Código: Por exemplo "MAT" (mínimo 2 caracteres, convertido automaticamente para maiúsculas)
+  - Cor: Selecione uma das 12 cores disponíveis na paleta
 
-**Passo 3**: Escolher "Eliminar"
+Passo 3: Clique em "Guardar"
 
-**Passo 4**: Confirmar na mensagem que aparece
+A disciplina será criada e aparecerá na lista.
 
-**ATENÇÃO**: Apagar uma disciplina apaga TODAS as tarefas e sessões de estudo associadas!
+Editar/Eliminar Disciplina
 
----
+Para editar ou eliminar uma disciplina existente:
+  1. Clique no ícone de três pontos da disciplina
+  2. Selecione "Editar" ou "Eliminar"
 
-## 3. Gerir Tarefas
+ATENÇÃO: Eliminar uma disciplina remove todas as tarefas associadas a ela! Esta operação não pode ser desfeita.
 
-### 3.1 Ver Lista de Tarefas
+Ver Detalhes
 
-**Passo 1**: Tocar na aba "Tasks" (terceiro ícone)
+Pode clicar no card de qualquer disciplina para ver os detalhes completos. Na tela de detalhes pode ver estatísticas (total de tarefas, pendentes, concluídas), tempo total de estudo dedicado à disciplina e a lista completa de tarefas dessa disciplina.
 
-**Passo 2**: Aparecem todas as tarefas em lista com:
-- Título da tarefa
-- Nome da disciplina (com cor)
-- Data de entrega
-- Indicador de prioridade (barra colorida: verde=baixa, laranja=média, vermelho=alta)
-- Estado atual
-- Checkbox para marcar como concluída
+================================================================================
 
-![Lista de tarefas]
+3.3 Tarefas
 
-### 3.2 Filtrar Tarefas
+Adicionar Tarefa
 
-**Passo 1**: Na aba Tasks, tocar no menu dropdown no topo
+Passo 1: Clique no botão "+"
 
-**Passo 2**: Escolher filtro:
-- Todas
-- Pendentes
-- Em Progresso
-- Concluídas
+Passo 2: Preencha os campos do formulário
+  - Título: Por exemplo "Trabalho de grupo"
+  - Descrição: Campo opcional para detalhes adicionais
+  - Disciplina: Selecione da lista de disciplinas cadastradas
+  - Data de Entrega: Clique no ícone do calendário para escolher
+  - Prioridade: Escolha entre Baixa, Média ou Alta
 
-### 3.3 Adicionar Nova Tarefa
+Passo 3: Clique em "Guardar"
 
-**Passo 1**: Na aba "Tasks", tocar no botão "+" azul
+Estados da Tarefa
 
-**Passo 2**: Preencher formulário:
-- **Disciplina**: Escolher de uma lista (obrigatório)
-- **Título**: Nome da tarefa (obrigatório)
-- **Descrição**: Detalhes da tarefa (opcional)
-- **Data de Entrega**: Tocar no calendário e escolher data
-- **Prioridade**: Escolher Baixa, Média ou Alta
-- **Estado**: Escolher Pendente, Em Progresso ou Concluída
+As tarefas podem ter três estados diferentes:
+  - Pendente (cor cinza): A tarefa ainda não foi iniciada
+  - Em Progresso (cor azul): A tarefa está em andamento
+  - Concluída (cor verde): A tarefa foi finalizada
 
-**Passo 3**: Tocar em "GUARDAR"
+Para alterar o estado de uma tarefa pode marcar a checkbox ao lado dela para marcar como concluída, ou usar o menu de três pontos para escolher "Marcar como Concluída/Pendente".
 
-![Formulário de adicionar tarefa]
+Prioridades
 
-### 3.4 Marcar Tarefa como Concluída (Forma Rápida)
+As prioridades aparecem com badges coloridos:
+  - Alta: Badge vermelho com texto "ALTA"
+  - Média: Badge laranja com texto "MÉDIA"
+  - Baixa: Badge verde com texto "BAIXA"
 
-**Passo 1**: Na lista de tarefas, tocar no checkbox à esquerda da tarefa
+================================================================================
 
-**Passo 2**: A tarefa fica automaticamente marcada como Concluída
+3.4 Timer Pomodoro
 
-### 3.5 Editar Tarefa
+Técnica Pomodoro
 
-**Passo 1**: Tocar na tarefa da lista
+A técnica Pomodoro consiste em três passos simples:
+  1. Trabalhar focado durante 25 minutos
+  2. Descansar durante 5 minutos
+  3. Repetir o ciclo
 
-**Passo 2**: Abre o formulário com dados preenchidos
+Como Usar
 
-**Passo 3**: Alterar o que for necessário
+Passo 1: (Opcional) Configurar durações
 
-**Passo 4**: Guardar
+Por padrão o timer usa 25 minutos para trabalho e 5 minutos para descanso. Se quiser pode alterar estes valores. Os valores aceites vão de 1 a 120 minutos.
 
-### 3.6 Apagar Tarefa
+Passo 2: OBRIGATÓRIO - Selecionar disciplina
 
-**Passo 1**: Tocar na tarefa para editar
+Tem que escolher uma disciplina antes de iniciar o timer. Clique em "Selecionar Disciplina" e escolha da lista. Isto é necessário para registar o tempo de estudo corretamente.
 
-**Passo 2**: Tocar em botão "ELIMINAR" (se tiver)
+Passo 3: Clique em "INICIAR"
 
-OU usar menu de contexto se disponível
+O cronómetro inicia a contagem regressiva. O botão muda automaticamente para "PAUSAR".
 
----
+Controles:
+  - PAUSAR: Pausa o timer sem perder o progresso
+  - CONTINUAR: Retoma de onde parou
+  - PARAR: Reseta completamente (mas guarda o tempo se já estudou mais de 10 segundos)
 
-## 4. Usar o Timer de Estudo (Pomodoro)
+Funcionalidade Especial - Troca de Abas
 
-### 4.1 Iniciar uma Sessão de Estudo
+Se trocar de aba durante o timer, o tempo estudado até aquele momento é guardado automaticamente. Ao voltar para a aba do Timer, pode clicar em "CONTINUAR" para prosseguir de onde parou.
 
-**Passo 1**: Ir para a aba "Timer" (quinto ícone - relógio)
+Ciclo Completo
 
-**Passo 2**: Escolher a disciplina no dropdown (OBRIGATÓRIO)
+Após completar 25 minutos de trabalho, o tempo é guardado automaticamente e aparece a mensagem "Sessão de trabalho completa! Hora de descansar." O timer muda automaticamente para o modo Descanso de 5 minutos.
 
-**Passo 3**: (Opcional) Configurar tempos:
-- Tempo de Trabalho: Quantos minutos de estudo (padrão: 25 min)
-- Tempo de Descanso: Quantos minutos de pausa (padrão: 5 min)
+Após os 5 minutos de descanso, aparece a mensagem "Descanso terminado! Pronto para outra sessão?" e o timer volta para o modo Trabalho de 25 minutos.
 
-**Passo 4**: Tocar no botão "INICIAR"
+================================================================================
 
-**Passo 5**: O cronómetro começa a contagem regressiva
+3.5 Estatísticas
 
-![Timer em funcionamento]
+A secção de estatísticas mostra o tempo de estudo dos últimos 7 dias.
 
-### 4.2 Durante a Sessão
+Período: Últimos 7 dias
 
-- O timer vai contando o tempo
-- Mostra se está em modo "Trabalho" ou "Descanso"
-- Quando termina o tempo de trabalho, passa automaticamente para descanso
-- Quando termina o descanso, pode começar novo ciclo
+Informações por disciplina:
+  - Nome da disciplina
+  - Cor (barra lateral colorida)
+  - Tempo total de estudo (formatado em horas e minutos)
 
-### 4.3 Parar o Timer
+Exemplo de como aparecem as estatísticas:
 
-**Passo 1**: Tocar em "PARAR"
+━━━━━━━━━━━━━━━━━━━━━━
+│ PAM
+│ 3h 45m
+━━━━━━━━━━━━━━━━━━━━━━
+│ BD
+│ 1h 30m
+━━━━━━━━━━━━━━━━━━━━━━
 
-**Passo 2**: O tempo parcial é guardado automaticamente no banco de dados
+Atualização: As estatísticas são atualizadas automaticamente sempre que completa uma sessão do Timer.
 
-### 4.4 Ver Tempo Guardado
+================================================================================
 
-O tempo de cada sessão é guardado e aparece:
-- No Dashboard (Home) - tempo de hoje por disciplina
-- Nas Estatísticas - lista dos últimos 7 dias
-- Nos Detalhes da Disciplina - tempo total estudado
+3.6 Configurações
 
----
+Para aceder às configurações, clique no menu superior (ícone de três pontos) e depois em Configurações.
 
-## 5. Ver Estatísticas
+Idioma
 
-### 5.1 Aceder às Estatísticas
+A app suporta dois idiomas:
+  - Português
+  - English
 
-**Passo 1**: Tocar na aba "Statistics" (quarto ícone)
+Como trocar o idioma:
+  1. Clique em "Idioma"
+  2. Selecione o idioma desejado
+  3. A app reinicia automaticamente com o novo idioma
 
-**Passo 2**: Aparece uma lista com cards de cada disciplina:
+Tema
 
-![Ecrã de estatísticas com lista]
+Pode escolher entre dois temas:
+  - Claro (para usar durante o dia)
+  - Escuro (para usar à noite ou ambientes escuros)
 
-### 5.2 Lista de Estatísticas
+Como trocar o tema:
+  1. Clique em "Tema"
+  2. Selecione o tema desejado
+  3. A mudança acontece imediatamente
 
-- **O que mostra**: Tempo de estudo por disciplina nos últimos 7 dias
-- **Como ler**: Cada card mostra o nome da disciplina e o tempo estudado
-- **Cores**: Barra lateral de cada card tem a cor da disciplina
-- **Formato**: Tempo aparece em minutos (ex: "120 min") ou horas (ex: "2.5 h")
+Logout
 
-### 5.3 Sem Dados
+Para sair da conta:
+  1. Abra o Menu e clique em "Logout"
+  2. Confirme a ação
+  3. Será redirecionado para a tela de Login
 
-Se ainda não usou o timer, aparece mensagem:
-"Sem dados de estudo disponíveis. Comece a usar o timer!"
+================================================================================
 
----
+4. Resolução de Problemas
 
-## 6. Usar o Calendário
+Problema: "Não consigo criar tarefas"
 
-O calendário está na tela Home (Dashboard).
+Causa: Não tem disciplinas cadastradas
 
-### 6.1 Visualizar o Calendário
+Solução:
+  1. Vá para a aba "Disciplinas"
+  2. Crie pelo menos uma disciplina
+  3. Volte para a aba "Tarefas" e tente novamente
 
-**Passo 1**: Ir para aba "Home"
+--------------------------------------------------------------------------------
 
-**Passo 2**: Fazer scroll para baixo até ver o calendário
+Problema: "Timer não inicia"
 
-**Passo 3**: O calendário mostra:
-- Grade 7x7 com os dias do mês actual
-- Cada quadrado é um dia
-- Dias com tarefas têm bolinhas coloridas
-- Número em cima das bolinhas = quantidade de tarefas
+Causa: Não selecionou uma disciplina
 
-![Calendário visual com cores]
+Solução:
+  1. Na aba Timer, clique em "Selecionar Disciplina"
+  2. Escolha uma disciplina da lista
+  3. Clique em "INICIAR"
 
-### 6.2 Entender as Cores
+--------------------------------------------------------------------------------
 
-- Cada bolinha colorida representa uma disciplina que tem tarefas nesse dia
-- As cores são as mesmas das disciplinas
-- Máximo 3 cores por dia (se houver mais, só mostra as 3 primeiras)
-- Número mostra total de tarefas (mesmo que de mais de 3 disciplinas)
+Problema: "Calendário sem tarefas"
 
-### 6.3 Ver Tarefas de um Dia
+Verificações a fazer:
+  1. As tarefas têm data de entrega definida?
+  2. Está a ver o mês correto?
+  3. As tarefas estão marcadas como concluídas? (Tarefas concluídas não aparecem no calendário)
 
-**Passo 1**: Tocar num dia que tenha bolinhas coloridas
+--------------------------------------------------------------------------------
 
-**Passo 2**: Aparece mensagem (Toast) com lista das tarefas desse dia
+Problema: "Estatísticas vazias"
 
-Exemplo: "Matemática: Fazer exercícios..."
+Causa: Não tem sessões de estudo nos últimos 7 dias
 
-### 6.4 Navegar Entre Meses
+Solução:
+  - Use o Timer para estudar
+  - Complete pelo menos uma sessão de 25 minutos
+  - As estatísticas aparecerão automaticamente
 
-**Passo 1**: Usar seta esquerda "<" para mês anterior
+================================================================================
 
-**Passo 2**: Usar seta direita ">" para próximo mês
+5. Dicas de Uso
 
-**Passo 3**: Nome do mês actual aparece no centro
+Boas Práticas
 
-### 6.5 Dia Actual
+1. Cadastre todas as disciplinas logo no início
+   Isto facilita a criação de tarefas depois.
 
-O dia de hoje tem borda especial para identificar facilmente.
+2. Use prioridades corretamente
+   - Alta: Para trabalhos urgentes e provas
+   - Média: Para trabalhos normais
+   - Baixa: Para leituras opcionais e exercícios extra
 
----
+3. Pomodoro: 25 minutos de foco total, sem distrações
+   Durante a sessão de trabalho, desligue notificações e concentre-se apenas na tarefa.
 
-## 7. Navegar na App
+4. Revise as estatísticas semanalmente
+   Ajuda a perceber quanto tempo está a dedicar a cada disciplina.
 
-### 7.1 Bottom Navigation (Barra Inferior)
+5. Atualize o calendário ao receber novos trabalhos
+   Adicione as tarefas assim que souber dos prazos.
 
-A app tem 5 abas na parte de baixo:
+================================================================================
 
-1. **Home** (ícone casa): Dashboard com resumo geral
-2. **Subjects** (ícone livro): Lista de disciplinas
-3. **Tasks** (ícone checklist): Lista de tarefas
-4. **Statistics** (ícone gráfico): Estatísticas de estudo
-5. **Timer** (ícone relógio): Cronómetro Pomodoro
+6. Atalhos
 
-**Como usar**: Tocar no ícone para ir para essa secção
+Ação: Adicionar disciplina
+Como Fazer: Botão "+" na aba Disciplinas (canto inferior direito)
 
-### 7.2 Voltar Atrás
+Ação: Adicionar tarefa
+Como Fazer: Botão "+" na aba Tarefas (canto inferior direito)
 
-- Usar botão "Voltar" do Android para fechar formulários ou voltar à tela anterior
-- Se estiver numa aba principal, voltar fecha a app
+Ação: Marcar tarefa como concluída
+Como Fazer: Checkbox ao lado da tarefa
 
-### 7.3 Menus de Contexto
+Ação: Ver detalhes de uma disciplina
+Como Fazer: Toque no card da disciplina
 
-Algumas telas têm menu de 3 pontinhos (⋮) no canto superior:
-- Detalhes da Disciplina: Editar ou Eliminar
+Ação: Ver tarefas de um dia específico
+Como Fazer: Toque no dia do calendário
 
----
+================================================================================
 
-## Dicas de Utilização
+7. Informações Técnicas
 
-### Para Organização
-- Usar cores diferentes para cada disciplina facilita identificação
-- Marcar prioridades nas tarefas ajuda a saber o que fazer primeiro
-- Consultar o calendário diariamente para ver carga de trabalho
+Versão: 1.0
+Data: Janeiro 2026
+SDK Compilação: 36 (Android 15)
+SDK Mínimo: 24 (Android 7.0)
+Gradle: 8.7
+Room Database: 2.6.1
 
-### Para Estudar Melhor
-- Usar o Timer Pomodoro: 25 min estudo + 5 min pausa
-- Escolher sempre a disciplina no timer para ter estatísticas correctas
-- Ver as estatísticas semanalmente para acompanhar progresso
+================================================================================
 
-### Para Manter Actualizado
-- Marcar tarefas como concluídas assim que terminar
-- Atualizar estados das tarefas (Pendente → Em Progresso → Concluída)
-- Apagar disciplinas/tarefas antigas que já não são necessárias
+Desenvolvido por: [Seu Nome]
+Instituição: IPS - EST Setúbal
+Ano Letivo: 2025/26
 
----
+================================================================================
 
-## Resolução de Problemas
-
-### A app não abre
-- Verificar se o Android é versão 7.0 ou superior
-- Reinstalar a aplicação
-
-### Dados desapareceram
-- Os dados são guardados localmente no telemóvel
-- Se limpar dados da app nas configurações do Android, perde tudo
-- Não há backup automático
-
-### Estatísticas não aparecem
-- Normal se ainda não usou o timer
-- Precisa ter pelo menos uma sessão de estudo guardada nos últimos 7 dias
-
-### Calendário sem cores
-- Normal se não tiver tarefas criadas
-- Criar tarefas com datas de entrega para aparecerem no calendário
-
-### Timer não guarda tempo
-- Verificar se escolheu a disciplina antes de iniciar
-- O timer só guarda se disciplina estiver seleccionada
-
----
-
-## Alterar Idioma
-
-A app detecta automaticamente o idioma do sistema:
-- Se Android em Português → App em PT
-- Se Android em Inglês → App em EN
-- Outros idiomas → App em EN (padrão)
-
-**Para mudar**: Alterar idioma nas definições do Android e reiniciar a app
-
----
-
-## Informações de Suporte
-
-Esta é uma app académica desenvolvida para projeto de PAM.
-Para dúvidas ou problemas, contactar os autores do projeto.
-
-**Versão**: 1.0
-**Última atualização**: Dezembro 2025
+Fim do Manual

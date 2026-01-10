@@ -31,36 +31,46 @@
             android:layout_weight="1"
             android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/tv_nome_disciplina"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Programação de Aplicações Móveis"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                android:textColor="@color/text_primary" />
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
 
-            <TextView
-                android:id="@+id/tv_detalhes"
+                <TextView
+                    android:id="@+id/tv_nome_disciplina"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Programação de Aplicações Móveis"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/text_primary" />
+
+                <TextView
+                    android:id="@+id/tv_tempo_estudo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="120 min"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/primary"
+                    android:layout_marginStart="8dp" />
+
+            </LinearLayout>
+
+            <!-- Barra de progresso visual -->
+            <ProgressBar
+                android:id="@+id/progress_bar_tempo"
+                style="?android:attr/progressBarStyleHorizontal"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Últimos 7 dias"
-                android:textSize="12sp"
-                android:textColor="@color/text_hint"
-                android:layout_marginTop="2dp" />
+                android:layout_height="18dp"
+                android:layout_marginTop="8dp"
+                android:max="100"
+                android:progress="75"
+                android:progressTint="@color/primary" />
 
         </LinearLayout>
-
-        <!-- Tempo de estudo -->
-        <TextView
-            android:id="@+id/tv_tempo_estudo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="120 min"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:textColor="@color/primary"
-            android:layout_marginStart="12dp" />
 
     </LinearLayout>
 

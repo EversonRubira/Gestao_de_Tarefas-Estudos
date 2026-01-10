@@ -134,15 +134,15 @@ public class AdicionarEditarTarefaActivity extends AppCompatActivity {
     private void mostrarDialogoSemDisciplinas() {
         // Criar um AlertDialog para informar o utilizador
         new AlertDialog.Builder(this)
-            .setTitle("Nenhuma Disciplina Encontrada")
-            .setMessage("Para criar uma tarefa, primeiro precisa de criar uma disciplina.\n\nDeseja criar uma disciplina agora?")
-            .setPositiveButton("Criar Disciplina", (dialog, which) -> {
+            .setTitle(getString(R.string.dialog_no_subjects_title))
+            .setMessage(getString(R.string.dialog_no_subjects_message))
+            .setPositiveButton(getString(R.string.dialog_create_subject), (dialog, which) -> {
                 // Abrir a tela de criar disciplina
                 Intent intent = new Intent(AdicionarEditarTarefaActivity.this,
                                           AdicionarEditarDisciplinaActivity.class);
                 startActivityForResult(intent, 100);
             })
-            .setNegativeButton("Voltar", (dialog, which) -> {
+            .setNegativeButton(getString(R.string.dialog_go_back), (dialog, which) -> {
                 // Fechar esta activity e voltar
                 finish();
             })

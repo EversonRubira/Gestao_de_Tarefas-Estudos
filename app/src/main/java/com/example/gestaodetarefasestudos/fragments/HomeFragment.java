@@ -156,7 +156,7 @@ public class HomeFragment extends Fragment {
                 // se nao tiver nada mostra msg
                 if (tempoFinal == 0) {
                     TextView textoVazio = new TextView(requireContext());
-                    textoVazio.setText("Nenhum estudo registado hoje");
+                    textoVazio.setText(getString(R.string.no_study_today));
                     textoVazio.setTextColor(getResources().getColor(R.color.text_secondary));
                     textoVazio.setTextSize(14);
                     textoVazio.setPadding(0, 8, 0, 8);
@@ -248,7 +248,8 @@ public class HomeFragment extends Fragment {
 
     // carrega o calendário do mês
     private void loadCalendar() {
-        SimpleDateFormat formatoMesAno = new SimpleDateFormat("MMMM yyyy", new Locale("pt", "PT"));
+        // Usar o locale configurado pelo utilizador (pt ou en)
+        SimpleDateFormat formatoMesAno = new SimpleDateFormat("MMMM yyyy", Locale.getDefault());
         textMonthYear.setText(formatoMesAno.format(currentCalendar.getTime()));
 
         List<DiaCalendario> dias = generateDaysOfMonth();

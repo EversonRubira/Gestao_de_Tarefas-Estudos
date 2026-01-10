@@ -44,17 +44,20 @@ public class TimerFragment extends Fragment {
     private TextView textoDisciplinaSelecionada;
 
     private CountDownTimer cronometro;
-    private long tempoRestante; // em milissegundos
-    private long duracaoTrabalho; // em milissegundos
-    private long duracaoDescanso; // em milissegundos
-    private boolean estaEmTrabalho = true;
-    private boolean cronometroAtivo = false;
-    private long tempoInicioSessao; // para calcular tempo total da sessão
+
+    // ✅ VARIÁVEIS STATIC - Sobrevivem quando troca de aba
+    private static long tempoRestante; // em milissegundos
+    private static long duracaoTrabalho; // em milissegundos
+    private static long duracaoDescanso; // em milissegundos
+    private static boolean estaEmTrabalho = true;
+    private static boolean cronometroAtivo = false;
+    private static long tempoInicioSessao; // para calcular tempo total da sessão
+    private static Disciplina disciplinaSelecionada;
+    private static boolean jaInicializado = false; // Flag para saber se já configurou
 
     private SessaoEstudoRoomDAO sessaoDAO;
     private DisciplinaRoomDAO disciplinaDAO;
     private List<Disciplina> listaDisciplinas;
-    private Disciplina disciplinaSelecionada;
     private Executor executor;
 
     public TimerFragment() {
@@ -110,7 +113,7 @@ public class TimerFragment extends Fragment {
                     botaoIniciar.setEnabled(false);
                     spinnerDisciplinaTimer.setEnabled(false);
                     Toast.makeText(requireContext(),
-                            "Crie pelo menos uma disciplina para usar o timer",
+                            getString(R.string.no_subjects_for_timer),
                             Toast.LENGTH_LONG).show();
                     return;
                 }
@@ -147,13 +150,23 @@ public class TimerFragment extends Fragment {
     }
 
     private void configurarDuracoes() {
-        // Configurar durações padrão (25 minutos trabalho, 5 minutos descanso)
-        int minutosTrabalho = obterMinutosDoEditText(campoTrabalho, 25);
-        int minutosDescanso = obterMinutosDoEditText(campoDescanso, 5);
+        android.util.Log.d("TimerFragment", "configurarDuracoes() - jaInicializado: " + jaInicializado);
 
-        duracaoTrabalho = minutosTrabalho * 60 * 1000L;
-        duracaoDescanso = minutosDescanso * 60 * 1000L;
-        tempoRestante = duracaoTrabalho;
+        // ✅ SÓ configura durações na PRIMEIRA VEZ que abre o timer
+        if (!jaInicializado) {
+            // Configurar durações padrão (25 minutos trabalho, 5 minutos descanso)
+            int minutosTrabalho = obterMinutosDoEditText(campoTrabalho, 25);
+            int minutosDescanso = obterMinutosDoEditText(campoDescanso, 5);
+
+            duracaoTrabalho = minutosTrabalho * 60 * 1000L;
+            duracaoDescanso = minutosDescanso * 60 * 1000L;
+            tempoRestante = duracaoTrabalho;
+
+            jaInicializado = true;
+            android.util.Log.d("TimerFragment", "Durações configuradas pela primeira vez");
+        } else {
+            android.util.Log.d("TimerFragment", "Durações já estavam configuradas, mantendo estado");
+        }
 
         atualizarDisplay();
     }
@@ -273,6 +286,8 @@ public class TimerFragment extends Fragment {
     }
 
     private void pararCronometro() {
+        android.util.Log.d("TimerFragment", "pararCronometro() chamado");
+
         if (cronometro != null) {
             cronometro.cancel();
         }
@@ -302,15 +317,21 @@ public class TimerFragment extends Fragment {
             }
         }
 
+        // ✅ RESETAR TODAS as variáveis estáticas para começar do zero
         cronometroAtivo = false;
         estaEmTrabalho = true;
         tempoRestante = duracaoTrabalho;
+        tempoInicioSessao = 0;
+        jaInicializado = false; // ✅ Permitir reconfigurar durações na próxima vez
+
         textoEstadoTimer.setText(R.string.timer_work_session);
         atualizarDisplay();
         botaoIniciar.setText(R.string.timer_start);
         campoTrabalho.setEnabled(true);
         campoDescanso.setEnabled(true);
         spinnerDisciplinaTimer.setEnabled(true); // Reabilitar seleção
+
+        android.util.Log.d("TimerFragment", "Timer resetado completamente");
     }
 
     private void atualizarDisplay() {
@@ -366,10 +387,114 @@ public class TimerFragment extends Fragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        android.util.Log.d("TimerFragment", "=== onResume() chamado ===");
+        android.util.Log.d("TimerFragment", "Estado: tempoRestante=" + tempoRestante +
+                          ", cronometroAtivo=" + cronometroAtivo +
+                          ", estaEmTrabalho=" + estaEmTrabalho);
+
+        // ✅ RESTAURAR ESTADO DA UI quando volta para o fragment
+
+        // Restaurar disciplina selecionada
+        if (disciplinaSelecionada != null) {
+            textoDisciplinaSelecionada.setText(disciplinaSelecionada.getNome());
+            cardDisciplinaSelecionada.setVisibility(View.VISIBLE);
+        }
+
+        // Atualizar display do timer
+        atualizarDisplay();
+
+        // Atualizar texto do estado (Trabalho ou Descanso)
+        if (estaEmTrabalho) {
+            textoEstadoTimer.setText(R.string.timer_work_session);
+        } else {
+            textoEstadoTimer.setText(R.string.timer_break_session);
+        }
+
+        // Atualizar texto do botão (Start, Pause ou Resume)
+        if (cronometroAtivo) {
+            botaoIniciar.setText(R.string.timer_pause);
+        } else if (tempoRestante < duracaoTrabalho && tempoRestante > 0) {
+            botaoIniciar.setText(R.string.timer_resume);
+        } else {
+            botaoIniciar.setText(R.string.timer_start);
+        }
+
+        android.util.Log.d("TimerFragment", "UI restaurada com sucesso");
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        // Salvar sessão parcial se estiver estudando ativamente
+        salvarSessaoParcialSeNecessario();
+    }
+
+    @Override
     public void onDestroyView() {
         super.onDestroyView();
+
+        // ✅ Se o cronômetro estava rodando, pausa e marca para mostrar "RESUME"
         if (cronometro != null) {
             cronometro.cancel();
+
+            // Se estava ativo, agora está pausado
+            if (cronometroAtivo) {
+                cronometroAtivo = false;
+                android.util.Log.d("TimerFragment", "Cronômetro pausado ao sair da aba");
+            }
+        }
+    }
+
+    /**
+     * Salva o tempo estudado até agora quando o utilizador sai do fragment
+     * Evita perder dados ao navegar entre abas
+     */
+    private void salvarSessaoParcialSeNecessario() {
+        android.util.Log.d("TimerFragment", "=== salvarSessaoParcialSeNecessario chamado ===");
+        android.util.Log.d("TimerFragment", "estaEmTrabalho: " + estaEmTrabalho);
+        android.util.Log.d("TimerFragment", "cronometroAtivo: " + cronometroAtivo);
+        android.util.Log.d("TimerFragment", "disciplinaSelecionada: " + (disciplinaSelecionada != null ? disciplinaSelecionada.getNome() : "null"));
+
+        // CORREÇÃO: Salvar mesmo se o cronômetro foi pausado
+        // O importante é ter iniciado uma sessão de trabalho
+        if (estaEmTrabalho && disciplinaSelecionada != null && tempoInicioSessao > 0) {
+            // Calcular quanto tempo estudou
+            long tempoFim = System.currentTimeMillis();
+            long duracaoEstudada = (tempoFim - tempoInicioSessao) / 1000; // em segundos
+
+            android.util.Log.d("TimerFragment", "Duração estudada: " + duracaoEstudada + " segundos");
+
+            // Salvar se estudou pelo menos 10 segundos (evitar salvamentos acidentais)
+            if (duracaoEstudada >= 10) {
+                android.util.Log.d("TimerFragment", "Salvando sessão de " + duracaoEstudada + " segundos");
+
+                SessaoEstudo sessao = new SessaoEstudo(disciplinaSelecionada.getId(), duracaoEstudada);
+
+                executor.execute(() -> {
+                    long id = sessaoDAO.inserir(sessao);
+                    android.util.Log.d("TimerFragment", "Sessão salva com ID: " + id);
+
+                    if (getActivity() != null) {
+                        getActivity().runOnUiThread(() -> {
+                            if (id > 0 && getContext() != null) {
+                                String duracao = formatarDuracao(duracaoEstudada);
+                                Toast.makeText(getContext(),
+                                    getString(R.string.timer_session_saved) + ": " + duracao,
+                                    Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+                });
+
+                // Resetar o início da sessão para não salvar duplicado
+                tempoInicioSessao = System.currentTimeMillis();
+            } else {
+                android.util.Log.d("TimerFragment", "Duração muito curta, não salvando (< 10s)");
+            }
+        } else {
+            android.util.Log.d("TimerFragment", "Condições não atendidas para salvar");
         }
     }
 }

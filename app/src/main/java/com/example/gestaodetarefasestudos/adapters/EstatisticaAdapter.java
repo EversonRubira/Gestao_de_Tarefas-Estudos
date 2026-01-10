@@ -24,6 +24,7 @@ public class EstatisticaAdapter extends RecyclerView.Adapter<EstatisticaAdapter.
 
     private Context context;
     private List<ItemEstatistica> listaEstatisticas;
+    private float tempoMaximo = 0;
 
     public EstatisticaAdapter(Context context) {
         this.context = context;
@@ -48,10 +49,23 @@ public class EstatisticaAdapter extends RecyclerView.Adapter<EstatisticaAdapter.
         holder.tvTempoEstudo.setText(item.tempoFormatado);
 
         // Cor da disciplina
+        int corDisciplina;
         try {
-            holder.viewCor.setBackgroundColor(Color.parseColor(item.cor));
+            corDisciplina = Color.parseColor(item.cor);
+            holder.viewCor.setBackgroundColor(corDisciplina);
         } catch (Exception e) {
-            holder.viewCor.setBackgroundColor(Color.parseColor("#00897B"));
+            corDisciplina = Color.parseColor("#00897B");
+            holder.viewCor.setBackgroundColor(corDisciplina);
+        }
+
+        // Configurar a barra de progresso
+        if (tempoMaximo > 0) {
+            // Calcular percentual em relação ao tempo máximo
+            int percentual = (int) ((item.minutos / tempoMaximo) * 100);
+            holder.progressBar.setProgress(percentual);
+            holder.progressBar.setProgressTintList(android.content.res.ColorStateList.valueOf(corDisciplina));
+        } else {
+            holder.progressBar.setProgress(0);
         }
     }
 
@@ -65,6 +79,15 @@ public class EstatisticaAdapter extends RecyclerView.Adapter<EstatisticaAdapter.
      */
     public void atualizarLista(List<ItemEstatistica> novaLista) {
         this.listaEstatisticas = novaLista;
+
+        // Calcular o tempo máximo para a barra de progresso
+        tempoMaximo = 0;
+        for (ItemEstatistica item : listaEstatisticas) {
+            if (item.minutos > tempoMaximo) {
+                tempoMaximo = item.minutos;
+            }
+        }
+
         notifyDataSetChanged();
     }
 
@@ -72,12 +95,14 @@ public class EstatisticaAdapter extends RecyclerView.Adapter<EstatisticaAdapter.
         TextView tvNomeDisciplina;
         TextView tvTempoEstudo;
         View viewCor;
+        android.widget.ProgressBar progressBar;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             tvNomeDisciplina = itemView.findViewById(R.id.tv_nome_disciplina);
             tvTempoEstudo = itemView.findViewById(R.id.tv_tempo_estudo);
             viewCor = itemView.findViewById(R.id.view_cor_disciplina);
+            progressBar = itemView.findViewById(R.id.progress_bar_tempo);
         }
     }
 
