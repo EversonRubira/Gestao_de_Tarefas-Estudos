@@ -20,6 +20,7 @@ import com.example.gestaodetarefasestudos.enums.EstadoTarefa;
 import com.example.gestaodetarefasestudos.enums.Prioridade;
 import com.example.gestaodetarefasestudos.models.Disciplina;
 import com.example.gestaodetarefasestudos.models.Tarefa;
+import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.MaterialAutoCompleteTextView;
 import com.google.android.material.textfield.TextInputEditText;
@@ -32,6 +33,7 @@ import java.util.Locale;
 
 public class AdicionarEditarTarefaActivity extends AppCompatActivity {
 
+    private MaterialToolbar toolbar;
     private TextInputLayout inputLayoutTitulo, inputLayoutDescricao, inputLayoutDisciplina, inputLayoutDataEntrega;
     private TextInputEditText editTituloTarefa, editDescricaoTarefa, editDataEntrega;
     private MaterialAutoCompleteTextView spinnerDisciplina;
@@ -54,6 +56,7 @@ public class AdicionarEditarTarefaActivity extends AppCompatActivity {
         setContentView(R.layout.activity_adicionar_editar_tarefa);
 
         inicializarComponentes();
+        configurarToolbar();
         carregarDisciplinas();
         configurarBotoes();
         configurarSeletorData();
@@ -61,6 +64,7 @@ public class AdicionarEditarTarefaActivity extends AppCompatActivity {
     }
 
     private void inicializarComponentes() {
+        toolbar = findViewById(R.id.toolbar);
         inputLayoutTitulo = findViewById(R.id.inputLayoutTitulo);
         inputLayoutDescricao = findViewById(R.id.inputLayoutDescricao);
         inputLayoutDisciplina = findViewById(R.id.inputLayoutDisciplina);
@@ -80,6 +84,15 @@ public class AdicionarEditarTarefaActivity extends AppCompatActivity {
         executor = Executors.newSingleThreadExecutor();
 
         calendarioSelecionado = Calendar.getInstance();
+    }
+
+    private void configurarToolbar() {
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+        }
+        toolbar.setNavigationOnClickListener(v -> finish());
     }
 
     /**

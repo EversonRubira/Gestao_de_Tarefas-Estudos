@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background">
+    android:background="@drawable/background_study_overlay">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -17,42 +17,69 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/timer_pomodoro"
-            android:textColor="@color/text_primary"
+            android:textColor="#E6FFFFFF"
             android:textSize="20sp"
             android:textStyle="bold"
-            android:layout_marginTop="16dp" />
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="12dp" />
 
-        <!-- Subject Selection -->
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/inputLayoutDisciplinaTimer"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+        <!-- Subject Selection Card -->
+        <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/subject"
-            android:layout_marginTop="16dp"
-            app:boxCornerRadiusTopStart="12dp"
-            app:boxCornerRadiusTopEnd="12dp"
-            app:boxCornerRadiusBottomStart="12dp"
-            app:boxCornerRadiusBottomEnd="12dp">
+            android:layout_marginBottom="12dp"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="6dp"
+            app:cardBackgroundColor="#F2FFFFFF">
 
-            <com.google.android.material.textfield.MaterialAutoCompleteTextView
-                android:id="@+id/spinnerDisciplinaTimer"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="none" />
+                android:orientation="vertical"
+                android:padding="12dp">
 
-        </com.google.android.material.textfield.TextInputLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/subject"
+                    android:textColor="@color/text_primary"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="8dp" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/inputLayoutDisciplinaTimer"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/subject"
+                    app:boxCornerRadiusTopStart="12dp"
+                    app:boxCornerRadiusTopEnd="12dp"
+                    app:boxCornerRadiusBottomStart="12dp"
+                    app:boxCornerRadiusBottomEnd="12dp">
+
+                    <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                        android:id="@+id/spinnerDisciplinaTimer"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="none" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
 
         <!-- Selected Subject Indicator -->
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/card_selected_subject"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginBottom="12dp"
             android:visibility="gone"
-            app:cardCornerRadius="8dp"
-            app:cardElevation="2dp"
-            app:cardBackgroundColor="@color/primary_light">
+            app:cardCornerRadius="12dp"
+            app:cardElevation="4dp"
+            app:cardBackgroundColor="#F2FFFFFF">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -75,7 +102,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="Programação Móvel"
-                    android:textColor="@color/primary_dark"
+                    android:textColor="@color/primary"
                     android:textSize="16sp"
                     android:textStyle="bold" />
 
@@ -85,11 +112,11 @@
 
         <!-- Timer Display -->
         <com.google.android.material.card.MaterialCardView
-            android:layout_width="220dp"
-            android:layout_height="220dp"
-            android:layout_marginTop="24dp"
-            android:layout_marginBottom="24dp"
-            app:cardCornerRadius="110dp"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            app:cardCornerRadius="100dp"
             app:cardElevation="8dp"
             app:cardBackgroundColor="@color/primary">
 
@@ -105,17 +132,17 @@
                     android:layout_height="wrap_content"
                     android:text="25:00"
                     android:textColor="@android:color/white"
-                    android:textSize="42sp"
+                    android:textSize="40sp"
                     android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/tv_timer_status"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
+                    android:layout_marginTop="2dp"
                     android:text="@string/timer_work_session"
                     android:textColor="@android:color/white"
-                    android:textSize="14sp" />
+                    android:textSize="13sp" />
 
             </LinearLayout>
 
@@ -127,7 +154,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:gravity="center"
-            android:layout_marginBottom="16dp">
+            android:layout_marginBottom="12dp">
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_start"
@@ -135,7 +162,8 @@
                 android:layout_height="wrap_content"
                 android:text="@string/timer_start"
                 android:layout_marginEnd="8dp"
-                app:cornerRadius="8dp" />
+                app:cornerRadius="8dp"
+                app:backgroundTint="@color/primary" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_stop"
@@ -143,7 +171,10 @@
                 android:layout_height="wrap_content"
                 android:text="@string/timer_stop"
                 android:layout_marginStart="8dp"
+                android:textColor="@color/error"
                 app:cornerRadius="8dp"
+                app:strokeColor="@color/error"
+                app:strokeWidth="2dp"
                 style="@style/Widget.Material3.Button.OutlinedButton" />
 
         </LinearLayout>
@@ -152,9 +183,10 @@
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            app:cardCornerRadius="8dp"
-            app:cardElevation="4dp">
+            android:layout_marginBottom="8dp"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="6dp"
+            app:cardBackgroundColor="#F2FFFFFF">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -169,7 +201,7 @@
                     android:textColor="@color/text_primary"
                     android:textSize="16sp"
                     android:textStyle="bold"
-                    android:layout_marginBottom="12dp" />
+                    android:layout_marginBottom="8dp" />
 
                 <!-- Work Duration -->
                 <TextView
@@ -182,10 +214,11 @@
                 <EditText
                     android:id="@+id/et_work_duration"
                     android:layout_width="match_parent"
-                    android:layout_height="48dp"
+                    android:layout_height="45dp"
                     android:inputType="number"
                     android:text="25"
-                    android:layout_marginBottom="12dp" />
+                    android:textColor="@color/text_primary"
+                    android:layout_marginBottom="8dp" />
 
                 <!-- Break Duration -->
                 <TextView
@@ -198,9 +231,10 @@
                 <EditText
                     android:id="@+id/et_break_duration"
                     android:layout_width="match_parent"
-                    android:layout_height="48dp"
+                    android:layout_height="45dp"
                     android:inputType="number"
-                    android:text="5" />
+                    android:text="5"
+                    android:textColor="@color/text_primary" />
 
             </LinearLayout>
 

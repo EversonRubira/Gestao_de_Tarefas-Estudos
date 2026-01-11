@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Imagem de fundo -->
+    <item>
+        <bitmap
+            android:src="@drawable/background_study"
+            android:gravity="fill" />
+    </item>
+
+    <!-- Overlay muito suave para MainActivity - permite ver mais a imagem -->
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="#F0FFFFFF" />
+        </shape>
+    </item>
+</layer-list>
