@@ -1,377 +1,222 @@
-StudyFlow - Gestão de Tarefas e Estudos
+# StudyFlow - Gestao de Tarefas e Estudos
 
-App Android para gerir disciplinas, tarefas e tempo de estudo. Feito para o projeto de PAM 2025/26.
+Aplicativo Android para gestao de disciplinas, tarefas e controle de tempo de estudo.
+Projeto desenvolvido para a UC de Programacao de Aplicacoes Moveis 2025/26 - IPS Setubal.
 
-================================================================================
+---
 
-Informações Técnicas
+## Sobre o Projeto
 
-SDK Compilação: 36 (Android 15)
-SDK Mínimo: 24 (Android 7.0 Nougat)
-SDK Target: 36
-Java Version: 11
-Gradle: 8.13
-Room Database: 2.6.1
+O StudyFlow e uma aplicacao completa para estudantes organizarem suas atividades academicas. Combina gestao de tarefas, timer Pomodoro, calendario visual e estatisticas de produtividade numa unica aplicacao.
 
-================================================================================
+### Funcionalidades Principais
 
-Bibliotecas Utilizadas
+- **Gestao de Disciplinas** - Cadastro com nome, codigo e cor personalizada
+- **Gestao de Tarefas** - Tarefas com prioridade, prazo e estado
+- **Timer Pomodoro** - Sessoes de estudo com registro automatico
+- **Calendario Visual** - Visualizacao de tarefas por dia
+- **Estatisticas** - Tempo de estudo por disciplina
+- **Dashboard** - Visao geral com metricas importantes
 
-Todas as bibliotecas utilizadas são oficiais do Android e estão sob a Apache License 2.0.
+---
 
-AndroidX (Google Official)
+## Informacoes Tecnicas
 
-AppCompat versão 1.7.0
-  Descrição: Compatibilidade com versões antigas do Android
-  Link: https://developer.android.com/jetpack/androidx/releases/appcompat
-  Licença: Apache 2.0
+| Requisito | Versao |
+|-----------|--------|
+| SDK Compilacao | 36 (Android 15) |
+| SDK Minimo | 24 (Android 7.0) |
+| SDK Target | 36 |
+| Java | 11 |
+| Gradle | 8.13 |
+| Room Database | 2.6.1 |
 
-Material Components versão 1.12.0
-  Descrição: Componentes Material Design (botões, cards, etc)
-  Link: https://material.io/develop/android
-  Licença: Apache 2.0
+---
 
-ConstraintLayout versão 2.2.0
-  Descrição: Layout responsivo e flexível
-  Link: https://developer.android.com/jetpack/androidx/releases/constraintlayout
-  Licença: Apache 2.0
+## Bibliotecas Utilizadas
 
-Room Database versão 2.6.1
-  Descrição: ORM para SQLite com type-safety
-  Link: https://developer.android.com/jetpack/androidx/releases/room
-  Licença: Apache 2.0
+Todas as bibliotecas sao oficiais do Android sob Apache License 2.0.
 
-Bibliotecas de Teste (Não incluídas no APK final)
-  - JUnit 4.13.2
-  - Espresso 3.6.1
+| Biblioteca | Versao | Descricao |
+|------------|--------|-----------|
+| AppCompat | 1.7.0 | Compatibilidade com versoes antigas |
+| Material Components | 1.12.0 | Componentes Material Design |
+| ConstraintLayout | 2.2.0 | Layout responsivo e flexivel |
+| Room Database | 2.6.1 | ORM para SQLite |
+| Security Crypto | 1.1.0-alpha06 | Criptografia de preferencias |
 
-Bibliotecas Externas
-  Nenhuma biblioteca externa utilizada.
-  Apenas bibliotecas oficiais do Android SDK.
+**Bibliotecas de Teste** (nao incluidas no APK):
+- JUnit 4.13.2
+- Espresso 3.6.1
 
-Licenças:
-Todas as bibliotecas usam Apache License 2.0: https://www.apache.org/licenses/LICENSE-2.0
+---
 
-================================================================================
+## Arquitetura do Projeto
 
-Como Importar o Projeto
+O projeto segue o padrao MVVM (Model-View-ViewModel):
 
-1. Abrir Android Studio
-2. File > Open
-3. Selecionar a pasta do projeto
-4. Esperar o Gradle sync terminar
-5. Se der erro de SDK, ir em File > Project Structure e configurar SDK 36
-6. Run > Run 'app'
+```
+app/src/main/java/com/example/gestaodetarefasestudos/
+├── activities/          # 8 Activities
+├── fragments/           # 5 Fragments (abas)
+├── viewmodels/          # ViewModels
+├── repositories/        # Repositorios
+├── database/            # Room Database e DAOs
+├── models/              # Entidades
+├── adapters/            # RecyclerView Adapters
+├── services/            # Background Services
+├── utils/               # Classes utilitarias
+└── enums/               # Enumeracoes
+```
 
-Nota: Projeto não usa bibliotecas externas, apenas Android SDK nativo.
+### Activities
+- `SplashActivity` - Tela inicial animada
+- `LoginActivity` - Autenticacao
+- `RegistroActivity` - Cadastro de conta
+- `MainActivity` - Navegacao principal com 5 abas
+- `AdicionarEditarDisciplinaActivity` - CRUD de disciplinas
+- `AdicionarEditarTarefaActivity` - CRUD de tarefas
+- `DetalhesDisciplinaActivity` - Detalhes da disciplina
+- `ConfiguracoesActivity` - Configuracoes do app
 
-================================================================================
+### Fragments
+- `HomeFragment` - Dashboard
+- `SubjectsFragment` - Lista de disciplinas
+- `TasksFragment` - Lista de tarefas
+- `StatisticsFragment` - Estatisticas
+- `TimerFragment` - Timer Pomodoro
 
-Descrição da App
+---
 
-O StudyFlow serve para estudantes organizarem as disciplinas, tarefas e controlarem o tempo de estudo. Tem várias funcionalidades uteis para quem estuda.
-
-Funcionalidades Principais
-
-Gestão de Disciplinas
-  - Adicionar disciplinas com nome, código e cor personalizada
-  - Cada disciplina tem uma cor diferente para facilitar identificação
-  - Ver detalhes completos da disciplina com estatísticas
-  - Editar e apagar disciplinas
-
-Gestão de Tarefas
-  - Criar tarefas associadas a disciplinas
-  - Definir data de entrega
-  - Marcar prioridade (Baixa, Média, Alta) com cores diferentes
-  - Estados: Pendente, Em Progresso, Concluída
-  - Filtrar tarefas por estado
-  - Marcar tarefas como concluídas rapidamente
-
-Calendário Visual
-  - Calendário do mês com grid de dias
-  - Cada dia mostra até 3 cores de disciplinas que têm tarefas
-  - Bolinhas coloridas indicam as disciplinas
-  - Contador mostra quantas tarefas tem no dia
-  - Clicar no dia mostra as tarefas desse dia
-  - Navegar entre meses (anterior/próximo)
-  - Dia atual marcado com borda diferente
-
-Timer Pomodoro
-  - Cronometro para sessões de estudo
-  - Tempo de trabalho e descanso configuráveis
-  - Tem que escolher a disciplina antes de começar
-  - Salva automaticamente o tempo estudado no banco de dados
-  - Se parar antes do fim, salva o tempo parcial
-  - Alterna automaticamente entre trabalho e descanso
-
-Estatísticas
-  - Lista com tempo de estudo por disciplina (últimos 7 dias)
-  - Cards coloridos para cada disciplina com tempo formatado
-  - Cores das disciplinas aparecem nos cards
-  - Se não tiver dados mostra mensagem
-
-Dashboard (Home)
-  - Cards com resumo: total de disciplinas, tarefas pendentes, tempo estudado hoje
-  - Tempo de estudo detalhado por disciplina
-  - Calendário visual integrado
-  - Tudo numa tela só para ter visão geral rápida
-
-Outras Features
-  - Splash screen com animação no início
-  - Bottom Navigation para navegar entre as 5 secções
-  - Suporte para Português e Inglês
-  - Dados de exemplo criados na primeira vez que abre a app
-  - Todas as cores e textos organizados nos recursos
-
-================================================================================
-
-Estrutura do Banco de Dados
+## Estrutura do Banco de Dados
 
 Room Database (SQLite) com 4 tabelas:
 
-Tabela: usuarios
-  - id (chave primária)
-  - nome
-  - email (único)
-  - senha_hash (SHA-256)
-  - data_criacao (timestamp)
-
-Tabela: disciplinas
-  - id (chave primária)
-  - usuario_id (foreign key -> usuarios)
-  - nome
-  - codigo (único por utilizador)
-  - cor (hexadecimal tipo #FF5722)
-  - data_criacao (timestamp)
-
-Tabela: tarefas
-  - id (chave primária)
-  - titulo
-  - descricao
-  - disciplina_id (foreign key -> disciplinas)
-  - data_entrega (timestamp)
-  - prioridade (1=Baixa, 2=Média, 3=Alta)
-  - estado (0=Pendente, 1=Em Progresso, 2=Concluída)
-  - data_criacao (timestamp)
-
-Tabela: sessoes_estudo
-  - id (chave primária)
-  - disciplina_id (foreign key -> disciplinas)
-  - duracao (em segundos)
-  - data (timestamp)
-
-Nota: As foreign keys têm CASCADE DELETE, ou seja:
-  - Apagar utilizador -> apaga disciplinas, tarefas e sessões
-  - Apagar disciplina -> apaga tarefas e sessões dessa disciplina
-
-================================================================================
-
-Arquitetura do Código
-
-Seguimos uma arquitetura em camadas:
-
-Activities: Telas principais (8 ao todo)
-  - SplashActivity (tela inicial animada)
-  - LoginActivity (autenticação)
-  - RegistroActivity (criar conta)
-  - MainActivity (com Bottom Navigation e 5 fragments)
-  - AdicionarEditarDisciplinaActivity
-  - AdicionarEditarTarefaActivity
-  - DetalhesDisciplinaActivity
-  - ConfiguracoesActivity (idioma e tema)
-
-Fragments: Secções da app (5 abas)
-  - HomeFragment (dashboard)
-  - SubjectsFragment
-  - TasksFragment
-  - StatisticsFragment
-  - TimerFragment
-
-DAOs: Acesso ao banco de dados (4 interfaces)
-  - UsuarioRoomDAO (autenticação)
-  - DisciplinaRoomDAO
-  - TarefaRoomDAO
-  - SessaoEstudoRoomDAO
-
-Adapters: Para as listas (RecyclerView) - 4 adapters
-  - DisciplinaAdapter (lista de disciplinas)
-  - TarefaAdapter (lista de tarefas)
-  - CalendarioAdapter (grid 7x7 do calendário)
-  - EstatisticaAdapter (lista de estatísticas)
-
-Models: Classes com os dados (Entities Room)
-  - Usuario (para autenticação)
-  - Disciplina
-  - Tarefa
-  - SessaoEstudo
-  - DiaCalendario (auxiliar, não é entity)
-
-Enums: Para ter valores fixos
-  - Prioridade
-  - EstadoTarefa
-
-Database: Gestão do SQLite
-  - DatabaseHelper (Singleton)
-
-================================================================================
-
-Como Usar a App
-
-Primeira Vez
-
-1. Abre a app e vê o Splash Screen (animação de 2-3 segundos)
-2. Aparece a tela de Login
-3. Como é primeira vez, clica em "Criar Conta" ou "Registar"
-4. Preenche: Nome, Email, Password e Confirmar Password
-5. Clica em "Registar"
-6. Conta criada! És redirecionado automaticamente para o Dashboard
-7. Na primeira abertura, a app cria automaticamente:
-   - 3 disciplinas de exemplo (PAM, BD, WEB)
-   - 3 tarefas de exemplo com diferentes prioridades
-   - 2 sessões de estudo de exemplo
-8. Podes apagar estes dados e criar os teus próprios
+### Tabela: usuarios
+| Coluna | Tipo | Descricao |
+|--------|------|-----------|
+| id | INTEGER | Chave primaria |
+| nome | TEXT | Nome do usuario |
+| email | TEXT | Email (unico) |
+| senha_hash | TEXT | Hash PBKDF2 |
+| data_criacao | INTEGER | Timestamp |
 
-Login em Sessões Seguintes
+### Tabela: disciplinas
+| Coluna | Tipo | Descricao |
+|--------|------|-----------|
+| id | INTEGER | Chave primaria |
+| usuario_id | INTEGER | FK -> usuarios |
+| nome | TEXT | Nome da disciplina |
+| codigo | TEXT | Codigo (unico por usuario) |
+| cor | TEXT | Cor hexadecimal |
+| data_criacao | INTEGER | Timestamp |
 
-1. Abre a app
-2. Insere Email e Password
-3. Clica em "Entrar"
-4. Vais direto para o Dashboard
+### Tabela: tarefas
+| Coluna | Tipo | Descricao |
+|--------|------|-----------|
+| id | INTEGER | Chave primaria |
+| titulo | TEXT | Titulo |
+| descricao | TEXT | Descricao |
+| disciplina_id | INTEGER | FK -> disciplinas |
+| data_entrega | INTEGER | Data limite |
+| prioridade | INTEGER | 1=Baixa, 2=Media, 3=Alta |
+| estado | INTEGER | 0=Pendente, 1=Concluida |
+| data_criacao | INTEGER | Timestamp |
 
-Adicionar Disciplina
+### Tabela: sessoes_estudo
+| Coluna | Tipo | Descricao |
+|--------|------|-----------|
+| id | INTEGER | Chave primaria |
+| disciplina_id | INTEGER | FK -> disciplinas |
+| duracao | INTEGER | Duracao em segundos |
+| data | INTEGER | Timestamp |
 
-1. Ir na aba "Subjects"
-2. Clicar no botão + (FloatingActionButton)
-3. Preencher nome, código e escolher cor
-4. Guardar
+**Nota:** Foreign keys com CASCADE DELETE ativado.
 
-Adicionar Tarefa
+---
 
-1. Ir na aba "Tasks"
-2. Clicar no botão +
-3. Escolher disciplina, preencher título, descrição (opcional)
-4. Escolher data de entrega, prioridade e estado
-5. Guardar
+## Como Executar
 
-Usar o Timer
+### Pre-requisitos
+- Android Studio (versao recente)
+- JDK 11 ou superior
+- Android SDK 36
 
-1. Ir na aba "Timer"
-2. Escolher a disciplina (obrigatório)
-3. Configurar tempo de trabalho e descanso se quiser
-4. Clicar em Iniciar
-5. O tempo é salvo automaticamente quando termina ou quando clicas em Parar
+### Passos
 
-Ver Estatísticas
+1. Clone o repositorio:
+```bash
+git clone <url-do-repositorio>
+```
 
-1. Ir na aba "Statistics"
-2. Ver lista com tempo por disciplina (últimos 7 dias)
-3. Cada disciplina aparece num card com sua cor e tempo estudado
+2. Abra o Android Studio
 
-Ver Detalhes de Disciplina
+3. File > Open > Selecione a pasta do projeto
 
-1. Ir na aba "Subjects"
-2. Clicar numa disciplina da lista
-3. Vê total de tarefas, pendentes, concluídas e tempo estudado
-4. Vê lista de tarefas dessa disciplina
-5. Pode editar ou apagar a disciplina pelo menu (3 pontinhos em cima)
+4. Aguarde a sincronizacao do Gradle
 
-Calendário
+5. Se houver erro de SDK:
+   - File > Project Structure
+   - Configure o SDK 36
 
-1. Na Home (aba inicial)
-2. Scroll até o calendário
-3. Dias com tarefas têm bolinhas coloridas e um número
-4. Clicar num dia para ver que tarefas tem
-5. Usar setas para mudar de mês
+6. Execute: Run > Run 'app'
 
-================================================================================
+### Build do APK
 
-Navegação
+```bash
+# Debug
+./gradlew assembleDebug
 
-A app usa Bottom Navigation com 5 abas:
-  - Home (ícone casa)
-  - Subjects (ícone livro)
-  - Tasks (ícone checklist)
-  - Statistics (ícone gráfico)
-  - Timer (ícone relógio)
+# Release
+./gradlew assembleRelease
+```
 
-Também tem menus de contexto em alguns sítios (ex: detalhes da disciplina tem opção editar/eliminar).
+O APK sera gerado em `app/build/outputs/apk/`
 
-================================================================================
+---
 
-Padrões de Design Usados
+## Seguranca
 
-Singleton: DatabaseHelper para ter só uma instância do banco
+- **Senhas**: Hash PBKDF2 com SHA256 e salt aleatorio (10.000 iteracoes)
+- **Preferencias**: EncryptedSharedPreferences com AES256-GCM
+- **Dados**: Isolamento por usuario no banco de dados
 
-DAO: Separar lógica de banco de dados
+---
 
-ViewHolder: Nos adapters para performance
+## Internacionalizacao
 
-Callback/Listener: Para comunicação entre componentes
+Idiomas suportados:
+- Portugues (PT)
+- Ingles (EN)
 
-================================================================================
+Arquivos de strings em:
+- `res/values/strings.xml` (ingles)
+- `res/values-pt/strings.xml` (portugues)
 
-Internacionalização
+---
 
-A app funciona em:
-  - Português (PT)
-  - Inglês (EN)
+## Problemas Conhecidos
 
-Todos os textos estão em res/values/strings.xml (inglês) e res/values-pt/strings.xml (português).
+1. Ao mudar o idioma do sistema com a app aberta, e necessario reiniciar a aplicacao
+2. O calendario exibe no maximo 3 cores por dia
 
-================================================================================
+---
 
-Cores e Tema
+## Documentacao Adicional
 
-Usamos Material Design com paleta de cores personalizada definida em res/values/colors.xml.
-Tem 43 cores diferentes para usar nas disciplinas e na interface.
+- [Manual do Usuario](docs/MANUAL_USUARIO.md) - Guia de uso da aplicacao
+- [Manual do Desenvolvedor](docs/MANUAL_DESENVOLVEDOR.md) - Documentacao tecnica
 
-================================================================================
+---
 
-Notas do Desenvolvimento
+## Licenca
 
-Usamos SharedPreferences para verificar se é a primeira vez que abre (para criar dados de exemplo). O banco de dados usa Singleton para não criar várias instâncias. Foreign keys estão ativadas no SQLite. Queries otimizadas com JOIN e GROUP BY para performance. Comentários no código em português para facilitar entendimento. Validação de dados nos formulários (ex: código de disciplina tem que ser único).
+Projeto academico desenvolvido para fins educacionais.
+Bibliotecas utilizadas sob Apache License 2.0.
 
-================================================================================
+---
 
-Problemas Conhecidos
+## Autores
 
-Se mudar o idioma do sistema enquanto a app está aberta, precisa fechar e abrir de novo.
-
-O calendário só mostra até 3 cores por dia, se tiver mais disciplinas não aparecem todas.
-
-================================================================================
-
-Melhorias Futuras Possíveis
-
-  - Notificações push para lembrar de tarefas próximas do prazo
-  - Export de dados para CSV ou PDF
-  - Widget para Home Screen com resumo diário
-  - Backup e sincronização na nuvem
-  - Sincronização entre dispositivos
-  - Gráficos mais avançados nas estatísticas
-  - Gamificação (badges, streaks, conquistas)
-  - Integração com Google Calendar
-
-================================================================================
-
-Apps Similares (Pesquisadas)
-
-  - Google Tasks
-  - Microsoft To Do
-  - Todoist
-  - Forest (para timer de estudo)
-  - MyStudyLife
-
-O nosso diferencial é juntar tudo numa app só: tarefas + timer + estatísticas + calendário visual único.
-
-================================================================================
-
-Autores
-
-Projeto desenvolvido para a UC de Programação de Aplicações Móveis 2025/26 - IPS Setúbal
-
-================================================================================
-
-Licença
-
-Projeto académico sem licença específica.
+Projeto desenvolvido para a UC de Programacao de Aplicacoes Moveis 2025/26
+Instituto Politecnico de Setubal
