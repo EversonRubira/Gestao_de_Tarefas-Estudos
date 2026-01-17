@@ -60,4 +60,21 @@ public interface SessaoEstudoRoomDAO {
 
     @Query("DELETE FROM sessoes_estudo WHERE id = :id")
     int deletarPorId(long id);
+
+    // Metodos para estatisticas do Timer
+
+    @Query("SELECT COUNT(*) FROM sessoes_estudo s " +
+           "INNER JOIN disciplinas d ON s.disciplina_id = d.id " +
+           "WHERE d.usuario_id = :usuarioId AND s.data >= :inicioDoDia")
+    int contarSessoesHoje(long usuarioId, long inicioDoDia);
+
+    @Query("SELECT COALESCE(SUM(s.duracao), 0) FROM sessoes_estudo s " +
+           "INNER JOIN disciplinas d ON s.disciplina_id = d.id " +
+           "WHERE d.usuario_id = :usuarioId AND s.data >= :inicioDoDia")
+    long tempoTotalHoje(long usuarioId, long inicioDoDia);
+
+    @Query("SELECT COUNT(*) FROM sessoes_estudo s " +
+           "INNER JOIN disciplinas d ON s.disciplina_id = d.id " +
+           "WHERE d.usuario_id = :usuarioId AND s.data >= :inicioPeriodo AND s.data < :fimPeriodo")
+    int contarSessoesPeriodo(long usuarioId, long inicioPeriodo, long fimPeriodo);
 }

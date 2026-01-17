@@ -3,48 +3,39 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background_study_overlay">
+    android:background="@drawable/background_study_overlay"
+    android:fillViewport="true">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="16dp"
-        android:gravity="center">
+        android:padding="20dp"
+        android:gravity="center_horizontal">
 
-        <!-- Timer Title -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/timer_pomodoro"
-            android:textColor="#E6FFFFFF"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:layout_marginTop="4dp"
-            android:layout_marginBottom="12dp" />
-
-        <!-- Subject Selection Card -->
+        <!-- Header com selecao de disciplina -->
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="12dp"
-            app:cardCornerRadius="12dp"
-            app:cardElevation="6dp"
-            app:cardBackgroundColor="#F2FFFFFF">
+            android:layout_marginBottom="16dp"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="4dp"
+            app:cardBackgroundColor="#F5FFFFFF">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="12dp">
+                android:padding="16dp">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/subject"
-                    android:textColor="@color/text_primary"
-                    android:textSize="14sp"
-                    android:textStyle="bold"
+                    android:text="@string/studying"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="12sp"
+                    android:textAllCaps="true"
+                    android:letterSpacing="0.1"
                     android:layout_marginBottom="8dp" />
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -52,17 +43,20 @@
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/subject"
+                    android:hint="@string/select_subject"
                     app:boxCornerRadiusTopStart="12dp"
                     app:boxCornerRadiusTopEnd="12dp"
                     app:boxCornerRadiusBottomStart="12dp"
-                    app:boxCornerRadiusBottomEnd="12dp">
+                    app:boxCornerRadiusBottomEnd="12dp"
+                    app:boxStrokeColor="@color/primary"
+                    app:hintTextColor="@color/text_secondary">
 
                     <com.google.android.material.textfield.MaterialAutoCompleteTextView
                         android:id="@+id/spinnerDisciplinaTimer"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="none" />
+                        android:inputType="none"
+                        android:textColor="@color/text_primary" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -70,175 +64,278 @@
 
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- Selected Subject Indicator -->
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/card_selected_subject"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="12dp"
-            android:visibility="gone"
-            app:cardCornerRadius="12dp"
-            app:cardElevation="4dp"
-            app:cardBackgroundColor="#F2FFFFFF">
+        <!-- Timer Principal com Progress Ring -->
+        <FrameLayout
+            android:layout_width="260dp"
+            android:layout_height="260dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="16dp">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="12dp"
-                android:gravity="center_vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Estudando:"
-                    android:textColor="@color/text_secondary"
-                    android:textSize="14sp"
-                    android:layout_marginEnd="8dp" />
-
-                <TextView
-                    android:id="@+id/tv_selected_subject"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Programação Móvel"
-                    android:textColor="@color/primary"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
-
-            </LinearLayout>
-
-        </com.google.android.material.card.MaterialCardView>
-
-        <!-- Timer Display -->
-        <com.google.android.material.card.MaterialCardView
-            android:layout_width="200dp"
-            android:layout_height="200dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="16dp"
-            app:cardCornerRadius="100dp"
-            app:cardElevation="8dp"
-            app:cardBackgroundColor="@color/primary">
-
-            <LinearLayout
+            <!-- Background Ring -->
+            <ProgressBar
+                android:id="@+id/progress_background"
+                style="?android:attr/progressBarStyleHorizontal"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:gravity="center"
-                android:orientation="vertical">
+                android:indeterminate="false"
+                android:max="100"
+                android:progress="100"
+                android:progressDrawable="@drawable/progress_ring_background"
+                android:rotation="-90" />
 
+            <!-- Progress Ring -->
+            <ProgressBar
+                android:id="@+id/progress_timer"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:indeterminate="false"
+                android:max="100"
+                android:progress="100"
+                android:progressDrawable="@drawable/progress_ring_progress"
+                android:rotation="-90" />
+
+            <!-- Timer Content -->
+            <LinearLayout
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:background="@drawable/circle_timer_background">
+
+                <!-- Status (Trabalho/Descanso) -->
+                <TextView
+                    android:id="@+id/tv_timer_status"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/timer_work_session"
+                    android:textColor="#B3FFFFFF"
+                    android:textSize="12sp"
+                    android:textAllCaps="true"
+                    android:letterSpacing="0.15" />
+
+                <!-- Tempo -->
                 <TextView
                     android:id="@+id/tv_timer"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="25:00"
                     android:textColor="@android:color/white"
-                    android:textSize="40sp"
-                    android:textStyle="bold" />
+                    android:textSize="52sp"
+                    android:fontFamily="sans-serif-light"
+                    android:layout_marginTop="-4dp"
+                    android:layout_marginBottom="-4dp" />
 
-                <TextView
-                    android:id="@+id/tv_timer_status"
+                <!-- Ciclos Indicadores -->
+                <LinearLayout
+                    android:id="@+id/layout_cycle_indicators"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="2dp"
-                    android:text="@string/timer_work_session"
-                    android:textColor="@android:color/white"
-                    android:textSize="13sp" />
+                    android:orientation="horizontal"
+                    android:layout_marginTop="8dp">
+
+                    <View
+                        android:id="@+id/indicator_cycle_1"
+                        android:layout_width="10dp"
+                        android:layout_height="10dp"
+                        android:layout_marginHorizontal="4dp"
+                        android:background="@drawable/circle_indicator_inactive" />
+
+                    <View
+                        android:id="@+id/indicator_cycle_2"
+                        android:layout_width="10dp"
+                        android:layout_height="10dp"
+                        android:layout_marginHorizontal="4dp"
+                        android:background="@drawable/circle_indicator_inactive" />
+
+                    <View
+                        android:id="@+id/indicator_cycle_3"
+                        android:layout_width="10dp"
+                        android:layout_height="10dp"
+                        android:layout_marginHorizontal="4dp"
+                        android:background="@drawable/circle_indicator_inactive" />
+
+                    <View
+                        android:id="@+id/indicator_cycle_4"
+                        android:layout_width="10dp"
+                        android:layout_height="10dp"
+                        android:layout_marginHorizontal="4dp"
+                        android:background="@drawable/circle_indicator_inactive" />
+
+                </LinearLayout>
 
             </LinearLayout>
 
-        </com.google.android.material.card.MaterialCardView>
+        </FrameLayout>
 
-        <!-- Control Buttons -->
+        <!-- Botoes de Controle -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:gravity="center"
-            android:layout_marginBottom="12dp">
+            android:layout_marginBottom="24dp">
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_start"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="140dp"
+                android:layout_height="56dp"
                 android:text="@string/timer_start"
-                android:layout_marginEnd="8dp"
-                app:cornerRadius="8dp"
-                app:backgroundTint="@color/primary" />
+                android:textSize="16sp"
+                android:textAllCaps="false"
+                app:cornerRadius="28dp"
+                app:backgroundTint="@android:color/white"
+                android:textColor="@color/primary"
+                app:elevation="4dp" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_stop"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/timer_stop"
-                android:layout_marginStart="8dp"
-                android:textColor="@color/error"
-                app:cornerRadius="8dp"
-                app:strokeColor="@color/error"
-                app:strokeWidth="2dp"
-                style="@style/Widget.Material3.Button.OutlinedButton" />
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:layout_marginStart="12dp"
+                app:icon="@drawable/ic_stop"
+                app:iconGravity="textStart"
+                app:iconPadding="0dp"
+                app:iconSize="24dp"
+                app:iconTint="@android:color/white"
+                app:cornerRadius="28dp"
+                style="@style/Widget.Material3.Button.OutlinedButton"
+                app:strokeColor="#80FFFFFF"
+                app:strokeWidth="2dp" />
 
         </LinearLayout>
 
-        <!-- Settings Card -->
+        <!-- Estatisticas do Dia -->
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            app:cardCornerRadius="12dp"
-            app:cardElevation="6dp"
-            app:cardBackgroundColor="#F2FFFFFF">
+            android:layout_marginBottom="16dp"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="4dp"
+            app:cardBackgroundColor="#F5FFFFFF">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="12dp">
+                android:orientation="horizontal"
+                android:padding="16dp"
+                android:baselineAligned="false">
 
-                <TextView
-                    android:layout_width="wrap_content"
+                <!-- Sessoes Hoje -->
+                <LinearLayout
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="Settings"
-                    android:textColor="@color/text_primary"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    android:layout_marginBottom="8dp" />
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:gravity="center">
 
-                <!-- Work Duration -->
-                <TextView
-                    android:layout_width="wrap_content"
+                    <TextView
+                        android:id="@+id/tv_sessions_today"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0"
+                        android:textColor="@color/primary"
+                        android:textSize="28sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/sessions_today"
+                        android:textColor="@color/text_secondary"
+                        android:textSize="12sp"
+                        android:gravity="center" />
+
+                </LinearLayout>
+
+                <!-- Divisor -->
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:background="#20000000" />
+
+                <!-- Tempo Hoje -->
+                <LinearLayout
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="@string/timer_work_duration"
-                    android:textColor="@color/text_secondary"
-                    android:textSize="13sp" />
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:gravity="center">
 
-                <EditText
-                    android:id="@+id/et_work_duration"
-                    android:layout_width="match_parent"
-                    android:layout_height="45dp"
-                    android:inputType="number"
-                    android:text="25"
-                    android:textColor="@color/text_primary"
-                    android:layout_marginBottom="8dp" />
+                    <TextView
+                        android:id="@+id/tv_time_today"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0min"
+                        android:textColor="@color/primary"
+                        android:textSize="28sp"
+                        android:textStyle="bold" />
 
-                <!-- Break Duration -->
-                <TextView
-                    android:layout_width="wrap_content"
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/time_today"
+                        android:textColor="@color/text_secondary"
+                        android:textSize="12sp"
+                        android:gravity="center" />
+
+                </LinearLayout>
+
+                <!-- Divisor -->
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:background="#20000000" />
+
+                <!-- Sequencia -->
+                <LinearLayout
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="@string/timer_break_duration"
-                    android:textColor="@color/text_secondary"
-                    android:textSize="13sp" />
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:gravity="center">
 
-                <EditText
-                    android:id="@+id/et_break_duration"
-                    android:layout_width="match_parent"
-                    android:layout_height="45dp"
-                    android:inputType="number"
-                    android:text="5"
-                    android:textColor="@color/text_primary" />
+                    <TextView
+                        android:id="@+id/tv_streak"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0"
+                        android:textColor="@color/primary"
+                        android:textSize="28sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/day_streak"
+                        android:textColor="@color/text_secondary"
+                        android:textSize="12sp"
+                        android:gravity="center" />
+
+                </LinearLayout>
 
             </LinearLayout>
 
         </com.google.android.material.card.MaterialCardView>
+
+        <!-- Info Pomodoro -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:padding="8dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/pomodoro_cycle_info"
+                android:textColor="#B3FFFFFF"
+                android:textSize="12sp"
+                android:gravity="center" />
+
+        </LinearLayout>
 
     </LinearLayout>
 

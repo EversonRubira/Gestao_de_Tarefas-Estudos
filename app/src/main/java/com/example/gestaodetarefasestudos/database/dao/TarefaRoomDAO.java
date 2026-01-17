@@ -78,4 +78,60 @@ public interface TarefaRoomDAO {
            "GROUP BY date(t.data_entrega / 1000, 'unixepoch'), t.disciplina_id " +
            "ORDER BY t.data_entrega ASC")
     Cursor obterTarefasPorPeriodoComCores(long inicioMes, long fimMes);
+
+    // Metodo para buscar tarefas pendentes para agendar notificacoes
+    @Query("SELECT t.* FROM tarefas t " +
+           "INNER JOIN disciplinas d ON t.disciplina_id = d.id " +
+           "WHERE d.usuario_id = :usuarioId AND t.estado != 2 " +
+           "ORDER BY t.data_entrega ASC")
+    List<Tarefa> obterPendentesParaNotificacao(long usuarioId);
+
+    // Filtros para a tela de tarefas
+
+    // Buscar tarefas por texto (titulo ou descricao)
+    @Query("SELECT t.*, d.nome as nome_disciplina FROM tarefas t " +
+           "LEFT JOIN disciplinas d ON t.disciplina_id = d.id " +
+           "WHERE (t.titulo LIKE '%' || :texto || '%' OR t.descricao LIKE '%' || :texto || '%') " +
+           "ORDER BY t.data_entrega ASC")
+    List<Tarefa> buscarPorTexto(String texto);
+
+    // Tarefas de hoje (pendentes)
+    @Query("SELECT t.*, d.nome as nome_disciplina FROM tarefas t " +
+           "LEFT JOIN disciplinas d ON t.disciplina_id = d.id " +
+           "WHERE t.data_entrega >= :inicioDia AND t.data_entrega <= :fimDia AND t.estado != 2 " +
+           "ORDER BY t.data_entrega ASC")
+    List<Tarefa> obterTarefasHoje(long inicioDia, long fimDia);
+
+    // Tarefas desta semana (pendentes)
+    @Query("SELECT t.*, d.nome as nome_disciplina FROM tarefas t " +
+           "LEFT JOIN disciplinas d ON t.disciplina_id = d.id " +
+           "WHERE t.data_entrega >= :inicioSemana AND t.data_entrega <= :fimSemana AND t.estado != 2 " +
+           "ORDER BY t.data_entrega ASC")
+    List<Tarefa> obterTarefasSemana(long inicioSemana, long fimSemana);
+
+    // Tarefas atrasadas (data de entrega passou e nao estao concluidas)
+    @Query("SELECT t.*, d.nome as nome_disciplina FROM tarefas t " +
+           "LEFT JOIN disciplinas d ON t.disciplina_id = d.id " +
+           "WHERE t.data_entrega < :agora AND t.estado != 2 " +
+           "ORDER BY t.data_entrega ASC")
+    List<Tarefa> obterAtrasadas(long agora);
+
+    // Tarefas concluidas
+    @Query("SELECT t.*, d.nome as nome_disciplina FROM tarefas t " +
+           "LEFT JOIN disciplinas d ON t.disciplina_id = d.id " +
+           "WHERE t.estado = 2 " +
+           "ORDER BY t.data_entrega DESC")
+    List<Tarefa> obterConcluidas();
+
+    // Ordenar por prioridade (alta primeiro)
+    @Query("SELECT t.*, d.nome as nome_disciplina FROM tarefas t " +
+           "LEFT JOIN disciplinas d ON t.disciplina_id = d.id " +
+           "ORDER BY t.prioridade DESC, t.data_entrega ASC")
+    List<Tarefa> obterTodasPorPrioridade();
+
+    // Ordenar por disciplina
+    @Query("SELECT t.*, d.nome as nome_disciplina FROM tarefas t " +
+           "LEFT JOIN disciplinas d ON t.disciplina_id = d.id " +
+           "ORDER BY d.nome ASC, t.data_entrega ASC")
+    List<Tarefa> obterTodasPorDisciplina();
 }

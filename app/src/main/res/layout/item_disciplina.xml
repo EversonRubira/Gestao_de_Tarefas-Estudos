@@ -5,6 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="8dp"
+    android:clickable="true"
+    android:focusable="true"
     app:cardCornerRadius="12dp"
     app:cardElevation="2dp"
     app:strokeWidth="0dp">
@@ -14,7 +16,8 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:padding="16dp"
-        android:gravity="center_vertical">
+        android:gravity="center_vertical"
+        android:background="?attr/selectableItemBackground">
 
         <!-- Indicador de cor da disciplina -->
         <View

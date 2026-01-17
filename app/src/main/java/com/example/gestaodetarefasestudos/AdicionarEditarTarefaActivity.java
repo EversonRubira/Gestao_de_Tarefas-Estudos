@@ -25,6 +25,7 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.MaterialAutoCompleteTextView;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.example.gestaodetarefasestudos.utils.TaskNotificationScheduler;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -44,6 +45,7 @@ public class AdicionarEditarTarefaActivity extends AppCompatActivity {
     private DisciplinaRoomDAO disciplinaDAO;
     private Tarefa tarefaEditando;
     private Executor executor;
+    private TaskNotificationScheduler notificationScheduler;
 
     private List<Disciplina> listaDisciplinas;
     private Disciplina disciplinaSelecionada;
@@ -82,6 +84,7 @@ public class AdicionarEditarTarefaActivity extends AppCompatActivity {
         tarefaDAO = AppDatabase.getInstance(this).tarefaDAO();
         disciplinaDAO = AppDatabase.getInstance(this).disciplinaDAO();
         executor = Executors.newSingleThreadExecutor();
+        notificationScheduler = new TaskNotificationScheduler(this);
 
         calendarioSelecionado = Calendar.getInstance();
     }
@@ -229,11 +232,13 @@ public class AdicionarEditarTarefaActivity extends AppCompatActivity {
                         editDescricaoTarefa.setText(tarefaEditando.getDescricao());
 
                         // Selecionar disciplina
-                        for (int i = 0; i < listaDisciplinas.size(); i++) {
-                            if (listaDisciplinas.get(i).getId() == tarefaEditando.getDisciplinaId()) {
-                                spinnerDisciplina.setText(listaDisciplinas.get(i).toString(), false);
-                                disciplinaSelecionada = listaDisciplinas.get(i);
-                                break;
+                        if (listaDisciplinas != null) {
+                            for (int i = 0; i < listaDisciplinas.size(); i++) {
+                                if (listaDisciplinas.get(i).getId() == tarefaEditando.getDisciplinaId()) {
+                                    spinnerDisciplina.setText(listaDisciplinas.get(i).toString(), false);
+                                    disciplinaSelecionada = listaDisciplinas.get(i);
+                                    break;
+                                }
                             }
                         }
 
@@ -318,6 +323,10 @@ public class AdicionarEditarTarefaActivity extends AppCompatActivity {
 
                 runOnUiThread(() -> {
                     if (id != -1) {
+                        // Agendar notificacoes para a nova tarefa
+                        novaTarefa.setId(id);
+                        notificationScheduler.scheduleTaskNotifications(novaTarefa);
+
                         Toast.makeText(this, R.string.success_task_added, Toast.LENGTH_SHORT).show();
                         setResult(RESULT_OK);
                         finish();
@@ -339,6 +348,10 @@ public class AdicionarEditarTarefaActivity extends AppCompatActivity {
 
                 runOnUiThread(() -> {
                     if (linhas > 0) {
+                        // Cancelar notificacoes antigas e agendar novas
+                        notificationScheduler.cancelTaskNotifications(tarefaEditando.getId());
+                        notificationScheduler.scheduleTaskNotifications(tarefaEditando);
+
                         Toast.makeText(this, R.string.success_task_updated, Toast.LENGTH_SHORT).show();
                         setResult(RESULT_OK);
                         finish();

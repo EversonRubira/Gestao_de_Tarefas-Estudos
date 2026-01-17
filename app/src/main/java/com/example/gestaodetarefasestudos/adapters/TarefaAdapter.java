@@ -29,7 +29,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class TarefaAdapter extends RecyclerView.Adapter<TarefaAdapter.TarefaViewHolder> {
@@ -39,7 +39,7 @@ public class TarefaAdapter extends RecyclerView.Adapter<TarefaAdapter.TarefaView
     private TarefaRoomDAO tarefaDAO;
     private OnTarefaChangedListener listener;
     private SimpleDateFormat formatoData = new SimpleDateFormat("dd MMM yyyy", Locale.getDefault());
-    private Executor executor;
+    private ExecutorService executor;
 
     public interface OnTarefaChangedListener {
         void onTarefaChanged();
@@ -63,10 +63,11 @@ public class TarefaAdapter extends RecyclerView.Adapter<TarefaAdapter.TarefaView
 
     @Override
     public void onBindViewHolder(@NonNull TarefaViewHolder holder, int position) {
+        if (position < 0 || position >= listaTarefas.size()) return;
         Tarefa tarefa = listaTarefas.get(position);
 
-        holder.txtTituloTarefa.setText(tarefa.getTitulo());
-        holder.txtDisciplinaTarefa.setText(tarefa.getNomeDisciplina());
+        holder.txtTituloTarefa.setText(tarefa.getTitulo() != null ? tarefa.getTitulo() : "");
+        holder.txtDisciplinaTarefa.setText(tarefa.getNomeDisciplina() != null ? tarefa.getNomeDisciplina() : "");
 
         // Formatar data
         Date data = new Date(tarefa.getDataEntrega());
@@ -136,7 +137,7 @@ public class TarefaAdapter extends RecyclerView.Adapter<TarefaAdapter.TarefaView
 
     @Override
     public int getItemCount() {
-        return listaTarefas.size();
+        return listaTarefas != null ? listaTarefas.size() : 0;
     }
 
     private void configurarPrioridade(TarefaViewHolder holder, Prioridade prioridade) {
@@ -195,10 +196,10 @@ public class TarefaAdapter extends RecyclerView.Adapter<TarefaAdapter.TarefaView
                         int linhas = tarefaDAO.deletar(tarefa);
 
                         ((android.app.Activity) contexto).runOnUiThread(() -> {
-                            if (linhas > 0) {
+                            if (linhas > 0 && position < listaTarefas.size()) {
                                 listaTarefas.remove(position);
                                 notifyItemRemoved(position);
-                                notifyItemRangeChanged(position, listaTarefas.size());
+                                notifyItemRangeChanged(position, listaTarefas.size() - position);
 
                                 Toast.makeText(contexto, R.string.success_task_deleted,
                                         Toast.LENGTH_SHORT).show();
@@ -220,6 +221,15 @@ public class TarefaAdapter extends RecyclerView.Adapter<TarefaAdapter.TarefaView
     public void atualizarLista(List<Tarefa> novaLista) {
         this.listaTarefas = novaLista;
         notifyDataSetChanged();
+    }
+
+    /**
+     * Libera recursos do executor. Deve ser chamado quando o adapter não for mais utilizado.
+     */
+    public void shutdown() {
+        if (executor != null && !executor.isShutdown()) {
+            executor.shutdown();
+        }
     }
 
     static class TarefaViewHolder extends RecyclerView.ViewHolder {

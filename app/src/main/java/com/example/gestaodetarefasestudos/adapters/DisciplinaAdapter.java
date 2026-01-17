@@ -25,7 +25,7 @@ import com.example.gestaodetarefasestudos.database.dao.DisciplinaRoomDAO;
 import com.example.gestaodetarefasestudos.models.Disciplina;
 
 import java.util.List;
-import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class DisciplinaAdapter extends RecyclerView.Adapter<DisciplinaAdapter.DisciplinaViewHolder> {
@@ -34,7 +34,7 @@ public class DisciplinaAdapter extends RecyclerView.Adapter<DisciplinaAdapter.Di
     private List<Disciplina> lista;
     private DisciplinaRoomDAO dao;
     private OnDisciplinaChangedListener listener;
-    private Executor executor;
+    private ExecutorService executor;
 
     public interface OnDisciplinaChangedListener {
         void onDisciplinaChanged();
@@ -58,6 +58,7 @@ public class DisciplinaAdapter extends RecyclerView.Adapter<DisciplinaAdapter.Di
 
     @Override
     public void onBindViewHolder(@NonNull DisciplinaViewHolder holder, int position) {
+        if (position < 0 || position >= lista.size()) return;
         Disciplina disciplina = lista.get(position);
 
         holder.txtNome.setText(disciplina.getNome());
@@ -89,7 +90,7 @@ public class DisciplinaAdapter extends RecyclerView.Adapter<DisciplinaAdapter.Di
 
     @Override
     public int getItemCount() {
-        return lista.size();
+        return lista != null ? lista.size() : 0;
     }
 
     private void showOptionsMenu(View view, Disciplina disciplina, int position) {
@@ -128,10 +129,10 @@ public class DisciplinaAdapter extends RecyclerView.Adapter<DisciplinaAdapter.Di
                             int linhas = dao.deletar(disciplina);
 
                             ((android.app.Activity) context).runOnUiThread(() -> {
-                                if (linhas > 0) {
+                                if (linhas > 0 && position < lista.size()) {
                                     lista.remove(position);
                                     notifyItemRemoved(position);
-                                    notifyItemRangeChanged(position, lista.size());
+                                    notifyItemRangeChanged(position, lista.size() - position);
 
                                     Toast.makeText(context, R.string.success_subject_deleted,
                                             Toast.LENGTH_SHORT).show();
@@ -154,6 +155,15 @@ public class DisciplinaAdapter extends RecyclerView.Adapter<DisciplinaAdapter.Di
     public void atualizarLista(List<Disciplina> novaLista) {
         this.lista = novaLista;
         notifyDataSetChanged();
+    }
+
+    /**
+     * Libera recursos do executor. Deve ser chamado quando o adapter não for mais utilizado.
+     */
+    public void shutdown() {
+        if (executor != null && !executor.isShutdown()) {
+            executor.shutdown();
+        }
     }
 
     static class DisciplinaViewHolder extends RecyclerView.ViewHolder {

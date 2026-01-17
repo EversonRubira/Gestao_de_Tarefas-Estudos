@@ -78,7 +78,11 @@
     <string name="timer_break_duration">Break Duration (minutes)</string>
     <string name="timer_work_complete">Work session completed! Time for a break.</string>
     <string name="timer_break_complete">Break over! Ready for another session?</string>
+    <string name="timer_long_break_session">Long Break</string>
+    <string name="timer_long_break_start">Great work! 4 cycles completed. Time for a long break!</string>
+    <string name="timer_long_break_complete">Long break over! Starting a new Pomodoro cycle.</string>
     <string name="timer_session_saved">Study session saved</string>
+    <string name="pomodoro_info">25 min focus + 5 min break (15 min after 4 cycles)</string>
 
     <!-- Validation Messages -->
     <string name="validation_field_required">This field is required</string>
@@ -189,9 +193,58 @@
     <string name="no_study_today">No study recorded today</string>
     <string name="no_subjects_for_timer">Create at least one subject to use the timer</string>
 
+    <!-- Timer Statistics -->
+    <string name="studying">Studying</string>
+    <string name="select_subject">Select a subject</string>
+    <string name="sessions_today">Sessions\ntoday</string>
+    <string name="time_today">Time\ntoday</string>
+    <string name="day_streak">Day\nstreak</string>
+    <string name="pomodoro_cycle_info">25 min work + 5 min break | 15 min break after 4 cycles</string>
+
     <!-- Dialog: No Subjects -->
     <string name="dialog_no_subjects_title">No Subjects Found</string>
     <string name="dialog_no_subjects_message">To create a task, you must first create a subject.\n\nWould you like to create a subject now?</string>
     <string name="dialog_create_subject">Create Subject</string>
     <string name="dialog_go_back">Go Back</string>
+
+    <!-- Notification Channels -->
+    <string name="notification_channel_timer">Study Timer</string>
+    <string name="notification_channel_timer_desc">Notifications for Pomodoro timer sessions</string>
+    <string name="notification_channel_tasks">Task Reminders</string>
+    <string name="notification_channel_tasks_desc">Notifications for upcoming and overdue tasks</string>
+
+    <!-- Timer Notifications -->
+    <string name="notification_timer_working">Focus Time</string>
+    <string name="notification_timer_break">Break Time</string>
+    <string name="notification_timer_long_break">Long Break</string>
+    <string name="notification_work_complete_title">Session Complete!</string>
+    <string name="notification_work_complete_message">Great work on %1$s! Time for a break.</string>
+    <string name="notification_break_time">Time for a break!</string>
+    <string name="notification_break_complete_title">Break Over</string>
+    <string name="notification_break_complete_message">Ready to focus again?</string>
+
+    <!-- Task Notifications -->
+    <string name="notification_due_tomorrow">Due tomorrow</string>
+    <string name="notification_due_1hour">Due in 1 hour</string>
+    <string name="notification_task_overdue_title">Task Overdue!</string>
+
+    <!-- Permission Request -->
+    <string name="permission_notification_title">Enable Notifications</string>
+    <string name="permission_notification_message">Allow notifications to receive reminders for upcoming tasks and timer alerts.</string>
+    <string name="permission_allow">Allow</string>
+    <string name="permission_deny">Not now</string>
+
+    <!-- Task Filters -->
+    <string name="filter_all">All</string>
+    <string name="filter_today">Today</string>
+    <string name="filter_this_week">This Week</string>
+    <string name="filter_overdue">Overdue</string>
+    <string name="filter_completed">Completed</string>
+    <string name="search_tasks_hint">Search tasks…</string>
+    <string name="sort_by_date">By date</string>
+    <string name="sort_by_priority">By priority</string>
+    <string name="sort_by_subject">By subject</string>
+    <string name="tasks_count">%d tasks</string>
+    <string name="tasks_count_singular">1 task</string>
+    <string name="no_tasks_found">No tasks match your search</string>
 </resources>

@@ -78,7 +78,11 @@
     <string name="timer_break_duration">Duração do Intervalo (minutos)</string>
     <string name="timer_work_complete">Sessão de trabalho concluída! Hora de fazer uma pausa.</string>
     <string name="timer_break_complete">Intervalo terminado! Pronto para outra sessão?</string>
+    <string name="timer_long_break_session">Pausa Longa</string>
+    <string name="timer_long_break_start">Excelente trabalho! 4 ciclos completos. Hora de uma pausa longa!</string>
+    <string name="timer_long_break_complete">Pausa longa terminada! Iniciando novo ciclo Pomodoro.</string>
     <string name="timer_session_saved">Sessão de estudo guardada</string>
+    <string name="pomodoro_info">25 min de foco + 5 min de pausa (15 min após 4 ciclos)</string>
 
     <!-- Validation Messages -->
     <string name="validation_field_required">Este campo é obrigatório</string>
@@ -189,10 +193,59 @@
     <string name="no_study_today">Nenhum estudo registado hoje</string>
     <string name="no_subjects_for_timer">Crie pelo menos uma disciplina para usar o timer</string>
 
+    <!-- Timer Statistics -->
+    <string name="studying">A estudar</string>
+    <string name="select_subject">Selecione uma disciplina</string>
+    <string name="sessions_today">Sessões\nhoje</string>
+    <string name="time_today">Tempo\nhoje</string>
+    <string name="day_streak">Dias\nseguidos</string>
+    <string name="pomodoro_cycle_info">25 min trabalho + 5 min pausa | 15 min pausa após 4 ciclos</string>
+
     <!-- Dialog: No Subjects -->
     <string name="dialog_no_subjects_title">Nenhuma Disciplina Encontrada</string>
     <string name="dialog_no_subjects_message">Para criar uma tarefa, primeiro precisa de criar uma disciplina.\n\nDeseja criar uma disciplina agora?</string>
     <string name="dialog_create_subject">Criar Disciplina</string>
     <string name="dialog_go_back">Voltar</string>
+
+    <!-- Notification Channels -->
+    <string name="notification_channel_timer">Cronometro de Estudo</string>
+    <string name="notification_channel_timer_desc">Notificacoes para sessoes do timer Pomodoro</string>
+    <string name="notification_channel_tasks">Lembretes de Tarefas</string>
+    <string name="notification_channel_tasks_desc">Notificacoes para tarefas proximas e atrasadas</string>
+
+    <!-- Timer Notifications -->
+    <string name="notification_timer_working">Tempo de Foco</string>
+    <string name="notification_timer_break">Intervalo</string>
+    <string name="notification_timer_long_break">Pausa Longa</string>
+    <string name="notification_work_complete_title">Sessao Completa!</string>
+    <string name="notification_work_complete_message">Otimo trabalho em %1$s! Hora de uma pausa.</string>
+    <string name="notification_break_time">Hora de uma pausa!</string>
+    <string name="notification_break_complete_title">Intervalo Terminado</string>
+    <string name="notification_break_complete_message">Pronto para focar novamente?</string>
+
+    <!-- Task Notifications -->
+    <string name="notification_due_tomorrow">Entrega amanha</string>
+    <string name="notification_due_1hour">Entrega em 1 hora</string>
+    <string name="notification_task_overdue_title">Tarefa Atrasada!</string>
+
+    <!-- Permission Request -->
+    <string name="permission_notification_title">Ativar Notificacoes</string>
+    <string name="permission_notification_message">Permita notificacoes para receber lembretes de tarefas e alertas do timer.</string>
+    <string name="permission_allow">Permitir</string>
+    <string name="permission_deny">Agora nao</string>
+
+    <!-- Task Filters -->
+    <string name="filter_all">Todas</string>
+    <string name="filter_today">Hoje</string>
+    <string name="filter_this_week">Esta Semana</string>
+    <string name="filter_overdue">Atrasadas</string>
+    <string name="filter_completed">Concluídas</string>
+    <string name="search_tasks_hint">Pesquisar tarefas…</string>
+    <string name="sort_by_date">Por data</string>
+    <string name="sort_by_priority">Por prioridade</string>
+    <string name="sort_by_subject">Por disciplina</string>
+    <string name="tasks_count">%d tarefas</string>
+    <string name="tasks_count_singular">1 tarefa</string>
+    <string name="no_tasks_found">Nenhuma tarefa encontrada</string>
 </resources>
 

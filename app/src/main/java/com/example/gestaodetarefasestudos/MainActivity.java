@@ -1,16 +1,22 @@
 package com.example.gestaodetarefasestudos;
 
+import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -40,6 +46,16 @@ public class MainActivity extends BaseActivity {
     private BottomNavigationView bottomNav;
     private Executor executor;
 
+    // Launcher para solicitar permissao de notificacao
+    private final ActivityResultLauncher<String> notificationPermissionLauncher =
+            registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
+                if (isGranted) {
+                    Log.d("MainActivity", "Permissao de notificacao concedida");
+                } else {
+                    Log.d("MainActivity", "Permissao de notificacao negada");
+                }
+            });
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,12 +69,54 @@ public class MainActivity extends BaseActivity {
 
         setupBottomNav();
         checkFirstRun();
+        checkNotificationPermission();
 
         // carregar o fragment inicial
         if (savedInstanceState == null) {
             loadFragment(new HomeFragment());
             setToolbarTitle(getString(R.string.home_title));
         }
+    }
+
+    /**
+     * Verifica e solicita permissao de notificacao para Android 13+ (API 33+)
+     * Necessario para que as notificacoes do timer e lembretes funcionem
+     */
+    private void checkNotificationPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS)
+                    != PackageManager.PERMISSION_GRANTED) {
+
+                // Verificar se devemos mostrar explicacao
+                if (shouldShowRequestPermissionRationale(Manifest.permission.POST_NOTIFICATIONS)) {
+                    // Mostrar dialog explicando por que precisamos da permissao
+                    showNotificationPermissionDialog();
+                } else {
+                    // Primeira vez ou usuario marcou "nao perguntar novamente"
+                    // Verificar se eh primeira vez
+                    if (getPrefs().isFirstNotificationRequest()) {
+                        showNotificationPermissionDialog();
+                        getPrefs().setFirstNotificationRequest(false);
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Mostra dialog explicando a importancia das notificacoes
+     */
+    private void showNotificationPermissionDialog() {
+        new AlertDialog.Builder(this)
+                .setTitle(R.string.permission_notification_title)
+                .setMessage(R.string.permission_notification_message)
+                .setPositiveButton(R.string.permission_allow, (dialog, which) -> {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                        notificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS);
+                    }
+                })
+                .setNegativeButton(R.string.permission_deny, null)
+                .show();
     }
 
     // setup da navegacao inferior

@@ -2,7 +2,11 @@
   "permissions": {
     "allow": [
       "Bash(dir /s /b \"C:\\\\Workspace\\\\IPS\\\\PAM\\\\ProjetoFinal\\\\GestaoTarefasEstudos\\\\app\\\\src\\\\main\\\\java\")",
-      "Bash(findstr:*)"
+      "Bash(findstr:*)",
+      "Bash(gradlew.bat:*)",
+      "Bash(.gradlew.bat assembleDebug)",
+      "Bash(./gradlew assembleDebug:*)",
+      "Bash(./gradlew test:*)"
     ]
   }
 }

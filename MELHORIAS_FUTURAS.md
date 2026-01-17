@@ -1,644 +1,694 @@
-# 📋 MELHORIAS FUTURAS - StudyFlow App
+# StudyFlow - Documentacao Completa do Projeto
 
-Documento com sugestões de melhorias e novas funcionalidades para o app de Gestão de Tarefas e Estudos.
-
----
-
-## 🎯 ALTA PRIORIDADE (Impacto Visual/UX)
-
-### 1. Notificações de Tarefas Próximas ao Prazo
-**Descrição:** Sistema de notificações para alertar o usuário sobre tarefas importantes.
-
-**Funcionalidades:**
-- Alertas 1 dia antes da entrega
-- Notificações push quando timer Pomodoro termina
-- Badge no ícone do app com número de tarefas pendentes
-- Notificação de tarefas atrasadas
-
-**Tecnologias:**
-- AlarmManager
-- NotificationManager
-- WorkManager para notificações recorrentes
-
-**Dificuldade:** Média
-**Impacto:** Alto
+App Android para gestao de estudos e organizacao de tarefas academicas.
 
 ---
 
-### 2. Modo Escuro (Dark Mode)
-**Descrição:** Implementar tema escuro para conforto visual noturno.
+## Indice
 
-**Funcionalidades:**
-- Criar `values-night/colors.xml` com paleta escura
-- Ajustar backgrounds e imagens para modo noturno
-- Toggle nas configurações para forçar modo claro/escuro/automático
-- Ícones adaptados para tema escuro
+1. [Visao Geral](#visao-geral)
+2. [Arquitetura Atual](#arquitetura-atual)
+3. [Funcionalidades Implementadas](#funcionalidades-implementadas)
+4. [Banco de Dados](#banco-de-dados)
+5. [Melhorias Pendentes](#melhorias-pendentes)
+6. [Roadmap de Desenvolvimento](#roadmap-de-desenvolvimento)
+7. [Debitos Tecnicos](#debitos-tecnicos)
+8. [Guia para Retomar Desenvolvimento](#guia-para-retomar-desenvolvimento)
 
-**Tecnologias:**
-- AppCompatDelegate.setDefaultNightMode()
-- Configuration.UI_MODE_NIGHT_YES/NO
+---
 
-**Dificuldade:** Média
-**Impacto:** Alto
+## Visao Geral
 
-**Paleta sugerida (Dark Mode):**
+### Missao
+Ajudar estudantes a organizar tarefas academicas e otimizar tempo de estudo de forma simples e eficiente.
+
+### Publico-alvo
+- Estudantes universitarios
+- Estudantes do ensino medio
+- Qualquer pessoa que precise organizar estudos e entregas
+
+### Diferencial
+App que combina gestao de tarefas + timer Pomodoro + estatisticas + notificacoes em uma interface limpa, sem complexidade desnecessaria.
+
+### Stack Tecnologica
+
+| Componente | Tecnologia |
+|------------|------------|
+| Linguagem | Java 11 |
+| Min SDK | 24 (Android 7.0) |
+| Target SDK | 36 |
+| Banco de Dados | Room 2.6.1 |
+| UI | Material Components |
+| Arquitetura | MVVM (ViewModel + LiveData + Repository) |
+
+---
+
+## Arquitetura Atual
+
+### Estrutura de Pastas
+
+```
+com.example.gestaodetarefasestudos/
+├── activities/
+│   ├── SplashActivity.java
+│   ├── LoginActivity.java
+│   ├── RegistroActivity.java
+│   ├── MainActivity.java
+│   ├── ConfiguracoesActivity.java
+│   ├── AdicionarEditarTarefaActivity.java
+│   ├── AdicionarEditarDisciplinaActivity.java
+│   └── DetalhesDisciplinaActivity.java
+├── fragments/
+│   ├── HomeFragment.java
+│   ├── SubjectsFragment.java
+│   ├── TasksFragment.java
+│   ├── TimerFragment.java
+│   └── StatisticsFragment.java
+├── adapters/
+│   ├── TarefaAdapter.java
+│   ├── DisciplinaAdapter.java
+│   ├── CalendarioAdapter.java
+│   └── EstatisticaAdapter.java
+├── models/
+│   ├── Usuario.java
+│   ├── Disciplina.java
+│   ├── Tarefa.java
+│   ├── SessaoEstudo.java
+│   └── DiaCalendario.java
+├── database/
+│   ├── AppDatabase.java
+│   ├── Converters.java
+│   └── dao/
+│       ├── UsuarioRoomDAO.java
+│       ├── DisciplinaRoomDAO.java
+│       ├── TarefaRoomDAO.java
+│       └── SessaoEstudoRoomDAO.java
+├── services/
+│   └── TimerService.java (Foreground Service)
+├── receivers/
+│   ├── TaskNotificationReceiver.java
+│   └── BootReceiver.java
+├── utils/
+│   ├── PasswordHelper.java
+│   ├── NotificationHelper.java
+│   └── TaskNotificationScheduler.java
+├── enums/
+│   ├── Prioridade.java (BAIXA, MEDIA, ALTA)
+│   └── EstadoTarefa.java (PENDENTE, EM_PROGRESSO, CONCLUIDA)
+├── viewmodels/
+│   ├── TasksViewModel.java
+│   ├── SubjectsViewModel.java
+│   ├── HomeViewModel.java
+│   └── TimerViewModel.java
+├── repositories/
+│   ├── TarefaRepository.java
+│   ├── DisciplinaRepository.java
+│   ├── HomeRepository.java
+│   └── TimerRepository.java
+└── PreferenciasApp.java (EncryptedSharedPreferences)
+```
+
+### Fluxo de Navegacao
+
+```
+SplashActivity (2s)
+    |
+    +-- Logado? --> MainActivity (BottomNav)
+    |                   |
+    |                   +-- Home (Dashboard + Calendario)
+    |                   +-- Subjects (CRUD Disciplinas)
+    |                   +-- Tasks (CRUD Tarefas)
+    |                   +-- Timer (Pomodoro)
+    |                   +-- Statistics (Graficos)
+    |                   +-- Settings (Tema, Idioma, Logout)
+    |
+    +-- Nao Logado? --> LoginActivity
+                            |
+                            +-- RegistroActivity
+```
+
+---
+
+## Funcionalidades Implementadas
+
+### 1. Autenticacao
+
+| Feature | Status | Detalhes |
+|---------|--------|----------|
+| Login com email/senha | Implementado | Validacao completa |
+| Registro de usuario | Implementado | Nome, email, senha |
+| Hash de senha seguro | Implementado | PBKDF2 com salt aleatorio |
+| Sessao persistente | Implementado | SharedPreferences |
+| Logout | Implementado | Limpa sessao |
+
+**Arquivos principais:**
+- `LoginActivity.java`
+- `RegistroActivity.java`
+- `PasswordHelper.java`
+- `PreferenciasApp.java`
+
+---
+
+### 2. Gestao de Disciplinas
+
+| Feature | Status | Detalhes |
+|---------|--------|----------|
+| Criar disciplina | Implementado | Nome, codigo, cor |
+| Editar disciplina | Implementado | Todos os campos |
+| Deletar disciplina | Implementado | Com cascade para tarefas |
+| Cores personalizadas | Implementado | 12 cores disponiveis |
+| Detalhes da disciplina | Implementado | Estatisticas + tarefas |
+
+**Arquivos principais:**
+- `SubjectsFragment.java`
+- `AdicionarEditarDisciplinaActivity.java`
+- `DetalhesDisciplinaActivity.java`
+- `DisciplinaAdapter.java`
+
+---
+
+### 3. Gestao de Tarefas
+
+| Feature | Status | Detalhes |
+|---------|--------|----------|
+| Criar tarefa | Implementado | Titulo, descricao, disciplina, data, prioridade |
+| Editar tarefa | Implementado | Todos os campos |
+| Deletar tarefa | Implementado | Swipe left + undo |
+| Marcar como concluida | Implementado | Checkbox + swipe right |
+| Prioridades | Implementado | Baixa (verde), Media (laranja), Alta (vermelho) |
+| Estados | Implementado | Pendente, Em Progresso, Concluida |
+| Validacao de data | Implementado | Nao permite datas passadas |
+| Notificacoes agendadas | Implementado | 24h, 1h antes e no vencimento |
+
+**Arquivos principais:**
+- `TasksFragment.java`
+- `AdicionarEditarTarefaActivity.java`
+- `TarefaAdapter.java`
+- `TaskNotificationScheduler.java`
+
+---
+
+### 4. Timer Pomodoro
+
+| Feature | Status | Detalhes |
+|---------|--------|----------|
+| Timer 25/5/15 | Implementado | Classico Pomodoro |
+| Selecao de disciplina | Implementado | Obrigatorio para iniciar |
+| Progress ring animado | Implementado | Indica tempo restante visualmente |
+| Indicadores de ciclo | Implementado | 4 bolinhas (1/4, 2/4, 3/4, 4/4) |
+| Estatisticas do dia | Implementado | Sessoes hoje, tempo hoje, streak |
+| Salva sessao automatico | Implementado | Ao completar ciclo ou parar |
+| Foreground Service | Implementado | Timer continua em background |
+| Notificacao persistente | Implementado | Mostra tempo restante na barra |
+| Notificacao ao terminar | Implementado | Som/vibracao quando sessao termina |
+
+**Arquivos principais:**
+- `TimerFragment.java`
+- `TimerService.java`
+- `NotificationHelper.java`
+- `fragment_timer.xml`
+
+**Drawables do Timer:**
+- `progress_ring_background.xml` - Fundo do anel de progresso
+- `progress_ring_progress.xml` - Progresso animado
+- `circle_indicator_active.xml` - Indicador de ciclo ativo (branco)
+- `circle_indicator_inactive.xml` - Indicador de ciclo inativo (transparente)
+- `circle_timer_background.xml` - Fundo circular do timer
+- `ic_timer_work.xml` - Icone para sessao de trabalho
+- `ic_timer_break.xml` - Icone para intervalo
+- `ic_stop.xml` - Icone do botao parar
+
+---
+
+### 5. Dashboard (Home)
+
+| Feature | Status | Detalhes |
+|---------|--------|----------|
+| Total de disciplinas | Implementado | Card com contagem |
+| Tarefas pendentes | Implementado | Card com contagem |
+| Tempo de estudo hoje | Implementado | Card com duracao |
+| Calendario mensal | Implementado | Grid visual 7x7 |
+| Navegacao entre meses | Implementado | Setas prev/next |
+| Indicadores no calendario | Implementado | Cores das disciplinas com tarefas |
+| Tarefas do dia | Implementado | Click no dia mostra lista |
+
+**Arquivos principais:**
+- `HomeFragment.java`
+- `CalendarioAdapter.java`
+- `DiaCalendario.java`
+
+---
+
+### 6. Estatisticas
+
+| Feature | Status | Detalhes |
+|---------|--------|----------|
+| Tempo por disciplina (7 dias) | Implementado | Lista com barras de progresso |
+| Tempo total | Implementado | Soma de todas sessoes |
+
+**Arquivos principais:**
+- `StatisticsFragment.java`
+- `EstatisticaAdapter.java`
+
+---
+
+### 7. Configuracoes
+
+| Feature | Status | Detalhes |
+|---------|--------|----------|
+| Tema claro/escuro | Implementado | AppCompatDelegate |
+| Idioma PT/EN | Implementado | Locale dinamico |
+| Logout | Implementado | Limpa sessao e redireciona |
+
+**Arquivos principais:**
+- `ConfiguracoesActivity.java`
+- `PreferenciasApp.java`
+
+---
+
+### 8. Sistema de Notificacoes
+
+| Feature | Status | Detalhes |
+|---------|--------|----------|
+| Canais de notificacao | Implementado | Timer (alta prioridade) + Tarefas (padrao) |
+| Notificacao timer running | Implementado | Persistente com progresso |
+| Notificacao timer finished | Implementado | Som + vibracao |
+| Lembrete 24h antes | Implementado | "Entrega amanha" |
+| Lembrete 1h antes | Implementado | "Entrega em 1 hora" |
+| Notificacao de atraso | Implementado | "Tarefa Atrasada!" |
+| Reagendar apos boot | Implementado | BootReceiver |
+| Cancelar ao deletar tarefa | Implementado | Automatico |
+
+**Arquivos principais:**
+- `NotificationHelper.java`
+- `TaskNotificationScheduler.java`
+- `TaskNotificationReceiver.java`
+- `BootReceiver.java`
+- `TimerService.java`
+
+**Permissoes (AndroidManifest.xml):**
 ```xml
-<color name="background_dark">#121212</color>
-<color name="surface_dark">#1E1E1E</color>
-<color name="primary_dark">#4DB6AC</color>
-<color name="text_primary_dark">#FFFFFF</color>
-<color name="text_secondary_dark">#B3B3B3</color>
+<uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+<uses-permission android:name="android.permission.VIBRATE" />
+<uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+<uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
+<uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+<uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
 ```
 
 ---
 
-### 3. Gráficos de Produtividade
-**Descrição:** Visualização gráfica dos dados de estudo e produtividade.
+### 9. Internacionalizacao
 
-**Funcionalidades:**
-- Gráfico de barras semanal de tempo estudado
-- Gráfico de pizza para distribuição por disciplina
-- Linha do tempo mostrando evolução mensal
-- Comparação semana atual vs semana anterior
-- Média de horas por dia
-
-**Tecnologias:**
-- MPAndroidChart (https://github.com/PhilJay/MPAndroidChart)
-- Alternativa: AAChartCore
-
-**Dificuldade:** Média-Alta
-**Impacto:** Muito Alto
-
-**Tipos de gráficos:**
-1. BarChart - Tempo por dia da semana
-2. PieChart - Distribuição por disciplina
-3. LineChart - Evolução ao longo do tempo
-4. HorizontalBarChart - Ranking de disciplinas
+| Idioma | Status | Arquivo |
+|--------|--------|---------|
+| Ingles (padrao) | Implementado | `values/strings.xml` |
+| Portugues | Implementado | `values-pt/strings.xml` |
 
 ---
 
-### 4. Animações e Transições
-**Descrição:** Adicionar animações para melhorar a experiência do usuário.
+### 10. UI/UX
 
-**Funcionalidades:**
-- Animação ao marcar tarefa como concluída (✓ com efeito de check)
-- Transições suaves entre fragments (SharedElementTransition)
-- Progress bar circular no timer Pomodoro (animado)
-- Ripple effects nos cards
-- Fade in/out em listas
-- Animação de loading durante operações
-
-**Tecnologias:**
-- Lottie para animações complexas
-- ObjectAnimator
-- AnimationUtils
-- MotionLayout para animações avançadas
-
-**Dificuldade:** Média
-**Impacto:** Alto
-
-**Recursos:**
-- LottieFiles (https://lottiefiles.com/) - Animações grátis
+| Feature | Status | Detalhes |
+|---------|--------|----------|
+| Material Design 3 | Implementado | Componentes modernos |
+| Dark Mode | Implementado | values-night/themes.xml |
+| Swipe gestures | Implementado | Delete (esquerda) e Complete (direita) |
+| Snackbar com Undo | Implementado | Ao deletar tarefa |
+| Empty states | Parcial | Mensagens basicas |
+| Animacoes | Parcial | Fade in, slide up, progress ring |
 
 ---
 
-### 5. Filtros e Ordenação Avançados
-**Descrição:** Sistema completo de filtros e ordenação para tarefas.
+## Banco de Dados
 
-**Funcionalidades:**
-- Filtrar tarefas por disciplina (multi-select)
-- Ordenar por: prioridade, data, alfabético, status
-- Busca por texto nas tarefas (título e descrição)
-- Chips de filtro rápido: Hoje, Esta Semana, Atrasadas, Concluídas
-- Salvar filtros favoritos
+### Versao Atual: 3
 
-**Tecnologias:**
-- SearchView
-- Chips do Material Design
-- Room queries com filtros dinâmicos
+**ATENCAO:** O app usa `fallbackToDestructiveMigration()` que APAGA todos os dados em atualizacoes. Isso PRECISA ser corrigido antes do lancamento!
 
-**Dificuldade:** Média
-**Impacto:** Alto
+### Entidades
 
----
+#### Usuario
+```java
+@Entity(tableName = "usuarios")
+public class Usuario {
+    @PrimaryKey(autoGenerate = true)
+    private long id;
+    private String nome;
+    private String email;
+    private String senhaHash;  // PBKDF2 com salt
+    private long dataCriacao;
+}
+```
 
-## 💡 MÉDIA PRIORIDADE (Funcionalidades)
+#### Disciplina
+```java
+@Entity(tableName = "disciplinas",
+        foreignKeys = @ForeignKey(
+            entity = Usuario.class,
+            parentColumns = "id",
+            childColumns = "usuario_id",
+            onDelete = CASCADE))
+public class Disciplina {
+    @PrimaryKey(autoGenerate = true)
+    private long id;
+    private long usuarioId;
+    private String nome;
+    private String codigo;
+    private String cor; // Hex color (#FF5722)
+    private long dataCriacao;
+}
+```
 
-### 6. Widget para Home Screen
-**Descrição:** Widget na tela inicial do Android para acesso rápido.
+#### Tarefa
+```java
+@Entity(tableName = "tarefas",
+        foreignKeys = @ForeignKey(
+            entity = Disciplina.class,
+            parentColumns = "id",
+            childColumns = "disciplina_id",
+            onDelete = CASCADE))
+public class Tarefa {
+    @PrimaryKey(autoGenerate = true)
+    private long id;
+    private String titulo;
+    private String descricao;
+    private long disciplinaId;
+    private long dataEntrega; // Timestamp
+    private Prioridade prioridade; // BAIXA=1, MEDIA=2, ALTA=3
+    private EstadoTarefa estado; // PENDENTE=0, EM_PROGRESSO=1, CONCLUIDA=2
+    private long dataCriacao;
+}
+```
 
-**Funcionalidades:**
-- Mostrar próximas 3 tarefas
-- Contador de tempo estudado hoje
-- Botão rápido para iniciar timer
-- Atualização automática
-- Tamanhos: 2x2, 4x2, 4x4
+#### SessaoEstudo
+```java
+@Entity(tableName = "sessoes_estudo",
+        foreignKeys = @ForeignKey(
+            entity = Disciplina.class,
+            parentColumns = "id",
+            childColumns = "disciplina_id",
+            onDelete = CASCADE))
+public class SessaoEstudo {
+    @PrimaryKey(autoGenerate = true)
+    private long id;
+    private long disciplinaId;
+    private long duracao; // Em segundos
+    private long data; // Timestamp
+}
+```
 
-**Tecnologias:**
-- AppWidgetProvider
-- RemoteViews
-- PendingIntent
-
-**Dificuldade:** Alta
-**Impacto:** Médio
-
----
-
-### 7. Sistema de Gamificação
-**Descrição:** Elementos de jogo para motivar o usuário.
-
-**Funcionalidades:**
-- Badges/conquistas:
-  - "Primeira sessão" 🎯
-  - "7 dias seguidos" 🔥
-  - "50 horas estudadas" 📚
-  - "Todas tarefas concluídas" ✅
-  - "Pomodoro Master - 100 sessões" ⏱️
-- Streaks de dias consecutivos estudando
-- Sistema de níveis (XP por tempo estudado)
-- Barra de progresso para próximo nível
-- Animação de "level up"
-- Histórico de conquistas
-
-**Tecnologias:**
-- SharedPreferences para tracking
-- AnimatedVectorDrawable para badges
-- Nova tabela no banco: conquistas
-
-**Dificuldade:** Alta
-**Impacto:** Alto (Engajamento)
-
-**Sistema de pontos sugerido:**
-- 1 minuto estudado = 1 XP
-- Tarefa concluída = 50 XP
-- Disciplina criada = 20 XP
-- Streak diário = 100 XP
-
----
-
-### 8. Compartilhamento e Export
-**Descrição:** Exportar e compartilhar dados do app.
-
-**Funcionalidades:**
-- Exportar estatísticas em PDF
-- Compartilhar conquistas nas redes sociais (imagem gerada)
-- Backup completo em JSON
-- Restore de backup
-- Export do calendário para Google Calendar
-- Compartilhar sessão de estudo (screenshot bonito)
-
-**Tecnologias:**
-- iTextPDF ou PdfDocument
-- Canvas para gerar imagens
-- Intent.ACTION_SEND para compartilhar
-- Gson para JSON
-- Google Calendar API
-
-**Dificuldade:** Alta
-**Impacto:** Médio
+### Type Converters
+- `Prioridade` (enum) <-> int
+- `EstadoTarefa` (enum) <-> int
 
 ---
 
-### 9. Melhorias no Timer Pomodoro
-**Descrição:** Funcionalidades adicionais para o timer.
+## Melhorias Pendentes
 
-**Funcionalidades:**
-- Sons personalizáveis (biblioteca de sons)
-- Vibração ao terminar (padrão customizável)
-- Histórico detalhado de sessões
-- Modo "não perturbe" automático durante sessão
-- Ciclos configuráveis (4 trabalhos = 1 descanso longo de 15min)
-- Pausar e retomar sessão
-- Timer em notificação persistente
-- Contagem de sessões completadas no dia
-- Meta diária de sessões
+### Prioridade 1 - CRITICO (Antes do Lancamento)
 
-**Tecnologias:**
-- MediaPlayer para sons
-- Vibrator
-- NotificationCompat com actions
-- Foreground Service
+#### 1.1 ~~Remover fallbackToDestructiveMigration~~ CONCLUIDO
+**Status:** Implementado em Janeiro 2026
+**Solucao:** Criado sistema de migrations explicitas em `AppDatabase.java`
 
-**Dificuldade:** Média-Alta
-**Impacto:** Alto
+#### 1.2 ~~Solicitar Permissao de Notificacao (Android 13+)~~ CONCLUIDO
+**Status:** Implementado em Janeiro 2026
+**Solucao:** Dialog explicativo + ActivityResultLauncher em `MainActivity.java`
 
-**Configurações adicionais:**
-- Auto-iniciar próxima sessão (opcional)
-- Pular descanso (opcional)
-- Alertas a cada X minutos
-- Integração com Do Not Disturb do Android
+#### 1.3 ~~Criptografar SharedPreferences~~ CONCLUIDO
+**Status:** Implementado em Janeiro 2026
+**Solucao:** EncryptedSharedPreferences com AES256 em `PreferenciasApp.java`
 
 ---
 
-### 10. Sistema de Notas e Anexos
-**Descrição:** Adicionar informações extras a tarefas e disciplinas.
+### Prioridade 2 - IMPORTANTE (v1.0)
 
-**Funcionalidades:**
-- Adicionar notas em formato texto a tarefas
-- Adicionar notas a disciplinas
-- Anexar arquivos (PDFs, imagens, documentos)
-- Checklist dentro de tarefas (subtarefas)
-- Editor de texto rico (bold, italic, listas)
-- Preview de PDFs e imagens
-- Galeria de anexos
+#### 2.1 ~~Busca e Filtros de Tarefas~~ CONCLUIDO
+**Status:** Implementado em Janeiro 2026
+**Implementado:**
+- Campo de busca por texto (titulo/descricao)
+- Filtros por periodo (todas, hoje, semana, atrasadas, concluidas)
+- Ordenacao (data, prioridade, disciplina)
+- Chips de filtro rapido no topo
+- Integrado com MVVM (TasksViewModel)
 
-**Tecnologias:**
-- RichEditor ou WYSIWYG editor
-- File Provider para anexos
-- Nova tabela: anexos, subtarefas
-- Storage interno/externo
+#### 2.2 Estatisticas com Graficos
+**Status:** PARCIAL (lista simples)
+**O que falta:**
+- Grafico de barras (tempo por dia da semana)
+- Grafico pizza (distribuicao por disciplina)
+- Historico completo (alem de 7 dias)
+- Comparativo semanal
 
-**Dificuldade:** Alta
-**Impacto:** Médio-Alto
+**Biblioteca sugerida:** MPAndroidChart
 
-**Estrutura BD:**
+#### 2.3 ~~Confirmacao ao Deletar Disciplina~~ CONCLUIDO
+**Status:** Ja existia em `DisciplinaAdapter.java`
+AlertDialog com aviso sobre cascade delete implementado.
+
+---
+
+### Prioridade 3 - DIFERENCIAL (v1.1+)
+
+#### 3.1 Subtarefas (Checklists)
+Quebrar tarefas grandes em etapas menores.
+
+**Nova tabela:**
 ```sql
-CREATE TABLE notas (
-    id INTEGER PRIMARY KEY,
-    tarefa_id INTEGER,
-    disciplina_id INTEGER,
-    conteudo TEXT,
-    data_criacao INTEGER
-);
-
-CREATE TABLE anexos (
-    id INTEGER PRIMARY KEY,
-    tarefa_id INTEGER,
-    tipo TEXT, -- pdf, imagem, outro
-    caminho TEXT,
-    nome TEXT,
-    tamanho INTEGER
-);
-
 CREATE TABLE subtarefas (
-    id INTEGER PRIMARY KEY,
-    tarefa_id INTEGER,
-    titulo TEXT,
-    concluida INTEGER DEFAULT 0
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    tarefa_id INTEGER NOT NULL,
+    titulo TEXT NOT NULL,
+    concluida INTEGER DEFAULT 0,
+    ordem INTEGER DEFAULT 0,
+    FOREIGN KEY(tarefa_id) REFERENCES tarefas(id) ON DELETE CASCADE
 );
 ```
 
+#### 3.2 Export/Import de Dados
+- Exportar para JSON (backup manual)
+- Importar de arquivo JSON
+- Restaurar dados em novo dispositivo
+
+#### 3.3 Widget para Home Screen
+- Widget 2x2: Proximas 2 tarefas
+- Widget 2x1: Timer rapido
+
+#### 3.4 Som Personalizado no Timer
+- Selecao de som de notificacao
+- Opcao de vibracao on/off
+
 ---
 
-## 🔧 MELHORIAS TÉCNICAS (Boas Práticas)
+### Prioridade 4 - ESCALA (v2.0+)
 
-### 11. Arquitetura MVVM
-**Descrição:** Refatorar para arquitetura Model-View-ViewModel.
+#### 4.1 ~~Migrar para MVVM~~ CONCLUIDO
+**Status:** Implementado em Janeiro 2026
+**Implementado:**
+- ViewModels: TasksViewModel, SubjectsViewModel, HomeViewModel, TimerViewModel
+- Repositories: TarefaRepository, DisciplinaRepository, HomeRepository, TimerRepository
+- LiveData para observacao reativa
+- Separacao clara View/ViewModel/Model
 
-**Benefícios:**
-- Separação clara de responsabilidades
-- Código mais testável
-- Melhor manutenibilidade
-- Ciclo de vida gerenciado automaticamente
+**Pendente para v2.0:**
+- Hilt para injecao de dependencia
 
-**Componentes:**
-- ViewModel + LiveData
-- Repository pattern
-- Use Cases (opcional)
-- Dependency Injection (Hilt/Dagger)
+#### 4.2 ~~Testes Automatizados~~ PARCIAL
+**Status:** Implementado parcialmente em Janeiro 2026
+**Implementado:**
+- Unit tests: PasswordHelperTest (11 testes)
+- Instrumented tests: TarefaDAOTest (14 testes), DisciplinaDAOTest (10 testes)
 
-**Dificuldade:** Muito Alta
-**Impacto:** Médio (Longo prazo)
+**Pendente:**
+- Testes para ViewModels
+- UI tests com Espresso
 
-**Estrutura sugerida:**
+#### 4.3 Backup em Nuvem
+- Firebase ou Google Drive
+- Sincronizacao manual
+- Restaurar em novo dispositivo
+
+#### 4.4 Modelo Freemium
+**Versao Gratuita:**
+- 5 disciplinas
+- Estatisticas 7 dias
+
+**Versao Pro (R$ 19-29):**
+- Ilimitado
+- Graficos completos
+- Backup em nuvem
+- Widgets
+
+---
+
+## Debitos Tecnicos
+
+### Criticos - TODOS RESOLVIDOS
+
+| Problema | Status | Solucao |
+|----------|--------|---------|
+| ~~fallbackToDestructiveMigration~~ | RESOLVIDO | Migrations explicitas |
+| ~~Sem pedir permissao POST_NOTIFICATIONS~~ | RESOLVIDO | Dialog + ActivityResultLauncher |
+| ~~SharedPreferences sem criptografia~~ | RESOLVIDO | EncryptedSharedPreferences |
+
+### Moderados
+
+| Problema | Arquivo | Status |
+|----------|---------|--------|
+| ~~Variaveis static no TimerFragment~~ | TimerFragment.java | RESOLVIDO - Migrado para ViewModel |
+| Sem tratamento de erro no Executor | Varios | Pendente |
+| Cursor sem try-catch | StatisticsFragment.java | Pendente |
+| Falta indices nas foreign keys | Models | Pendente |
+
+### Menores (Warnings)
+
+| Problema | Arquivo | Impacto |
+|----------|---------|---------|
+| CURSOR_MISMATCH | DAOs | Warnings no build |
+| Multiplos constructors | Models | Warnings no build |
+
+---
+
+## Guia para Retomar Desenvolvimento
+
+### Setup do Ambiente
+
+1. Android Studio Hedgehog ou superior
+2. JDK 11+
+3. Gradle 8.x
+
+### Comandos Uteis
+
+```bash
+# Build debug
+./gradlew assembleDebug
+
+# Build release
+./gradlew assembleRelease
+
+# Limpar build
+./gradlew clean
+
+# Rodar testes (quando existirem)
+./gradlew test
 ```
-app/
-├── data/
-│   ├── repository/
-│   ├── local/ (Room)
-│   └── remote/ (API, se houver)
-├── domain/
-│   ├── model/
-│   └── usecase/
-├── presentation/
-│   ├── viewmodel/
-│   └── ui/
-│       ├── activities/
-│       └── fragments/
-└── di/ (Dependency Injection)
-```
+
+### Ordem de Implementacao Sugerida
+
+1. **PRIMEIRO:** Corrigir fallbackToDestructiveMigration
+2. Adicionar solicitacao de permissao de notificacao
+3. Implementar busca e filtros de tarefas
+4. Adicionar graficos nas estatisticas
+5. Adicionar confirmacao ao deletar disciplina
+6. Migrar gradualmente para MVVM
+7. Adicionar testes
+
+### Arquivos Mais Importantes por Funcionalidade
+
+| Funcionalidade | Arquivos Principais |
+|----------------|---------------------|
+| Timer | `TimerFragment.java`, `TimerService.java`, `fragment_timer.xml` |
+| Tarefas | `TasksFragment.java`, `TarefaAdapter.java`, `AdicionarEditarTarefaActivity.java` |
+| Notificacoes | `NotificationHelper.java`, `TaskNotificationScheduler.java`, `TimerService.java` |
+| Banco | `AppDatabase.java`, `*RoomDAO.java` |
+| Auth | `LoginActivity.java`, `PasswordHelper.java`, `PreferenciasApp.java` |
+| Home | `HomeFragment.java`, `CalendarioAdapter.java` |
+
+### Cores do App
+
+| Nome | Hex | Uso |
+|------|-----|-----|
+| Primary | #6200EE | Cor principal, botoes |
+| Primary Dark | #3700B3 | Status bar |
+| Accent | #03DAC5 | Destaques |
+| Error | #B00020 | Erros, prioridade alta |
+| Prioridade Baixa | #4CAF50 | Verde |
+| Prioridade Media | #FF9800 | Laranja |
+| Prioridade Alta | #F44336 | Vermelho |
 
 ---
 
-### 12. Testes Automatizados
-**Descrição:** Implementar suite de testes.
+## O Que NAO Fazer
 
-**Tipos de testes:**
-- Unit tests (JUnit) para lógica de negócio
-- UI tests (Espresso) para fluxos principais
-- Testes de banco de dados (Room Testing)
-- Integration tests
+### Gamificacao Excessiva
+- XP, niveis, badges elaborados
+- **Por que:** Distrai do proposito, parece infantil
 
-**Cobertura mínima sugerida:** 60%
+### Features Sociais
+- Chat, grupos, compartilhamento
+- **Por que:** Fora do escopo, adiciona complexidade
 
-**Dificuldade:** Alta
-**Impacto:** Médio (Qualidade)
+### Integracoes Complexas
+- Google Calendar, Moodle, etc
+- **Por que:** Cada integracao e ponto de falha
 
-**Testes prioritários:**
-1. CRUD de disciplinas
-2. CRUD de tarefas
-3. Timer Pomodoro (contagem)
-4. Cálculos de estatísticas
-5. Validações de formulário
+### IA/ML
+- "Sugestoes inteligentes"
+- **Por que:** Complexo, impreciso, desnecessario
 
 ---
 
-### 13. Melhorias de Performance
-**Descrição:** Otimizações de performance.
+## Concorrentes e Posicionamento
 
-**Melhorias:**
-- Paginação nas listas longas (PagedList)
-- Cache de imagens (Glide/Coil)
-- Lazy loading de dados
-- Índices no banco de dados
-- ProGuard/R8 para reduzir APK
-- Image optimization
-- Background threading otimizado
+| App | Foco | Fraqueza | Nos somos melhores porque |
+|-----|------|----------|---------------------------|
+| Google Tasks | Tarefas genericas | Sem timer, sem estatisticas | Timer + Estatisticas integrados |
+| Todoist | Produtividade geral | Complexo demais | Interface simples e focada |
+| Forest | Timer gamificado | Sem gestao de tarefas | Tarefas + Timer em um so app |
+| MyStudyLife | Horarios academicos | Interface datada | UI moderna, Material Design |
 
-**Ferramentas:**
-- Android Profiler
-- LeakCanary para memory leaks
-- StrictMode para debug
-
-**Dificuldade:** Média-Alta
-**Impacto:** Médio
+**Posicionamento StudyFlow:**
+"Simples como Google Tasks + Timer integrado + Estatisticas para estudantes."
 
 ---
 
-### 14. Sincronização Cloud
-**Descrição:** Backup e sincronização entre dispositivos.
+## Changelog
 
-**Funcionalidades:**
-- Firebase Firestore para backup
-- Sincronização multi-dispositivo em tempo real
-- Login com Google/Email
-- Resolve de conflitos
-- Modo offline-first
+### v1.0.0 (Em desenvolvimento)
 
-**Tecnologias:**
-- Firebase Authentication
-- Firebase Firestore
-- Firebase Storage (para anexos)
+**Funcionalidades Core:**
+- Sistema de autenticacao com hash seguro (PBKDF2)
+- CRUD completo de disciplinas e tarefas
+- Timer Pomodoro com ciclos automaticos (25/5/15)
+- Calendario visual com indicadores de tarefas
+- Estatisticas basicas (tempo por disciplina - 7 dias)
+- Dark mode e internacionalizacao (PT/EN)
 
-**Dificuldade:** Muito Alta
-**Impacto:** Alto
+**Melhorias de UX (Janeiro 2026):**
+- Progress ring animado no timer (visual do tempo restante)
+- Indicadores de ciclo (4 bolinhas mostrando progresso)
+- Estatisticas do dia no timer (sessoes, tempo total, streak)
+- Swipe to delete/complete com undo
+- Busca e filtros de tarefas (texto, periodo, ordenacao)
+- Chips de filtro rapido
 
-**Arquitetura:**
-- Sincronização bidirecional
-- Timestamp para resolver conflitos
-- Queue de sincronização offline
-- Estado: synced, pending, conflict
+**Sistema de Notificacoes (Janeiro 2026):**
+- Foreground Service para timer em background
+- Notificacao persistente durante timer ativo
+- Notificacao com som/vibracao ao terminar sessao
+- Lembretes de tarefas: 24h antes, 1h antes, no vencimento
+- Reagendamento automatico apos reinicio do dispositivo
+- Cancelamento automatico ao deletar tarefa
+- Solicitacao de permissao Android 13+ com dialog explicativo
 
----
+**Arquitetura MVVM (Janeiro 2026):**
+- ViewModels: TasksViewModel, SubjectsViewModel, HomeViewModel, TimerViewModel
+- Repositories: TarefaRepository, DisciplinaRepository, HomeRepository, TimerRepository
+- LiveData para comunicacao reativa View-ViewModel
+- Separacao clara de responsabilidades
 
-## 🎨 MELHORIAS DE UX/UI ESPECÍFICAS
+**Seguranca (Janeiro 2026):**
+- EncryptedSharedPreferences (AES256) para dados sensiveis
+- Removido fallbackToDestructiveMigration - migrations explicitas
+- ProGuard/R8 configurado para release
 
-### 15. Onboarding
-**Descrição:** Tutorial para novos usuários.
-
-**Funcionalidades:**
-- ViewPager2 com 3-4 telas explicativas
-- Ilustrações das funcionalidades principais
-- Skip button
-- Indicadores de página (dots)
-- Botão "Começar" na última página
-- Mostrar apenas na primeira vez
-
-**Recursos:**
-- Ilustrações: undraw.co (grátis e personalizáveis)
-- Lottie animations
-
-**Dificuldade:** Baixa
-**Impacto:** Médio
-
-**Telas sugeridas:**
-1. Bem-vindo ao StudyFlow
-2. Organize suas disciplinas e tarefas
-3. Use o Timer Pomodoro
-4. Acompanhe sua produtividade
+**Testes (Janeiro 2026):**
+- Unit tests: PasswordHelperTest (11 testes)
+- Instrumented tests: TarefaDAOTest (14 testes), DisciplinaDAOTest (10 testes)
 
 ---
 
-### 16. Empty States Melhores
-**Descrição:** Melhorar telas vazias.
-
-**Melhorias:**
-- Ilustrações customizadas (SVG)
-- Mensagens motivacionais e claras
-- Botão de ação direta (ex: "Adicionar Primeira Disciplina")
-- Animações sutis
-- Diferentes empty states por contexto
-
-**Exemplos:**
-- Sem disciplinas: "Comece criando sua primeira disciplina! 📚"
-- Sem tarefas: "Nenhuma tarefa pendente. Relaxe! ✨"
-- Sem estatísticas: "Use o timer para começar a acumular dados 📊"
-- Busca sem resultados: "Nenhuma tarefa encontrada 🔍"
-
-**Dificuldade:** Baixa
-**Impacto:** Médio
-
----
-
-### 17. Feedback Visual Melhorado
-**Descrição:** Melhor comunicação com o usuário.
-
-**Melhorias:**
-- Snackbar para todas as ações (salvar, deletar, etc)
-- Snackbar com ação "Desfazer" ao deletar
-- Loading states (skeleton screens)
-- Progress indicators durante operações longas
-- Estados de erro mais claros e acionáveis
-- Dialog de confirmação antes de deletar (com checkbox "não mostrar novamente")
-- Toast apenas para erros críticos
-- Animações de sucesso
-
-**Dificuldade:** Baixa-Média
-**Impacto:** Alto
-
----
-
-### 18. Acessibilidade
-**Descrição:** Tornar o app acessível para todos.
-
-**Melhorias:**
-- Content descriptions completos em todos os elementos
-- Suporte completo a TalkBack
-- Tamanhos de fonte ajustáveis
-- Modo alto contraste
-- Navegação por teclado
-- Mínimo de contraste WCAG AA (4.5:1)
-- Labels descritivos
-- Feedback sonoro para ações importantes
-
-**Ferramentas:**
-- Accessibility Scanner
-- TalkBack para testes
-
-**Dificuldade:** Média
-**Impacto:** Alto (Inclusão)
-
----
-
-### 19. Swipe Gestures
-**Descrição:** Gestos de deslizar para ações rápidas.
-
-**Funcionalidades:**
-- Swipe para direita: marcar como concluída
-- Swipe para esquerda: deletar (com confirmação)
-- Swipe para baixo: editar
-- Feedback visual durante swipe (cores e ícones)
-- Undo action após swipe to delete
-
-**Tecnologias:**
-- ItemTouchHelper
-- ItemTouchHelper.SimpleCallback
-
-**Dificuldade:** Média
-**Impacto:** Alto
-
----
-
-### 20. Melhorias no Calendário
-**Descrição:** Calendário mais funcional e informativo.
-
-**Melhorias:**
-- Mostrar mais de 3 disciplinas por dia (scroll horizontal)
-- View de lista detalhada ao clicar no dia
-- DatePicker para pular para mês específico
-- Indicador de hoje mais destacado (borda grossa)
-- Legenda de cores
-- Mini calendário no drawer/header
-- Marcar feriados/fins de semana
-- Diferentes views: mês, semana, agenda
-
-**Dificuldade:** Alta
-**Impacto:** Médio-Alto
-
----
-
-## 🚀 IMPLEMENTAÇÕES RÁPIDAS (Quick Wins)
-
-Melhorias com **alto impacto e baixo esforço**:
-
-### 1. Animação ao Completar Tarefa ✅
-**Tempo estimado:** 2-3 horas
-**Impacto:** Alto
-**Como:** Lottie animation de checkmark quando marcar como concluída
-
-### 2. Snackbar com "Desfazer"
-**Tempo estimado:** 1-2 horas
-**Impacto:** Alto
-**Como:** Ao deletar, mostrar Snackbar com ação para desfazer (não deletar do BD imediatamente)
-
-### 3. Swipe to Dismiss
-**Tempo estimado:** 3-4 horas
-**Impacto:** Alto
-**Como:** ItemTouchHelper nas RecyclerViews de tarefas
-
-### 4. Progress Indicator no Timer
-**Tempo estimado:** 2-3 horas
-**Impacto:** Médio-Alto
-**Como:** ProgressBar circular ou canvas customizado ao redor do timer
-
-### 5. Ilustrações nos Empty States
-**Tempo estimado:** 1-2 horas
-**Impacto:** Médio
-**Como:** Baixar SVGs do undraw.co e adicionar nos empty states
-
-### 6. Confirmação ao Deletar
-**Tempo estimado:** 1 hora
-**Impacto:** Médio
-**Como:** AlertDialog antes de deletar disciplinas/tarefas
-
-### 7. Splash Screen Animado
-**Tempo estimado:** 2 horas
-**Impacto:** Médio
-**Como:** Logo com fade in e transição suave
-
-### 8. Ripple Effects
-**Tempo estimado:** 30 minutos
-**Impacto:** Baixo-Médio
-**Como:** Adicionar `android:foreground="?attr/selectableItemBackground"` nos cards
-
-### 9. Ícones Melhores
-**Tempo estimado:** 1 hora
-**Impacto:** Médio
-**Como:** Substituir ícones padrão por Material Icons melhores
-
-### 10. Loading States
-**Tempo estimado:** 2-3 horas
-**Impacto:** Médio
-**Como:** ProgressBar enquanto carrega dados do banco
-
----
-
-## 📊 RECOMENDAÇÃO TOP 3
-
-Se pudesse implementar **apenas 3 melhorias agora**:
-
-### 🥇 1. Gráficos de Produtividade
-**Por quê:**
-- Grande impacto visual
-- Funcionalidade muito útil
-- Diferencial competitivo
-- Aumenta engajamento
-
-**Prioridade:** ALTA
-**ROI:** Muito Alto
-
----
-
-### 🥈 2. Notificações
-**Por quê:**
-- Funcionalidade essencial que está faltando
-- Aumenta utilidade do app
-- Melhora retenção de usuários
-- Previne tarefas atrasadas
-
-**Prioridade:** ALTA
-**ROI:** Alto
-
----
-
-### 🥉 3. Animações e Feedback Visual
-**Por quê:**
-- Melhora muito a experiência
-- App parece mais "premium"
-- Fácil de implementar (quick wins)
-- Diferença imediata perceptível
-
-**Prioridade:** ALTA
-**ROI:** Alto
-
----
-
-## 📝 NOTAS FINAIS
-
-### Bibliotecas Úteis
-- **MPAndroidChart**: Gráficos - https://github.com/PhilJay/MPAndroidChart
-- **Lottie**: Animações - https://airbnb.io/lottie/
-- **Material Components**: UI - https://material.io/develop/android
-- **Glide/Coil**: Imagens - https://github.com/bumptech/glide
-- **Gson**: JSON - https://github.com/google/gson
-- **WorkManager**: Background tasks - AndroidX
-
-### Recursos de Design
-- **Undraw**: Ilustrações grátis - https://undraw.co
-- **LottieFiles**: Animações - https://lottiefiles.com
-- **Material Icons**: Ícones - https://fonts.google.com/icons
-- **Coolors**: Paletas de cores - https://coolors.co
-- **Figma**: Design de UI - https://figma.com
-
-### Próximos Passos
-1. Priorizar melhorias baseado em feedback de usuários
-2. Criar branches separadas para cada feature
-3. Testar extensivamente antes de mergear
-4. Documentar mudanças no README.md
-5. Considerar versionamento semântico (v1.1.0, v1.2.0, etc)
-
----
-
-**Documento criado em:** 2026-01-11
-**Última atualização:** 2026-01-11
-**Versão do App:** 1.0.0
+*Ultima atualizacao: 2026-01-15*
+*Versao do documento: 3.0*
+*Versao do App: 1.0.0-rc1*

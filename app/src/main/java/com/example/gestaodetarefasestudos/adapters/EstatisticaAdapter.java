@@ -40,6 +40,7 @@ public class EstatisticaAdapter extends RecyclerView.Adapter<EstatisticaAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        if (position < 0 || position >= listaEstatisticas.size()) return;
         ItemEstatistica item = listaEstatisticas.get(position);
 
         // Nome da disciplina
@@ -71,7 +72,7 @@ public class EstatisticaAdapter extends RecyclerView.Adapter<EstatisticaAdapter.
 
     @Override
     public int getItemCount() {
-        return listaEstatisticas.size();
+        return listaEstatisticas != null ? listaEstatisticas.size() : 0;
     }
 
     /**
