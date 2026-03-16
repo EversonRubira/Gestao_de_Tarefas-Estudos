@@ -1,6 +1,7 @@
 package com.example.gestaodetarefasestudos.repositories;
 
 import android.app.Application;
+import android.util.Log;
 
 import com.example.gestaodetarefasestudos.database.AppDatabase;
 import com.example.gestaodetarefasestudos.database.dao.DisciplinaRoomDAO;
@@ -21,6 +22,8 @@ import java.util.concurrent.Executors;
  * - Disciplinas (para selecao no timer)
  */
 public class TimerRepository {
+
+    private static final String TAG = "TimerRepository";
 
     private final SessaoEstudoRoomDAO sessaoDAO;
     private final DisciplinaRoomDAO disciplinaDAO;
@@ -46,8 +49,13 @@ public class TimerRepository {
 
     public void obterDisciplinas(long usuarioId, Callback<List<Disciplina>> callback) {
         executor.execute(() -> {
-            List<Disciplina> result = disciplinaDAO.obterTodas(usuarioId);
-            callback.onResult(result);
+            try {
+                List<Disciplina> result = disciplinaDAO.obterTodas(usuarioId);
+                callback.onResult(result);
+            } catch (Exception e) {
+                Log.e(TAG, "Erro ao obter disciplinas para o timer", e);
+                callback.onError(e);
+            }
         });
     }
 
@@ -57,8 +65,13 @@ public class TimerRepository {
 
     public void salvarSessao(SessaoEstudo sessao, Callback<Long> callback) {
         executor.execute(() -> {
-            long id = sessaoDAO.inserir(sessao);
-            callback.onResult(id);
+            try {
+                long id = sessaoDAO.inserir(sessao);
+                callback.onResult(id);
+            } catch (Exception e) {
+                Log.e(TAG, "Erro ao salvar sessao de estudo", e);
+                callback.onError(e);
+            }
         });
     }
 
@@ -67,20 +80,24 @@ public class TimerRepository {
      */
     public void obterEstatisticasDoDia(long usuarioId, Callback<EstatisticasDia> callback) {
         executor.execute(() -> {
-            // Calcular timestamp do inicio do dia
-            Calendar cal = Calendar.getInstance();
-            cal.set(Calendar.HOUR_OF_DAY, 0);
-            cal.set(Calendar.MINUTE, 0);
-            cal.set(Calendar.SECOND, 0);
-            cal.set(Calendar.MILLISECOND, 0);
-            long inicioDoDia = cal.getTimeInMillis();
+            try {
+                Calendar cal = Calendar.getInstance();
+                cal.set(Calendar.HOUR_OF_DAY, 0);
+                cal.set(Calendar.MINUTE, 0);
+                cal.set(Calendar.SECOND, 0);
+                cal.set(Calendar.MILLISECOND, 0);
+                long inicioDoDia = cal.getTimeInMillis();
 
-            int sessoesHoje = sessaoDAO.contarSessoesHoje(usuarioId, inicioDoDia);
-            long tempoHojeSegundos = sessaoDAO.tempoTotalHoje(usuarioId, inicioDoDia);
-            int streak = calcularStreak(usuarioId);
+                int sessoesHoje = sessaoDAO.contarSessoesHoje(usuarioId, inicioDoDia);
+                long tempoHojeSegundos = sessaoDAO.tempoTotalHoje(usuarioId, inicioDoDia);
+                int streak = calcularStreak(usuarioId);
 
-            EstatisticasDia stats = new EstatisticasDia(sessoesHoje, tempoHojeSegundos, streak);
-            callback.onResult(stats);
+                EstatisticasDia stats = new EstatisticasDia(sessoesHoje, tempoHojeSegundos, streak);
+                callback.onResult(stats);
+            } catch (Exception e) {
+                Log.e(TAG, "Erro ao obter estatisticas do dia", e);
+                callback.onError(e);
+            }
         });
     }
 
@@ -156,5 +173,8 @@ public class TimerRepository {
      */
     public interface Callback<T> {
         void onResult(T result);
+        default void onError(Exception e) {
+            Log.e("TimerRepository.Callback", "Erro nao tratado", e);
+        }
     }
 }

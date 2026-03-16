@@ -2,12 +2,24 @@ plugins {
     alias(libs.plugins.android.application)
 }
 
+// ─────────────────────────────────────────────────────────────────────────────
+// ASSINATURA DE RELEASE
+// Lê credenciais do ficheiro keystore.properties (NÃO versionado no git).
+// Para gerar o AAB de release: ./gradlew bundleRelease
+// ─────────────────────────────────────────────────────────────────────────────
+def keystorePropertiesFile = rootProject.file("keystore.properties")
+def keystoreProperties = new Properties()
+if (keystorePropertiesFile.exists()) {
+    keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+}
+
 android {
     namespace 'com.example.gestaodetarefasestudos'
     compileSdk 36
 
     defaultConfig {
-        applicationId "com.example.gestaodetarefasestudos"
+        // ID único no Google Play — nunca pode ser alterado após publicação
+        applicationId "com.studyflow.app"
         minSdk 24
         targetSdk 36
         versionCode 1
@@ -23,12 +35,36 @@ android {
         }
     }
 
-    buildTypes {
+    signingConfigs {
         release {
+            // Credenciais lidas de keystore.properties (ficheiro local, não no git)
+            if (keystorePropertiesFile.exists()) {
+                storeFile file(keystoreProperties['storeFile'])
+                storePassword keystoreProperties['storePassword']
+                keyAlias keystoreProperties['keyAlias']
+                keyPassword keystoreProperties['keyPassword']
+            }
+        }
+    }
+
+    buildTypes {
+        debug {
+            // Versao de desenvolvimento: instala junto com o release sem conflito
+            applicationIdSuffix ".debug"
+            versionNameSuffix "-debug"
+            debuggable true
             minifyEnabled false
+        }
+        release {
+            // Versao de loja: codigo obfuscado, recursos removidos, menor APK, assinado
+            debuggable false
+            minifyEnabled true
+            shrinkResources true
+            signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_11
         targetCompatibility JavaVersion.VERSION_11
@@ -55,6 +91,9 @@ dependencies {
     def room_version = "2.6.1"
     implementation "androidx.room:room-runtime:$room_version"
     annotationProcessor "androidx.room:room-compiler:$room_version"
+
+    // Graficos (MPAndroidChart)
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
 
     // Unit Tests
     testImplementation libs.junit
