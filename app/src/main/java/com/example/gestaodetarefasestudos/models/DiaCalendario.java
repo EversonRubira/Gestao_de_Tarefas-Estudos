@@ -29,15 +29,11 @@ public class DiaCalendario {
     }
 
     /**
-     * Adiciona uma cor de disciplina à lista
-     * Limita a 3 cores para não poluir visualmente
+     * Adiciona uma cor de disciplina à lista.
+     * Limita a 5 cores para não poluir visualmente e evita duplicatas.
      */
     public void adicionarCorDisciplina(String cor) {
-        // Verifica duas condições antes de adicionar:
-        // 1. size() < 3: ainda não atingiu o limite de 3 cores
-        // 2. !contains(cor): cor ainda não está na lista (evita duplicatas)
-        // Ambas precisam ser verdadeiras (operador &&)
-        if (coresDisciplinas.size() < 3 && !coresDisciplinas.contains(cor)) {
+        if (coresDisciplinas.size() < 5 && !coresDisciplinas.contains(cor)) {
             coresDisciplinas.add(cor);
         }
     }

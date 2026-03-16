@@ -33,7 +33,7 @@ import com.example.gestaodetarefasestudos.models.Usuario;
  */
 @Database(
         entities = {Usuario.class, Disciplina.class, Tarefa.class, SessaoEstudo.class},
-        version = 3,
+        version = 4,
         exportSchema = true
 )
 @TypeConverters(Converters.class)
@@ -55,35 +55,28 @@ public abstract class AppDatabase extends RoomDatabase {
     // ═══════════════════════════════════════════════════════════════════════
 
     /**
-     * Migration de exemplo para referencia futura.
-     * Quando precisar alterar o banco:
-     * 1. Copie este template
-     * 2. Altere os numeros de versao
-     * 3. Adicione os comandos SQL necessarios
-     * 4. Adicione ao array ALL_MIGRATIONS
+     * Migration 3 -> 4: Adiciona indices nas colunas de chave estrangeira
+     * para melhorar performance das queries com JOIN e WHERE.
      */
     static final Migration MIGRATION_3_4 = new Migration(3, 4) {
         @Override
         public void migrate(@NonNull SupportSQLiteDatabase database) {
-            // Exemplo: adicionar coluna
-            // database.execSQL("ALTER TABLE tarefas ADD COLUMN lembrete INTEGER DEFAULT 0");
+            // Indice em disciplinas.usuario_id (usado em obterTodas, contarTotal, etc.)
+            database.execSQL("CREATE INDEX IF NOT EXISTS index_disciplinas_usuario_id ON disciplinas(usuario_id)");
 
-            // Exemplo: criar nova tabela
-            // database.execSQL("CREATE TABLE IF NOT EXISTS subtarefas (" +
-            //         "id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
-            //         "tarefa_id INTEGER NOT NULL, " +
-            //         "titulo TEXT NOT NULL, " +
-            //         "concluida INTEGER NOT NULL DEFAULT 0, " +
-            //         "FOREIGN KEY(tarefa_id) REFERENCES tarefas(id) ON DELETE CASCADE)");
+            // Indice em tarefas.disciplina_id (usado em todos os JOINs com disciplinas)
+            database.execSQL("CREATE INDEX IF NOT EXISTS index_tarefas_disciplina_id ON tarefas(disciplina_id)");
 
-            Log.d(TAG, "Migration 3 -> 4 executada");
+            // Indice em sessoes_estudo.disciplina_id (usado em estatisticas e timer)
+            database.execSQL("CREATE INDEX IF NOT EXISTS index_sessoes_estudo_disciplina_id ON sessoes_estudo(disciplina_id)");
+
+            Log.d(TAG, "Migration 3 -> 4: indices de FK criados com sucesso");
         }
     };
 
     // Array com todas as migrations disponiveis
     private static final Migration[] ALL_MIGRATIONS = {
-            // Adicione novas migrations aqui
-            // MIGRATION_3_4,
+            MIGRATION_3_4,
     };
 
     // ═══════════════════════════════════════════════════════════════════════

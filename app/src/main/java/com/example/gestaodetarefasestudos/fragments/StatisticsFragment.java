@@ -66,42 +66,39 @@ public class StatisticsFragment extends Fragment {
      */
     private void carregarEstatisticas() {
         executor.execute(() -> {
-            // Calcular início dos últimos 7 dias
             Calendar cal = Calendar.getInstance();
             cal.add(Calendar.DAY_OF_MONTH, -7);
             long inicio7Dias = cal.getTimeInMillis();
 
-            Cursor cursor = sessaoEstudoDAO.obterTempoUltimos7DiasPorDisciplina(inicio7Dias);
-
             List<EstatisticaAdapter.ItemEstatistica> listaEstatisticas = new ArrayList<>();
-
-            // Processar os dados do cursor
-            if (cursor != null && cursor.moveToFirst()) {
-                do {
-                    String nomeDisciplina = cursor.getString(cursor.getColumnIndexOrThrow("nome_disciplina"));
-                    float totalMinutos = cursor.getFloat(cursor.getColumnIndexOrThrow("total_minutos"));
-                    String cor = cursor.getString(cursor.getColumnIndexOrThrow("cor"));
-
-                    // Criar item de estatística
-                    EstatisticaAdapter.ItemEstatistica item =
-                        new EstatisticaAdapter.ItemEstatistica(nomeDisciplina, cor, totalMinutos);
-                    listaEstatisticas.add(item);
-
-                } while (cursor.moveToNext());
-                cursor.close();
+            Cursor cursor = null;
+            try {
+                cursor = sessaoEstudoDAO.obterTempoUltimos7DiasPorDisciplina(inicio7Dias);
+                if (cursor != null && cursor.moveToFirst()) {
+                    do {
+                        String nomeDisciplina = cursor.getString(cursor.getColumnIndexOrThrow("nome_disciplina"));
+                        float totalMinutos = cursor.getFloat(cursor.getColumnIndexOrThrow("total_minutos"));
+                        String cor = cursor.getString(cursor.getColumnIndexOrThrow("cor"));
+                        listaEstatisticas.add(new EstatisticaAdapter.ItemEstatistica(nomeDisciplina, cor, totalMinutos));
+                    } while (cursor.moveToNext());
+                }
+            } catch (Exception e) {
+                android.util.Log.e("StatisticsFragment", "Erro ao carregar estatisticas", e);
+            } finally {
+                if (cursor != null && !cursor.isClosed()) {
+                    cursor.close();
+                }
             }
 
-            // Atualizar a UI na thread principal
+            final List<EstatisticaAdapter.ItemEstatistica> lista = listaEstatisticas;
             requireActivity().runOnUiThread(() -> {
-                if (listaEstatisticas.isEmpty()) {
-                    // Mostrar mensagem de lista vazia
+                if (lista.isEmpty()) {
                     emptyState.setVisibility(View.VISIBLE);
                     recyclerViewEstatisticas.setVisibility(View.GONE);
                 } else {
-                    // Mostrar a lista de estatísticas
                     emptyState.setVisibility(View.GONE);
                     recyclerViewEstatisticas.setVisibility(View.VISIBLE);
-                    adapter.atualizarLista(listaEstatisticas);
+                    adapter.atualizarLista(lista);
                 }
             });
         });

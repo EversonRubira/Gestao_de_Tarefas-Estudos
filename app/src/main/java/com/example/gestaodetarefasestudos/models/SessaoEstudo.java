@@ -4,6 +4,7 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.Ignore;
+import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
 @Entity(tableName = "sessoes_estudo",
@@ -12,7 +13,8 @@ import androidx.room.PrimaryKey;
                 parentColumns = "id",
                 childColumns = "disciplina_id",
                 onDelete = ForeignKey.CASCADE
-        ))
+        ),
+        indices = {@Index("disciplina_id")})
 public class SessaoEstudo {
     @PrimaryKey(autoGenerate = true)
     private long id;

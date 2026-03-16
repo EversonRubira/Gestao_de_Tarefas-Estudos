@@ -4,6 +4,7 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.Ignore;
+import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
 import com.example.gestaodetarefasestudos.enums.EstadoTarefa;
@@ -15,7 +16,8 @@ import com.example.gestaodetarefasestudos.enums.Prioridade;
                 parentColumns = "id",
                 childColumns = "disciplina_id",
                 onDelete = ForeignKey.CASCADE
-        ))
+        ),
+        indices = {@Index("disciplina_id")})
 public class Tarefa {
     @PrimaryKey(autoGenerate = true)
     private long id;

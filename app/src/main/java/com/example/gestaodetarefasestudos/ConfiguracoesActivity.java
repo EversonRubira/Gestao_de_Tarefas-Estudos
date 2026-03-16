@@ -1,5 +1,6 @@
 package com.example.gestaodetarefasestudos;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.RadioButton;
@@ -65,6 +66,7 @@ public class ConfiguracoesActivity extends BaseActivity {
         // Salvar idioma
         int idiomaId = radioGroupIdioma.getCheckedRadioButtonId();
         String novoIdioma = (idiomaId == R.id.radioPortugues) ? "pt" : "en";
+        boolean idiomaAlterado = !novoIdioma.equals(getPrefs().getIdioma());
         getPrefs().salvarIdioma(novoIdioma);
 
         // Salvar tema
@@ -74,8 +76,15 @@ public class ConfiguracoesActivity extends BaseActivity {
 
         Toast.makeText(this, R.string.settings_saved, Toast.LENGTH_SHORT).show();
 
-        // Reiniciar activity para aplicar mudanças
-        recreate();
+        if (idiomaAlterado) {
+            // Reiniciar toda a stack de activities para aplicar o novo idioma em todas as telas
+            Intent intent = new Intent(this, MainActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+        } else {
+            // Apenas o tema mudou — basta recriar a activity atual
+            recreate();
+        }
     }
 
     @Override

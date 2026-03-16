@@ -2,6 +2,7 @@ package com.example.gestaodetarefasestudos.repositories;
 
 import android.app.Application;
 import android.database.Cursor;
+import android.util.Log;
 
 import com.example.gestaodetarefasestudos.database.AppDatabase;
 import com.example.gestaodetarefasestudos.database.dao.DisciplinaRoomDAO;
@@ -20,6 +21,8 @@ import java.util.concurrent.Executors;
  * para fornecer uma visao unificada ao ViewModel.
  */
 public class HomeRepository {
+
+    private static final String TAG = "HomeRepository";
 
     private final DisciplinaRoomDAO disciplinaDAO;
     private final TarefaRoomDAO tarefaDAO;
@@ -52,11 +55,15 @@ public class HomeRepository {
      */
     public void obterEstatisticas(long usuarioId, Callback<DashboardStats> callback) {
         executor.execute(() -> {
-            int totalDisciplinas = disciplinaDAO.contarTotal(usuarioId);
-            int tarefasPendentes = tarefaDAO.contarPendentes();
-
-            DashboardStats stats = new DashboardStats(totalDisciplinas, tarefasPendentes);
-            callback.onResult(stats);
+            try {
+                int totalDisciplinas = disciplinaDAO.contarTotal(usuarioId);
+                int tarefasPendentes = tarefaDAO.contarPendentes();
+                DashboardStats stats = new DashboardStats(totalDisciplinas, tarefasPendentes);
+                callback.onResult(stats);
+            } catch (Exception e) {
+                Log.e(TAG, "Erro ao obter estatisticas do dashboard", e);
+                callback.onError(e);
+            }
         });
     }
 
@@ -65,8 +72,13 @@ public class HomeRepository {
      */
     public void obterTempoEstudoHoje(long inicioDia, Callback<Cursor> callback) {
         executor.execute(() -> {
-            Cursor cursor = sessaoDAO.obterTempoHojePorDisciplina(inicioDia);
-            callback.onResult(cursor);
+            try {
+                Cursor cursor = sessaoDAO.obterTempoHojePorDisciplina(inicioDia);
+                callback.onResult(cursor);
+            } catch (Exception e) {
+                Log.e(TAG, "Erro ao obter tempo de estudo de hoje", e);
+                callback.onError(e);
+            }
         });
     }
 
@@ -79,8 +91,13 @@ public class HomeRepository {
      */
     public void obterTarefasCalendario(long inicioMes, long fimMes, Callback<Cursor> callback) {
         executor.execute(() -> {
-            Cursor cursor = tarefaDAO.obterTarefasPorPeriodoComCores(inicioMes, fimMes);
-            callback.onResult(cursor);
+            try {
+                Cursor cursor = tarefaDAO.obterTarefasPorPeriodoComCores(inicioMes, fimMes);
+                callback.onResult(cursor);
+            } catch (Exception e) {
+                Log.e(TAG, "Erro ao obter tarefas do calendario", e);
+                callback.onError(e);
+            }
         });
     }
 
@@ -89,8 +106,13 @@ public class HomeRepository {
      */
     public void obterTarefasDoDia(long inicioDia, long fimDia, Callback<List<Tarefa>> callback) {
         executor.execute(() -> {
-            List<Tarefa> tarefas = tarefaDAO.obterTarefasPorDia(inicioDia, fimDia);
-            callback.onResult(tarefas);
+            try {
+                List<Tarefa> tarefas = tarefaDAO.obterTarefasPorDia(inicioDia, fimDia);
+                callback.onResult(tarefas);
+            } catch (Exception e) {
+                Log.e(TAG, "Erro ao obter tarefas do dia", e);
+                callback.onError(e);
+            }
         });
     }
 
@@ -124,5 +146,8 @@ public class HomeRepository {
      */
     public interface Callback<T> {
         void onResult(T result);
+        default void onError(Exception e) {
+            Log.e("HomeRepository.Callback", "Erro nao tratado", e);
+        }
     }
 }

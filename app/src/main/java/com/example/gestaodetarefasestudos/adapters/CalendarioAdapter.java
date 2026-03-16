@@ -71,11 +71,13 @@ public class CalendarioAdapter extends RecyclerView.Adapter<CalendarioAdapter.Di
 
         private LinearLayout containerDia;
         private TextView textNumeroDia;
+        private LinearLayout layoutCoresDisciplinas;
 
         public DiaViewHolder(@NonNull View itemView) {
             super(itemView);
             containerDia = itemView.findViewById(R.id.layout_dia_container);
             textNumeroDia = itemView.findViewById(R.id.tv_numero_dia);
+            layoutCoresDisciplinas = itemView.findViewById(R.id.layout_cores_disciplinas);
         }
 
         /**
@@ -107,22 +109,38 @@ public class CalendarioAdapter extends RecyclerView.Adapter<CalendarioAdapter.Di
                     textNumeroDia.setTextColor(context.getResources().getColor(R.color.text_primary));
                 }
 
-                // Aplicar borda colorida se houver tarefas neste dia
+                // Aplicar borda se houver tarefas, usando a cor da primeira disciplina
+                layoutCoresDisciplinas.removeAllViews();
                 if (dia.temTarefas()) {
                     List<String> cores = dia.getCoresDisciplinas();
-
                     if (!cores.isEmpty()) {
                         try {
-                            // Usar a cor da primeira disciplina para a borda
                             int corBorda = Color.parseColor(cores.get(0));
-                            // Borda de 2dp de largura
                             int larguraBorda = (int) (2 * context.getResources().getDisplayMetrics().density);
                             backgroundDrawable.setStroke(larguraBorda, corBorda);
                         } catch (Exception e) {
-                            // Se falhar ao parsear a cor, usar cor primária
                             int corBorda = context.getResources().getColor(R.color.primary);
                             int larguraBorda = (int) (2 * context.getResources().getDisplayMetrics().density);
                             backgroundDrawable.setStroke(larguraBorda, corBorda);
+                        }
+
+                        // Renderizar dots de cor para cada disciplina
+                        int dotSize = (int) (5 * context.getResources().getDisplayMetrics().density);
+                        int dotMargin = (int) (1.5f * context.getResources().getDisplayMetrics().density);
+                        for (String cor : cores) {
+                            View dot = new View(context);
+                            LinearLayout.LayoutParams dotParams = new LinearLayout.LayoutParams(dotSize, dotSize);
+                            dotParams.setMargins(dotMargin, 0, dotMargin, 0);
+                            dot.setLayoutParams(dotParams);
+                            GradientDrawable dotDrawable = new GradientDrawable();
+                            dotDrawable.setShape(GradientDrawable.OVAL);
+                            try {
+                                dotDrawable.setColor(Color.parseColor(cor));
+                            } catch (Exception e) {
+                                dotDrawable.setColor(context.getResources().getColor(R.color.primary));
+                            }
+                            dot.setBackground(dotDrawable);
+                            layoutCoresDisciplinas.addView(dot);
                         }
                     }
                 }
