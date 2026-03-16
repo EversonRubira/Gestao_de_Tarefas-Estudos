@@ -24,8 +24,18 @@ android {
     }
 
     buildTypes {
-        release {
+        debug {
+            // Versao de desenvolvimento: instala junto com o release sem conflito
+            applicationIdSuffix ".debug"
+            versionNameSuffix "-debug"
+            debuggable true
             minifyEnabled false
+        }
+        release {
+            // Versao de loja: codigo obfuscado, recursos removidos, menor APK
+            debuggable false
+            minifyEnabled true
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
@@ -55,6 +65,9 @@ dependencies {
     def room_version = "2.6.1"
     implementation "androidx.room:room-runtime:$room_version"
     annotationProcessor "androidx.room:room-compiler:$room_version"
+
+    // Graficos (MPAndroidChart)
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
 
     // Unit Tests
     testImplementation libs.junit
